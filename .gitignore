@@ -1,0 +1,67 @@
+# # コメント。これは無視されます
+# *.a       # .a ファイルは無視
+# !lib.a    # しかし、lib.a ファイルだけは .a であっても追跡対象とします
+# /TODO     # ルートディレクトリの TODO ファイルだけを無視し、サブディレクトリの TODO は無視しません
+# build/    # build/ ディレクトリのすべてのファイルを無視します
+# doc/*.txt # doc/notes.txt は無視しますが、doc/server/arch.txt は無視しません
+
+*.o
+*.lo
+*.la
+*.al
+.libs
+*.so
+*.a
+*.pyc
+*.pyo
+*.rej
+*.swp
+.DS_Store
+*.ncb
+*.suo
+*.sdf
+*.pdb
+*.ilk
+*.opensdf
+*.bmc
+*.aux
+*.VC.db
+*.ini
+*.opendb
+
+score/
+bmc/
+vc_msw/
+Debug/
+Release/
+Release(*)/
+ipch/
+
+vol/
+img/
+result/
+images/
+images_with_tag*/
+*_ign
+*_ign/
+
+*.lzh
+*.zip
+*.rar
+cufft*.dll
+cublas*.dll
+cudpp*.dll
+cublas*.dll
+cusparse*.dll
+npp*.dll
+curand*.dll
+curand*.dll
+fbxsdk*.lib
+podofo*.lib
+UpgradeLog.xml
+_UpgradeReport_Files
+mesh_fluid3d_*.pov
+~$*
+
+
+
