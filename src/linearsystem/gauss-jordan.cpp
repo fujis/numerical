@@ -48,6 +48,10 @@ int GaussJordan(vector< vector<double> > &A, int n)
 				A[i][j] -= A[k][j]*aik;
 			}
 		}
+
+		cout << "k = " << k << endl;
+		OutputMatrix(A, n, 2*n);
+		cout << endl;
 	}
 
 	return 0;
@@ -149,8 +153,8 @@ int main(void)
 	}
 
 	// ガウスジョルダンで逆行列を求める
-	//GaussJordan(A, n);				// ピボッティングなし
-	GaussJordanWithPivoting(A, n);	// ピボッティングあり
+	GaussJordan(A, n);				// ピボッティングなし
+	//GaussJordanWithPivoting(A, n);	// ピボッティングあり
 
 	// 拡張行列A(nx2n)全体の画面表示
 	OutputMatrix(A, n, 2*n);
