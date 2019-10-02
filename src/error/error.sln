@@ -8,7 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{F6210C
 		..\..\shared\inc\rx_utils.h = ..\..\shared\inc\rx_utils.h
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "errror", "errror.vcxproj", "{C9D200AD-61B9-4452-A7C8-86F974A1F75B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "error", "error.vcxproj", "{C9D200AD-61B9-4452-A7C8-86F974A1F75B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
