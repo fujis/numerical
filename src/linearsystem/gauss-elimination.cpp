@@ -35,6 +35,9 @@ int GaussElimination(vector< vector<double> > &A, int n)
 				A[i][j] = A[i][j]-aik*(A[k][j]/akk);
 			}
 		}
+		cout << "k = " << k << endl;
+		OutputMatrix(A, n, n+1);
+		cout << endl;
 	}
 
 	// 後退代入(back substitution)
@@ -47,6 +50,10 @@ int GaussElimination(vector< vector<double> > &A, int n)
 			ax += A[i][j]*A[j][n];
 		}
 		A[i][n] = (A[i][n]-ax)/A[i][i];
+
+		//cout << "line " << i << endl;
+		//OutputMatrix(A, n, n+1);
+		//cout << endl;
 	}
 
 	return 0;
@@ -94,6 +101,9 @@ int GaussEliminationWithPivoting(vector< vector<double> > &A, int n)
 				A[i][j] = A[i][j]-aik*(A[k][j]/akk);
 			}
 		}
+		cout << "k = " << k << endl;
+		OutputMatrix(A, n, n+1);
+		cout << endl;
 	}
 
 	// 後退代入(back substitution)
