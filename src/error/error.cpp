@@ -12,7 +12,7 @@
 // インクルードファイル
 //-----------------------------------------------------------------------------
 #include "rx_utils.h"
-//#include <float.h>
+#include <cfloat>
 
 
 //-----------------------------------------------------------------------------
@@ -25,8 +25,8 @@ int main(void)
 	cout << "short : " << SHRT_MIN << " - " << SHRT_MAX << "  (" << sizeof(short)*8 << "bit)" << endl; // 正確にはshort int
 	cout << "int : " << INT_MIN << " - " << INT_MAX << "  (" << sizeof(int)*8 << "bit)" << endl;
 	cout << "longlong : " << LLONG_MIN << " - " << LLONG_MAX << "  (" << sizeof(long long)*8 << "bit)" << endl;
-	//cout << "float : " << FLT_MIN << " - " << FLT_MAX << "  (" << sizeof(float)*8 << "bit)" << endl;
-	//cout << "double : " << DBL_MIN << " - " << DBL_MAX << "  (" << sizeof(double)*8 << "bit)" << endl;
+	cout << "float : " << FLT_MIN << " - " << FLT_MAX << "  (" << sizeof(float)*8 << "bit)" << endl;
+	cout << "double : " << DBL_MIN << " - " << DBL_MAX << "  (" << sizeof(double)*8 << "bit)" << endl;
 	cout << endl;
 
 	// float型の有効桁数
