@@ -33,7 +33,6 @@ int JacobiIteration(vector< vector<double> > &A, int n, int &max_iter, double &e
 	vector<double> x(n, 0.0);	// 初期値はすべて0とする
 	vector<double> y(n, 0.0);
 
-	double e = 0.0;
 	int k;
 	for(k = 0; k < max_iter; ++k){
 		// 現在の値を代入して，次の解候補を計算
@@ -45,13 +44,21 @@ int JacobiIteration(vector< vector<double> > &A, int n, int &max_iter, double &e
 			y[i] /= A[i][i];
 		}
 
+		// 確認のため現在の解を画面出力
+		cout << k << " : ";
+		for(int i = 0; i < n; ++i) cout << "x" << i << " = " << x[i] << (i == n-1 ? "" : ", ");
+		cout << endl;
+
+
 		// 収束判定
-		e = 0.0;
-		for(int i = 0; i < n; ++i){
-			e += fabs(y[i]-x[i]);	// 絶対誤差の場合
-			//e += fabs((y[i]-x[i])/y[i]);	// 相対誤差の場合
+		int l;
+		for(l = 0; l < n; ++l){
+			if(fabs(y[l]-x[l]) > eps){	// 絶対誤差の場合
+			//if(fabs((y[l]-x[l])/y[l])){	// 相対誤差の場合
+				break;
+			}
 		}
-		if(e <= eps){
+		if(l == n){ // すべての解が許容誤差以下なら反復終了
 			break;
 		}
 
@@ -59,8 +66,16 @@ int JacobiIteration(vector< vector<double> > &A, int n, int &max_iter, double &e
 	}
 
 	max_iter = k;
-	eps = e;
 
+	// 最大誤差(確認用)
+	double e = 0.0;
+	for(int l = 0; l < n; ++l){
+		if(e < fabs(y[l]-x[l])){
+			e = fabs(y[l]-x[l]);
+		}
+	}
+
+	// 解をA_(i,n)に格納
 	for(int i = 0; i < n; ++i){
 		A[i][n] = y[i];
 	}

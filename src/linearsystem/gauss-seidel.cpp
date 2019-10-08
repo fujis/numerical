@@ -36,7 +36,8 @@ int GaussSeidel(vector< vector<double> > &A, int n, int &max_iter, double &eps)
 	int k;	// 計算反復回数
 	for(k = 0; k < max_iter; ++k){
 		// 現在の値を代入して，次の解候補を計算
-		e = 0.0;
+		int l = 0;
+		e = 0;
 		for(int i = 0; i < n; ++i){
 			double tmp = x[i];
 			x[i] = A[i][n];
@@ -45,18 +46,26 @@ int GaussSeidel(vector< vector<double> > &A, int n, int &max_iter, double &eps)
 			}
 			x[i] /= A[i][i];
 
-			e += fabs(tmp-x[i]);	// 絶対誤差の場合
-			//e += fabs((tmp-x[i])/tmp);	// 相対誤差の場合
+			if(fabs(tmp-x[i]) > eps){	// 絶対誤差の場合
+			//if(fabs((tmp-x[i])/tmp)){	// 相対誤差の場合
+				e += fabs(tmp-x[i]);
+				l++;
+			}
 		}
 
+		// 確認のため現在の解を画面出力
+		cout << k << " : ";
+		for(int i = 0; i < n; ++i) cout << "x" << i << " = " << x[i] << (i == n-1 ? "" : ", ");
+		cout << endl;
+
 		// 収束判定
-		if(e <= eps){
+		if(l == 0){ // すべての解が許容誤差以下なら反復終了
 			break;
 		}
 	}
 
 	max_iter = k;
-	eps = e;
+	eps = e/n; // 平均誤差
 
 	for(int i = 0; i < n; ++i){
 		A[i][n] = x[i];
