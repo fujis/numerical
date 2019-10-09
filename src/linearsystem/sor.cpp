@@ -34,6 +34,7 @@ int SOR(vector< vector<double> > &A, int n, double w, int &max_iter, double &eps
 	int k;	// 計算反復回数
 	for(k = 0; k < max_iter; ++k){
 		// 現在の値を代入して，次の解候補を計算
+		int l = 0;
 		e = 0.0;
 		for(int i = 0; i < n; ++i){
 			double tmp = x[i];
@@ -43,14 +44,22 @@ int SOR(vector< vector<double> > &A, int n, double w, int &max_iter, double &eps
 			}
 			x[i] /= A[i][i];
 
-			x[i] = tmp+w*(x[i]-tmp);	// 加速緩和係数wを使って次の解を計算
+			x[i] = (1.0-w)*tmp+w*x[i];	// 加速緩和係数wを使って次の解を計算
 
-			e += fabs(tmp-x[i]);	// 絶対誤差の場合
-			//e += fabs((tmp-x[i])/tmp);	// 相対誤差の場合
+			if(fabs(tmp-x[i]) > eps){	// 絶対誤差の場合
+			//if(fabs((tmp-x[i])/tmp)){	// 相対誤差の場合
+				e += fabs(tmp-x[i]);
+				l++;
+			}
 		}
 
+		// 確認のため現在の解を画面出力
+		cout << k << " : ";
+		for(int i = 0; i < n; ++i) cout << "x" << i << " = " << x[i] << (i == n-1 ? "" : ", ");
+		cout << endl;
+
 		// 収束判定
-		if(e <= eps){
+		if(l == 0){ // すべての解が許容誤差以下なら反復終了
 			break;
 		}
 	}
