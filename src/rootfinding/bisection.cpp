@@ -43,6 +43,9 @@ int bisection(double func(const double), double xl, double xr, double &x, int &m
 		// 中点での関数値を求める
 		fmid = func(xmid);
 
+		// 確認用の画面出力
+		cout << k << " : [" << xl << ", " << xr << "], fmid = " << fmid << endl;
+
 		// 収束判定
 		if(dx < eps || fmid == 0.0){
 			break;
@@ -75,18 +78,20 @@ int main(void)
 	double x = 0.0;
 
 	// 探索範囲
-	x1 = 0.9;
-	x2 = 1.2;
+	x1 = 3.0;
+	x2 = 4.0;
 
 	// 二分法でf(x)=0を解く
 	int max_iter = 100;
 	double eps = 1e-6;
-	bisection(Func1, x1, x2, x, max_iter, eps);
+	bisection(FuncPi, x1, x2, x, max_iter, eps);
 
 	// 結果の画面表示
 	cout << "x = " << x << endl;
 	cout << "iter = " << max_iter << ", eps = " << eps << endl;
 	cout << endl;
+
+	cout << log2(2.0/1.0e-6) << endl;
 
 	return 0;
 }

@@ -38,6 +38,9 @@ int newton(double func(const double), double dfunc(const double),
 		f = func(x);
 		df = dfunc(x);
 
+		// 確認用の画面出力
+		cout << k << " : f(" << x << ") = " << f << endl;
+
 		// 導関数の結果から次の位置を計算
 		x = x-f/df;
 
@@ -60,7 +63,7 @@ int newton(double func(const double), double dfunc(const double),
 int main(void)
 {
 	// 探索開始位置
-	double x = 0.9;
+	double x = -1;
 
 	// ニュートン法でf(x)=0を解く
 	int max_iter = 100;
