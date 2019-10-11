@@ -101,6 +101,7 @@ int IncompleteCholeskyDecomp2(const vector< vector<double> > &A, vector< vector<
 int CGSolver(const vector< vector<double> > &A, const vector<double> &b, vector<double> &x, int n, int &max_iter, double &eps)
 {
 	if(n <= 0) return 1;
+	cout.precision(8);
 
 	vector<double> r(n), p(n), y(n);
 	x.assign(n, 0.0);
@@ -121,6 +122,8 @@ int CGSolver(const vector< vector<double> > &A, const vector<double> &b, vector<
 	double e = 0.0;
 	int k;
 	for(k = 0; k < max_iter; ++k){
+		//cout << k;
+
 		// y = AP の計算
 		for(int i = 0; i < n; ++i){
 			y[i] = dot(A[i], p, n);
@@ -135,11 +138,17 @@ int CGSolver(const vector< vector<double> > &A, const vector<double> &b, vector<
 			r[i] -= alpha*y[i];
 		}
 
+		// 確認のため現在の解を画面出力
+		cout << k << " : ";
+		for(int i = 0; i < n; ++i) cout << "x" << i << " = " << x[i] << (i == n-1 ? "" : ", ");
+
 		// (r*r)_(k+1)の計算
 		rr1 = dot(r, r, n);
 
 		// 収束判定 (||r||<=eps)
 		e = sqrt(rr1);
+		//cout << ", " << e/n;
+		cout << endl;
 		if(e < eps){
 			k++;
 			break;
@@ -202,6 +211,7 @@ inline void ICRes(const vector< vector<double> > &L, const vector<double> &d, co
 int ICCGSolver(const vector< vector<double> > &A, const vector<double> &b, vector<double> &x, int n, int &max_iter, double &eps)
 {
 	if(n <= 0) return 1;
+	cout.precision(8);
 
 	vector<double> r(n), p(n), y(n), r2(n);
 
@@ -233,6 +243,8 @@ int ICCGSolver(const vector< vector<double> > &A, const vector<double> &b, vecto
 	double e = 0.0;
 	int k;
 	for(k = 0; k < max_iter; ++k){
+		cout << k;
+
 		// y = AP の計算
 		for(int i = 0; i < n; ++i){
 			y[i] = dot(A[i], p, n);
@@ -247,12 +259,19 @@ int ICCGSolver(const vector< vector<double> > &A, const vector<double> &b, vecto
 			r[i] -= alpha*y[i];
 		}
 
+		// 確認のため現在の解を画面出力
+		//cout << k << " : ";
+		//for(int i = 0; i < n; ++i) cout << "x" << i << " = " << x[i] << (i == n-1 ? "" : ", ");
+		//cout << endl;
+
 		// (r*r)_(k+1)の計算
 		ICRes(L, d, r, r2, n);
 		rr1 = dot(r, r2, n);
 
 		// 収束判定 (||r||<=eps)
 		e = sqrt(rr1);
+		cout << ", " << e/n;
+		cout << endl;
 		if(e < eps){
 			k++;
 			break;

@@ -29,10 +29,13 @@
 int SOR(vector< vector<double> > &A, int n, double w, int &max_iter, double &eps)
 {
 	vector<double> x(n, 0.0);	// 初期値はすべて0とする
+	cout.precision(8);
 
 	double e = 0.0;	// 誤差
 	int k;	// 計算反復回数
 	for(k = 0; k < max_iter; ++k){
+		//cout << k;// << " : ";
+
 		// 現在の値を代入して，次の解候補を計算
 		int l = 0;
 		e = 0.0;
@@ -51,11 +54,15 @@ int SOR(vector< vector<double> > &A, int n, double w, int &max_iter, double &eps
 				e += fabs(tmp-x[i]);
 				l++;
 			}
+
+			//cout << ", " << fabs(tmp-x[i]);
 		}
+		//cout << ", " << e/n;
 
 		// 確認のため現在の解を画面出力
 		cout << k << " : ";
 		for(int i = 0; i < n; ++i) cout << "x" << i << " = " << x[i] << (i == n-1 ? "" : ", ");
+
 		cout << endl;
 
 		// 収束判定
@@ -97,22 +104,25 @@ int main(void)
 
 	// 加速係数の入力
 	double w = 1.0;
-	cout << "relaxation factor : ";
-	cin >> w;
+	while(w >= 0.0){
+		cout << "relaxation factor (enter -1 to stop) : ";
+		cin >> w;
+		if(w < 0.0) break;
 
-	// SOR法で線形システムを解く
-	int max_iter = 100;
-	double eps = 1e-6;
-	SOR(A, n, w, max_iter, eps);
+		// SOR法で線形システムを解く
+		int max_iter = 100;
+		double eps = 1e-6;
+		SOR(A, n, w, max_iter, eps);
 
-	// 結果の画面表示
-	for(int i = 0; i < n; ++i){
-		cout << "x" << i << " = " << A[i][n] << (i == n-1 ? "" : ", ");
+		// 結果の画面表示
+		for(int i = 0; i < n; ++i){
+			cout << "x" << i << " = " << A[i][n] << (i == n-1 ? "" : ", ");
+		}
+		cout << endl;
+
+		cout << "iter = " << max_iter << ", eps = " << eps << endl;
+		cout << endl;
 	}
-	cout << endl;
-
-	cout << "iter = " << max_iter << ", eps = " << eps << endl;
-	cout << endl;
 
 	return 0;
 }
