@@ -30,11 +30,13 @@ using namespace std;
  */
 inline double Func1(const double x)
 {
-	return x*x*x-2*x*x-x+2;
+	//return x*x*x-2*x*x-x+2;
+	return 2*x*x*x*x*x+5*x*x*x+3*x+1;
 }
 inline double DFunc1(const double x)
 {
-	return 3*x*x-4*x-1;
+	//return 3*x*x-4*x-1;
+	return 10*x*x*x*x+15*x*x+3;
 }
 
 
@@ -77,15 +79,32 @@ inline double DFunc3(const double x)
 inline double Func4(const vector<double> &x)
 {
 	//return x[0]*x[0]-2*x[0]*x[1]+2*x[1]*x[1];
-	return x[0]*x[0]+2*x[0]*x[1]+3*x[1]*x[1]+3*x[0];
+	return x[0]*x[0]-4*x[0]*x[1]+x[1]*x[1];
 }
 inline vector<double> DFunc4(const vector<double> &x)
 {
 	vector<double> g(x.size(), 0.0);
 	//g[0] = 2*x[0]-2*x[1];
 	//g[1] = -2*x[0]+4*x[1];
-	g[0] = 2*x[0]+2*x[1]+3;
-	g[1] = 2*x[0]+6*x[1];
+	g[0] = 2*x[0]-4*x[1];
+	g[1] = -4*x[0]+2*x[1];
+	return g;
+}
+
+/*!
+ * 2次元の凸関数2
+ * @param[in] x 変数
+ * @return 方程式の値
+ */
+inline double Func4a(const vector<double> &x)
+{
+	return x[0]*x[0]+x[1]*x[1]-2;
+}
+inline vector<double> DFunc4a(const vector<double> &x)
+{
+	vector<double> g(x.size(), 0.0);
+	g[0] = 2*x[0];
+	g[1] = 2*x[1];
 	return g;
 }
 
@@ -119,6 +138,20 @@ inline double FuncExp(const double x)
 inline double DFuncExp(const double x)
 {
 	return exp(x);
+}
+
+/*!
+ * 円周率計算用関数
+ * @param[in] x 変数
+ * @return 方程式の値
+ */
+inline double FuncPi(const double x)
+{
+	return cos(x/2.0);
+}
+inline double DFuncPi(const double x)
+{
+	return -sin(x/2.0)/2.0;
 }
 
 
