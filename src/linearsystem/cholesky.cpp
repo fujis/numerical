@@ -163,11 +163,11 @@ int main(void)
 	// コレスキー分解
 	vector< vector<double> > L(n, vector<double>(n, 0.0));
 	vector<double> d;
-	CholeskyDecomp(A, L, n);
+	//CholeskyDecomp(A, L, n);
 
 	// 修正コレスキー分解，不完全コレスキー分解
-	//d.resize(n, 0.0);
-	//ModifiedCholeskyDecomp(A, L, d, n);
+	d.resize(n, 0.0);
+	ModifiedCholeskyDecomp(A, L, d, n);
 	//IncompleteCholeskyDecomp(A, L, d, n);
 
 	cout << "L = " << endl;
