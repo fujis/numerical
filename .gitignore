@@ -69,3 +69,7 @@ mesh_fluid3d_*.pov
 *.db-wal
 /src/linearsystem/.vs/linearsystem/v15/*.db-shm
 *.db-shm
+/src/error/.vs/ProjectSettings.json
+/src/error/.vs/VSWorkspaceState.json
+/src/error/.vs/slnx.sqlite
+/src/error/Makefile

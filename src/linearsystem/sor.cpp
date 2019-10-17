@@ -97,6 +97,10 @@ int main(void)
 	int n = (int)A.size();	// n元連立一次方程式
 	int m = (int)A[0].size();
 
+	// 繰り返し計算のために右辺項ベクトルを退避しておく
+	vector<double> b(n, 0.0);
+	for(int i = 0; i < n; ++i) b[i] = A[i][n];
+
 	// 読み込んだ行列を確認用に画面表示
 	cout << "A(" << n << " x " << m << ") = " << endl;
 	OutputMatrix(A, n, n+1);
@@ -108,6 +112,9 @@ int main(void)
 		cout << "relaxation factor (enter -1 to stop) : ";
 		cin >> w;
 		if(w < 0.0) break;
+
+		// 退避しておいたbを元に戻す
+		for(int i = 0; i < n; ++i) A[i][n] = b[i];
 
 		// SOR法で線形システムを解く
 		int max_iter = 100;

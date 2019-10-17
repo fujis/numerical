@@ -51,9 +51,9 @@ int GaussElimination(vector< vector<double> > &A, int n)
 		}
 		A[i][n] = (A[i][n]-ax)/A[i][i];
 
-		//cout << "line " << i << endl;
-		//OutputMatrix(A, n, n+1);
-		//cout << endl;
+		cout << "i = " << i << endl;
+		OutputMatrix(A, n, n+1);
+		cout << endl;
 	}
 
 	return 0;

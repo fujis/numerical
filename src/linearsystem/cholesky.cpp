@@ -18,6 +18,41 @@
 // コレスキー分解
 //-----------------------------------------------------------------------------
 /*!
+ * コレスキー分解
+ *  - 正定値対称行列A(n×n)を下三角行列(L:Lower triangular matrix)とその転置(L^T)に分解する
+ *  - L: i >= j (i>jとi==jに分けて処理)
+ * @param[in] A n×nの対称行列
+ * @param[out] L 対角成分が1の下三角行列
+ * @param[in] n 行列の大きさ
+ * @return 0:成功,1:失敗
+ */
+int CholeskyDecomp(vector< vector<double> > &A, vector< vector<double> > &L, int n)
+{
+	if(n <= 0) return 1;
+
+	for(int j = 0; j < n; ++j){
+		// i == jについて解く
+		double ll = A[j][j];
+		for(int k = 0; k < j; ++k){
+			ll -= L[j][k]*L[j][k];
+		}
+		L[j][j] = sqrt(ll);
+
+		for(int i = j+1; i < n; ++i){
+			ll = A[i][j];
+			for(int k = 0; k < j; ++k){
+				ll -= L[i][k]*L[j][k];
+			}
+			L[i][j] = ll/L[j][j];
+		}
+
+	}
+
+	return 0;
+}
+
+
+/*!
  * 修正コレスキー分解(modified Cholesky decomposition)
  *  - 対称行列A(n×n)を下三角行列(L:Lower triangular matrix)と対角行列の積(LDL^T)に分解する
  *  - l_ii = 1とした場合
@@ -125,34 +160,47 @@ int main(void)
 	OutputMatrix(A, n, n);
 	cout << endl;
 
+	// コレスキー分解
+	vector< vector<double> > L(n, vector<double>(n, 0.0));
+	vector<double> d;
+	//CholeskyDecomp(A, L, n);
 
 	// 修正コレスキー分解，不完全コレスキー分解
-	vector< vector<double> > L(n, vector<double>(n, 0.0));
-	vector<double> d(n, 0.0);
-	//ModifiedCholeskyDecomp(A, L, d, n);
-	IncompleteCholeskyDecomp(A, L, d, n);
-
-	vector< vector<double> > D(n, vector<double>(n, 0.0));
-	for(int i = 0; i < n; ++i) D[i][i] = d[i];
+	d.resize(n, 0.0);
+	ModifiedCholeskyDecomp(A, L, d, n);
+	//IncompleteCholeskyDecomp(A, L, d, n);
 
 	cout << "L = " << endl;
 	OutputMatrix(L, n, n);
-	cout << "D = " << endl;
-	OutputMatrix(D, n, n);
-	cout << endl;
 
-	// 分解結果のチェック用
-	vector< vector<double> > LD(n, vector<double>(n, 0.0));
-	vector< vector<double> > LDL(n, vector<double>(n, 0.0));
-	MulMatrix(L, D, LD, n);
-	MulMatrix(LD, Transpose(L, n), LDL, n);
+	if(d.empty()){
+		// 分解結果のチェック用
+		vector< vector<double> > LL(n, vector<double>(n, 0.0));
+		MulMatrix(L, Transpose(L, n), LL, n);
 
-	// 分解した結果を掛け合わせた行列を画面表示(これが元の行列Aと同じならOK)
-	cout << "LDL^T = " << endl;
-	OutputMatrix(LDL, n, n);
-	cout << endl;
+		// 分解した結果を掛け合わせた行列を画面表示(これが元の行列Aと同じならOK)
+		cout << "LL^T = " << endl;
+		OutputMatrix(LL, n, n);
+		cout << endl;
+	}
+	else{
+		vector< vector<double> > D(n, vector<double>(n, 0.0));
+		for(int i = 0; i < n; ++i) D[i][i] = d[i];
+		cout << "D = " << endl;
+		OutputMatrix(D, n, n);
+		cout << endl;
 
+		// 分解結果のチェック用
+		vector< vector<double> > LD(n, vector<double>(n, 0.0));
+		vector< vector<double> > LDL(n, vector<double>(n, 0.0));
+		MulMatrix(L, D, LD, n);
+		MulMatrix(LD, Transpose(L, n), LDL, n);
 
+		// 分解した結果を掛け合わせた行列を画面表示(これが元の行列Aと同じならOK)
+		cout << "LDL^T = " << endl;
+		OutputMatrix(LDL, n, n);
+		cout << endl;
+	}
 
 	return 0;
 }
