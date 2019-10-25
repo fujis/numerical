@@ -61,10 +61,12 @@ int gradientdecent(vector<double> dfunc(const vector<double>&), vector<double> x
 	int n = x0.size();
 	vector<double> x = x0, dx(n, 0.0);
 
-	double norm_dx; // 勾配ベクトルのノルム(収束判定用)
+	double norm_dx = 1.0; // 勾配ベクトルのノルム(収束判定用)
 	int k;
 	for(k = 0; k < max_iter; ++k){
-		
+		//cout << k << " : " << x << ", e = " << norm_dx << endl;
+		cout << x << ", " << norm_dx << endl;
+
 		dx = dfunc(x);
 		norm_dx = 0.0;
 		for(int i = 0; i < n; ++i){
@@ -91,9 +93,12 @@ int gradientdecent(vector<double> dfunc(const vector<double>&), vector<double> x
 //-----------------------------------------------------------------------------
 int main(void)
 {
-	double alpha = 0.2;
+	double alpha = 0.5;
 	int max_iter = 100;
 	double eps = 1e-6;
+
+	cout << "alpha = ";
+	cin >> alpha;
 
 #if 0
 	double x0 = 1.0;
@@ -101,7 +106,7 @@ int main(void)
 	gradientdecent(DFunc3, x0, alpha, x, max_iter, eps);
 	cout << "x = " << x << endl;
 #else
-	vector<double> x0(2, 2.0);
+	vector<double> x0(2, -1);
 	vector<double> x(2);
 	gradientdecent(DFunc4, x0, alpha, x, max_iter, eps);
 

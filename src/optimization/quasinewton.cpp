@@ -110,43 +110,40 @@ int goldensection(double func(const vector<double>&), const vector<double> x0, c
 int quasinewton_bgfs(double func(const vector<double>&), vector<double> dfunc(const vector<double>&), vector<double> x0, vector<double> &xout, int &max_iter, double &eps)
 {
 	int n = x0.size();
-	vector< vector<double> > H;
+	vector< vector<double> > H; // ヘッセ行列の逆行列H^-1
 	H.resize(n);
 	for(int i = 0; i < n; ++i) H[i].resize(n, 0.0);
 	for(int i = 0; i < n; ++i) H[i][i] = 1.0;
 
 	vector<double> x = x0;
-	double fx = func(x);
 	vector<double> g = dfunc(x);
-	double alpha = 0.1;
+	double alpha = 0.1, gnorm = 1.0;
 
-	double f0, f1;
+	double f;
 	int k;
 	for(k = 0; k < max_iter; ++k){
-		f0 = func(x);
-
-		cout << "f(" << x[0] << "," << x[1] << ") = " << f0 << endl;
+		//cout << "f(" << x << ") = " << func(x) << endl;
+		cout << x << ", " << gnorm << endl;
 
 		// 探索方向dの計算(d = -H∇f)
-		vector<double> d(n, 0.0);
+		vector<double> p(n, 0.0);
 		for(int i = 0; i < n; ++i){
 			for(int j = 0; j < n; ++j){
-				d[i] -= H[i][j]*g[j];
+				p[i] -= H[i][j]*g[j];
 			}
 		}
 
 		// 黄金分割法で探索方向d上の最小値までの距離を調べてalphaとして設定
-		int gmax_iter = 10;
-		double geps = 1e-3;
-		goldensection(func, x, d, 0.0, 1.0, alpha, gmax_iter, geps);
+		int gmax_iter = 20;
+		double geps = 1e-4;
+		goldensection(func, x, p, 0.0, 3.0, alpha, gmax_iter, geps);
 
 		// xの更新
 		vector<double> s(n, 0.0);
 		for(int i = 0; i < n; ++i){
-			s[i] = alpha*d[i];
+			s[i] = alpha*p[i];
 			x[i] += s[i];
 		}
-		f1 = func(x);
 
 		// yの計算
 		vector<double> gprev = g;
@@ -156,30 +153,36 @@ int quasinewton_bgfs(double func(const vector<double>&), vector<double> dfunc(co
 			y[i] = g[i]-gprev[i];
 		}
 
-		// H(=B^-1)の更新
+		gnorm = 0.0;
+		for(int i = 0; i < n; ++i) gnorm += g[i]*g[i];
+		if(sqrt(gnorm) < eps) break; // 勾配ベクトル∇fの大きさで収束判定
+
+		// H*yの計算(行列×縦ベクトル⇒縦ベクトル)
 		vector<double> Hy(n, 0.0);
 		for(int i = 0; i < n; ++i){
 			for(int j = 0; j < n; ++j){
-				Hy[i] += H[i][j]*y[j];	// H*yの計算(行列×縦ベクトル⇒縦ベクトル)
+				Hy[i] += H[i][j]*y[j];	
 			}
 		}
+		// (s^T)*yと(y^T)*(H*y)の計算(どちらもベクトル同士の内積)
 		double sy = 0.0, yHy = 0.0;
 		for(int i = 0; i < n; ++i){
-			sy += s[i]*y[i];	// s*yの計算(ベクトル同士の内積演算,(s^T)*y)
-			yHy += y[i]*Hy[i];	// y*H*yの計算(ベクトル同士の内積演算,(y^T)*(H*y))
+			sy += s[i]*y[i];
+			yHy += y[i]*Hy[i];
 		}
+
+		// H^-1の更新
 		for(int i = 0; i < n; ++i){
 			for(int j = 0; j < n; ++j){
 				H[i][j] += s[i]*s[j]/sy + yHy*s[i]*s[j]/(sy*sy) - Hy[i]*s[j]/sy - s[i]*Hy[j]/sy;
 			}
 		}
 
-		if(fabs(f1-f0) < eps) break; // 関数値fの値が変化しなくなったら反復修了
 	}
 
 	xout = x;
 	max_iter = k;
-	eps = fabs(f1-f0);
+	eps = gnorm;
 
 	return 0;
 }
@@ -190,12 +193,12 @@ int quasinewton_bgfs(double func(const vector<double>&), vector<double> dfunc(co
 //-----------------------------------------------------------------------------
 int main(void)
 {
-	vector<double> x0(2, 1.0);
+	vector<double> x0(2, -1.0);
 	vector<double> x(2, 0.0);
 	double alpha = 0.2;
 
 	int max_iter = 100;
-	double eps = 1e-6;
+	double eps = 1e-8;
 	quasinewton_bgfs(Func4, DFunc4, x0, x, max_iter, eps);
 
 	cout << "(x,y) = (" << x[0] << "," << x[1] << "), ";

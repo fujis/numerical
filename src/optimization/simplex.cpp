@@ -39,10 +39,10 @@ int simplex(const vector< vector<double> > &a, const vector<int> &eqn, int n_con
 
 	// 単体表の作成
 	vector< vector<double> > s; // 単体表
-	s.resize(n); // 単体表の行数は条件式の数+1=n，最後の行が最適化式
+	s.resize(n);		// 単体表の行数は条件式の数+1=n，最後の行が目的関数
 	vector<int> xi(n);	// それぞれの行の基底変数(x1=0,x2=1,x3=2,...とインデックス値を格納)
 	for(int i = 0; i < n; ++i){
-		s[i].resize(m_all+1); // 単体表の列数はスラック変数を含む全変数の数+1
+		s[i].resize(m_all+1); // 単体表の列数はスラック変数を含む全変数の数+1，最後の列が基底可能解
 		if(i != n-1){ // 条件式の行(0～n-2行)
 			xi[i] = i+m; // 初期基底変数はスラック変数
 			int sgn = (a[i][m] < 0 ? -1 : 1); // 条件式の右辺項の符号
@@ -57,6 +57,17 @@ int simplex(const vector< vector<double> > &a, const vector<int> &eqn, int n_con
 		}
 	}
 
+	// チェック用
+	for(int i = 0; i < n; ++i){
+		if(i == n-1) cout << " z: ";
+		else cout << "x" << xi[i]+1 << ": ";
+		for(int j = 0; j < m_all+1; ++j){
+			cout << setw(8) << right << s[i][j] << " ";
+		}
+		cout << endl;
+	}
+	cout << endl;
+
 	int k;
 	for(k = 0; k < max_iter; ++k){
 		// 非基底変数(初期状態ではスラック変数以外)から負で絶対値最大のものを選択
@@ -67,7 +78,7 @@ int simplex(const vector< vector<double> > &a, const vector<int> &eqn, int n_con
 				b = j; xmax = -s[n-1][j];
 			}
 		}
-		if(b == -1) break; // 負の変数が見つからなければ収束したとしてループロ抜ける
+		if(b == -1) break; // 負の変数が見つからなければ収束したとしてループを抜ける
 
 		// ピボット要素の探索
 		int p = 0;
@@ -127,11 +138,12 @@ int simplex(const vector< vector<double> > &a, const vector<int> &eqn, int n_con
 //-----------------------------------------------------------------------------
 int main(void)
 {
+	// 条件式と目的関数の係数
 	//double a0[4][3] = { { 3, 1, 9 },{ 2.5, 2, 12.5 },{ 1, 2, 8 },{ 3, 2, 0 } };
 	//double a0[4][3] = { { 1, 2, 800 },{ 3, 4, 1800 },{ 3, 1, 1500 },{ 20, 30, 0 } };
 	double a0[3][3] = { { 2, 1, 8 },{ 1, 3, 9 },{ 1, 1, 0 } };
 	//int eqn0[4] = { 1, 1, 1, 0 };
-	int eqn0[3] = { 1, 1, 0 };
+	int eqn0[3] = { 1, 1, 0 }; // 条件式の符号(1:<=, -1:>=, 0:=), 最後の要素は目的関数
 
 	int n_cond = 2; // 条件式の数
 	int m = 2; // 変数の数

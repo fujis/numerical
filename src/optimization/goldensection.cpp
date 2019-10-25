@@ -30,15 +30,16 @@ const double SQRT5 = 2.23606797749979;
  */
 int goldensection(double func(const double), double xl, double xr, double &ans, int &max_iter, double &eps)
 {
-	const double eta = (SQRT5-1.0)/(SQRT5+1.0);
-	//const double eta = 2.0/(SQRT5+3.0);	// 上の式の変形(√5を事前計算してないならこちらの方が速い)
-	double beta = xr-xl;
-	double tau = eta*beta;
+	const double e = (SQRT5-1.0)/(SQRT5+1.0);
+	//const double e = 2.0/(SQRT5+3.0);	// 上の式の変形(√5を事前計算してないならこちらの方が速い)
+	double b = xr-xl;
+	double d = e*b;
+	cout.precision(7);
 
 	double x[4];
 	x[0] = xl;
-	x[1] = xl+tau;
-	x[2] = xr-tau;
+	x[1] = xl+d;
+	x[2] = xr-d;
 	x[3] = xr;
 
 	// x[1],x[2]における関数値
@@ -48,12 +49,12 @@ int goldensection(double func(const double), double xl, double xr, double &ans, 
 	int k;
 	for(k = 0; k < max_iter; ++k){
 
-		cout << x[0] << " " << x[1] << " " << x[2] << " " << x[3] << ", beta,tau = " << beta << "," << tau << endl;
+		cout << k << " : " << x[0] << " " << x[1] << " " << x[2] << " " << x[3] << ", b = " << b << endl;
 
 		if(f1 < f2){ // 区間[x2,x3]に最小値なし
 			double x2 = x[2];
 			x[2] = x[1];
-			x[1] = x2-tau;
+			x[1] = x2-d;
 			x[3] = x2;
 			f2 = f1;
 			f1 = func(x[1]);
@@ -61,21 +62,21 @@ int goldensection(double func(const double), double xl, double xr, double &ans, 
 		else{ // 区間[x0,x1]に最小値なし
 			double x1 = x[1];
 			x[1] = x[2];
-			x[2] = x1+tau;
+			x[2] = x1+d;
 			x[0] = x1;
 			f1 = f2;
 			f2 = func(x[2]);
 		}
 
-		beta -= tau;	// 新しい[x0,x3]の長さ(現在の長さから[x0,x1](or[x2,x3])の長さtauを引く)
-		tau = eta*beta; // 新しい[x0,x1](or[x2,x3])の長さ
+		b -= d;	// 新しい[x0,x3]の長さ(現在の長さから[x0,x1](or[x2,x3])の長さdを引く)
+		d = e*b; // 新しい[x0,x1](or[x2,x3])の長さ
 
-		if(beta < eps) break;
+		if(b < eps) break;
 	}
 
-	ans = x[1];
+	ans = 0.5*(x[1]+x[2]);
 	max_iter = k;
-	eps = beta;
+	eps = b;
 	
 	return 0;
 }
