@@ -78,16 +78,16 @@ inline double DFunc3(const double x)
  */
 inline double Func4(const vector<double> &x)
 {
-	//return x[0]*x[0]-2*x[0]*x[1]+2*x[1]*x[1];
-	return x[0]*x[0]-4*x[0]*x[1]+x[1]*x[1];
+	return x[0]*x[0]+x[1]*x[1]-x[0]*x[1]-x[0]-1;
+	//return x[0]*x[0]-4*x[0]*x[1]+x[1]*x[1];
 }
 inline vector<double> DFunc4(const vector<double> &x)
 {
 	vector<double> g(x.size(), 0.0);
-	//g[0] = 2*x[0]-2*x[1];
-	//g[1] = -2*x[0]+4*x[1];
-	g[0] = 2*x[0]-4*x[1];
-	g[1] = -4*x[0]+2*x[1];
+	g[0] = 2*x[0]-x[1]-1;
+	g[1] = 2*x[1]-x[0];
+	//g[0] = 2*x[0]-4*x[1];
+	//g[1] = -4*x[0]+2*x[1];
 	return g;
 }
 
