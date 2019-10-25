@@ -30,12 +30,12 @@ using namespace std;
  */
 inline double Func1(const double x)
 {
-	//return x*x*x-2*x*x-x+2;
+	//return x*x-3;
 	return 2*x*x*x*x*x+5*x*x*x+3*x+1;
 }
 inline double DFunc1(const double x)
 {
-	//return 3*x*x-4*x-1;
+	//return 2*x;
 	return 10*x*x*x*x+15*x*x+3;
 }
 

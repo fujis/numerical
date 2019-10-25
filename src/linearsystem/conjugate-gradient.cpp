@@ -325,7 +325,7 @@ int main(void)
 	
 	// 共役勾配法を用いて連立1次方程式を解く
 	int max_iter = 100;
-	double eps = 1e-4;
+	double eps = 1e-6;
 	vector<double> x(n);
 	//CGSolver(A, b, x, n, max_iter, eps);
 	ICCGSolver(A, b, x, n, max_iter, eps);
