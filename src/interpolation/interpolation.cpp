@@ -37,34 +37,27 @@ int linear_interpolation(const vector<double> &f, double a, double b, double x, 
 /*!
  * ラグランジュ補間
  *  - 線形補間は2点の時のラグランジュ補間
- * @param[in] yi 関数値を格納した配列
+ * @param[in] fi 関数値を格納した配列
  * @param[in] xi 関数値に対応する位置を格納した配列
  * @param[in] n データ数
  * @param[in] x 補間した値が必要な位置x
- * @param[out] ans 解
+ * @param[out] f 位置xでの関数値
  * @return
  */
-int lagrangian_interpolation(const vector<double> &yi, const vector<double> &xi, int n, double x, double &ans)
+int lagrangian_interpolation(const vector<double> &fi, const vector<double> &xi, int n, double x, double &f)
 {
-	ans = 0.0;
-	for(int k = 0; k < n; ++k){
-		// 補間係数の分子(Π(x-xi) (k!=i) の計算)
-		double pn = 1;
-		for(int i = 0; i < n; ++i){
-			if(i == k) continue;
-			pn *= (x-xi[i]);
+	double Ln = 0.0;
+	for(int i = 0; i < n; ++i){
+		// 補間係数(Π(x-xj)/(xi-xj) (j!=i) の計算)
+		double l = 1;
+		for(int j = 0; j < n; ++j){
+			if(j == i) continue;
+			l *= (x-xi[j])/(xi[i]-xi[j]);
 		}
-
-		// 補間係数の分母(Π(xk-xi) (k!=i) の計算)
-		double pd = 1;
-		for(int i = 0; i < n; ++i){
-			if(i == k) continue;
-			pd *= (xi[k]-xi[i]);
-		}
-		
 		// 補間値
-		ans += yi[k]*pn/pd;
+		Ln += fi[i]*l;
 	}
+	f = Ln;
 	return 0;
 }
 
@@ -89,6 +82,12 @@ int main(void)
 	xi.push_back(1.0);
 	yi.push_back(func(xi.back()));
 
+	cout << "sampling points : ";
+	for(int i = 0; i < xi.size(); ++i){
+		cout << "(" << xi[i] << ", " << yi[i] << ")" << (i == xi.size()-1 ? "" : ",  ");
+	}
+	cout << endl;
+
 	// 線形補間
 	linear_interpolation(yi, xi[0], xi[1], x, fx);
 	cout << "f_linear(" << x << ") = " << fx << ",  error = " << fabs(fx-gt) << endl;
@@ -102,6 +101,12 @@ int main(void)
 	yi.push_back(func(xi.back()));
 	xi.push_back(0.66);
 	yi.push_back(func(xi.back()));
+
+	cout << "sampling points : ";
+	for(int i = 0; i < xi.size(); ++i){
+		cout << "(" << xi[i] << ", " << yi[i] << ")" << (i == xi.size()-1 ? "" : ",  ");
+	}
+	cout << endl;
 
 	// 4点ラグランジュ補間
 	lagrangian_interpolation(yi, xi, 4, x, fx);

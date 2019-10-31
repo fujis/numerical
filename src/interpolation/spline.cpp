@@ -11,8 +11,8 @@
 //-----------------------------------------------------------------------------
 // インクルードファイル
 //-----------------------------------------------------------------------------
-#include "rx_common.h"
-#include "rx_func.h"
+#include "rx_utils.h"
+#include "rx_funcs.h"
 
 #include <iomanip>
 
@@ -99,66 +99,61 @@ int cg_solver(const vector< vector<double> > &A, const vector<double> &b, vector
  *  - 
  * @param[in] yi 関数値を格納した配列
  * @param[in] xi 関数値に対応する位置を格納した配列(位置は昇順でソートされている必要がある)
- * @param[in] n データ数
+ * @param[in] m データ数(=n+1)
  * @param[in] x 補間した値が必要な位置x
  * @param[out] ans 解
  * @return
  */
-int spline_interpolation(const vector<double> &yi, const vector<double> &xi, int n, double x, double &ans)
+int spline_interpolation(const vector<double> &f, const vector<double> &xi, int m, double x, double &ans)
 {
-	int m = n-1; // 補間区間の数
-	vector<double> a(m+1, 0.0), b(m, 0.0), c(m+1, 0.0), d(m, 0.0); // 各区間における補間係数(計算上aとcだけサイズがm+1になっていることに注意)
-	vector<double> h(m); // 各補間区間の幅
-	for(int i = 0; i < m; ++i){
+	int n = m-1; // 補間区間の数
+	vector<double> a(n), b(n), c(n), d(n); // 各区間における補間係数
+	vector<double> h(n); // 各補間区間の幅
+	for(int i = 0; i < n; ++i){
 		h[i] = xi[i+1]-xi[i];
 	}
 
-	// 係数aの計算(0次項の係数=定数項)
-	for(int i = 0; i < m+1; ++i){
-		a[i] = yi[i];
+	// 位置x_iでの多項式の2階微分u_iの計算
+	// 線形システムの係数行列Hと右辺項ベクトルbの計算
+	vector< vector<double> > H(n-1);
+	vector<double> tmp(n-1, 0.0), v(n-1, 0.0);
+	for(int i = 0; i < n-1; ++i){
+		H[i].resize(n-1, 0.0); // 係数行列の各行を0で初期化
+		// 係数行列と右辺項ベクトルの要素の計算
+		if(i != 0) H[i][i-1] = h[i];
+		H[i][i] = 2*(h[i]+h[i+1]);
+		if(i != n-2) H[i][i+1] = h[i+1];
+		v[i] = 6*((f[i+2]-f[i+1])/h[i+1]-(f[i+1]-f[i])/h[i]);
 	}
-
-	// 係数cの計算(2次項の係数) -> 線形システムを解くことで求める
-	// 線形システムの係数行列と右辺項ベクトルの計算
-	vector< vector<double> > Ac(m+1);
-	vector<double> bc(m+1, 0.0);
-	for(int i = 0; i < m+1; ++i){
-		Ac[i].resize(m+1, 0.0); // 係数行列の各行を0で初期化
-		if(i == 0){
-			Ac[i][0] = 1.0; bc[0] = 0.0;
-		}
-		else if(i == m){
-			Ac[i][m] = 1.0; bc[m] = 0.0;
-		}
-		else{
-			Ac[i][i-1] = h[i-1];
-			Ac[i][i]   = 2*(h[i-1]+h[i]);
-			Ac[i][i+1] = h[i];
-			bc[i] = 3*(a[i+1]-a[i])/h[i]-3*(a[i]-a[i-1])/h[i-1];
-		}
-	}
-	// CG法で線形システムを解く(Acは対称疎行列)
+	// CG法で線形システムを解く(Hは対称疎行列)
 	int max_iter = 100;
 	double eps = 1e-6;
-	cg_solver(Ac, bc, c, m+1, max_iter, eps);
+	cg_solver(H, v, tmp, n-1, max_iter, eps);
 
-	// 係数b,dの計算(1次項,3次項の係数)
-	for(int i = 0; i < m-1; ++i){
-		b[i] = (a[i+1]-a[i])/h[i]-h[i]*(c[i+1]+2*c[i])/3;
-		d[i] = (c[i+1]-c[i])/(3*h[i]);
+	// u_0とu_nを追加
+	vector<double> u(n+1);
+	u[0] = 0.0; u[n] = 0.0;
+	for(int i = 0; i < n-1; ++i) u[i+1] = tmp[i];
+
+	// 係数a,b,c,dの計算
+	for(int i = 0; i < n; ++i){
+		a[i] = (u[i+1]-u[i])/(6.0*h[i]);
+		b[i] = u[i]/2.0;
+		c[i] = (f[i+1]-f[i])/h[i]-h[i]*(2*u[i]+u[i+1])/6.0;
+		d[i] = f[i];
 	}
-	b[m-1] = d[m-1] = 0.0;
 
 	// xが含まれる区間の探索(区間幅がすべて同じならint(x/h)で求められる)
 	int k = 0;
-	for(int i = 0; i < m; ++i){
+	for(int i = 0; i < n; ++i){
 		if(x >= xi[i] && x < xi[i+1]){
 			k = i; break;
 		}
 	}
 
 	// 計算済みの係数を使って3次多項式で補間値を計算
-	ans = a[k] + b[k]*(x-xi[k]) + c[k]*(x-xi[k])*(x-xi[k]) + d[k]*(x-xi[k])*(x-xi[k])*(x-xi[k]);
+	double dx = x-xi[k];
+	ans = a[k]*dx*dx*dx + b[k]*dx*dx + c[k]*dx + d[k];
 
 	return 0;
 }
