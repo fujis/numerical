@@ -122,8 +122,8 @@ int quasinewton_bgfs(double func(const vector<double>&), vector<double> dfunc(co
 	double f;
 	int k;
 	for(k = 0; k < max_iter; ++k){
-		//cout << "f(" << x << ") = " << func(x) << endl;
-		cout << x << ", " << gnorm << endl;
+		cout << "f(" << x << ") = " << func(x) << endl;
+		//cout << x << ", " << gnorm << endl;
 
 		// 探索方向dの計算(d = -H∇f)
 		vector<double> p(n, 0.0);
