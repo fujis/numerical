@@ -95,19 +95,21 @@ int cg_solver(const vector< vector<double> > &A, const vector<double> &b, vector
 // 補間法
 //-----------------------------------------------------------------------------
 /*!
- * スプライン補間
- *  - 
- * @param[in] yi 関数値を格納した配列
+ * 3次スプライン補間
+ * @param[in] f 関数値を格納した配列
  * @param[in] xi 関数値に対応する位置を格納した配列(位置は昇順でソートされている必要がある)
  * @param[in] m データ数(=n+1)
  * @param[in] x 補間した値が必要な位置x
  * @param[out] ans 解
+ * @param[out] a,b,c,d 各区間における補間係数
  * @return
  */
-int spline_interpolation(const vector<double> &f, const vector<double> &xi, int m, double x, double &ans)
+int spline_interpolation(const vector<double> &f, const vector<double> &xi, int m, double x, double &ans,
+						 vector<double> &a, vector<double> &b, vector<double> &c, vector<double> &d)
 {
 	int n = m-1; // 補間区間の数
-	vector<double> a(n), b(n), c(n), d(n); // 各区間における補間係数
+	// 補間係数配列のメモリ確保
+	a.resize(n); b.resize(n); c.resize(n); d.resize(n);
 	vector<double> h(n); // 各補間区間の幅
 	for(int i = 0; i < n; ++i){
 		h[i] = xi[i+1]-xi[i];
@@ -159,6 +161,28 @@ int spline_interpolation(const vector<double> &f, const vector<double> &xi, int 
 }
 
 
+/*!
+ * 3次スプライン多項式で関数値を計算
+ * @param[in] n 区間数
+ * @param[in] x 補間した値が必要な位置
+ * @param[out] a,b,c,d 各区間における補間係数
+ * @return スプライン多項式を計算した結果
+ */
+double cubic_spline(double x, const vector<double> &xi, int n, const vector<double> &a, const vector<double> &b, const vector<double> &c, const vector<double> &d)
+{
+	// xが含まれる区間の探索(区間幅がすべて同じならint(x/h)で求められる)
+	int k = 0;
+	for(int i = 0; i < n; ++i){
+		if(x >= xi[i] && x < xi[i+1]){
+			k = i; break;
+		}
+	}
+
+	// 計算済みの係数を使って3次多項式で補間値を計算
+	double dx = x-xi[k];
+	return a[k]*dx*dx*dx + b[k]*dx*dx + c[k]*dx + d[k];
+}
+
 
 //-----------------------------------------------------------------------------
 //! メイン関数
@@ -166,35 +190,38 @@ int spline_interpolation(const vector<double> &f, const vector<double> &xi, int 
 int main(void)
 {
 	double(*func)(double) = FuncExp;
-	//double(*func)(double) = FuncLinear;
+	double x0 = 0, x1 = 1;
 
-	double x = 0.5;
-	double fx;
+	//double(*func)(double) = FuncRunge;
+	//double x0 = -1, x1 = 1;
+
+	double x = 0.5, fx;
 	double gt = func(x); // 真値
-	cout.precision(10);
+	cout.precision(6);
 
-	// 補間用の点
+	// 補間用の点(サンプリング点数6)
 	vector<double> xi, yi;
-	xi.push_back(0.0);
-	yi.push_back(func(xi.back()));
-	xi.push_back(0.2);
-	yi.push_back(func(xi.back()));
-	xi.push_back(0.4);
-	yi.push_back(func(xi.back()));
-	xi.push_back(0.6);
-	yi.push_back(func(xi.back()));
-	xi.push_back(0.8);
-	yi.push_back(func(xi.back()));
-	xi.push_back(1.0);
-	yi.push_back(func(xi.back()));
+	MakeSamplingPoints(x0, x1, (x1-x0)/5, func, xi, yi);
+	OutputSamplingPoints(xi, yi); // サンプリング点の画面出力
 
-	// 線形補間
-	spline_interpolation(yi, xi, xi.size(), x, fx);
+	// スプライン補間
+	vector<double> a, b, c, d;
+	spline_interpolation(yi, xi, xi.size(), x, fx, a, b, c, d);
 	cout << "f_spline(" << x << ") = " << fx << ",  error = " << fabs(fx-gt) << endl;
-
 	cout << "ground truth = " << gt << endl;
 
-		
+
+
+	// グラフ描画用にデータ出力
+	int m = 11; // データ点数
+	MakeSamplingPoints(x0, x1, (x1-x0)/(m-1.0), func, xi, yi);
+	spline_interpolation(yi, xi, xi.size(), x, fx, a, b, c, d);
+	OutputSamplingPoints(xi, yi, "dat/spline"+TOSTR(m)+"_data.txt"); // サンプリング点のファイル出力
+	OutputFunction(x0, x1, (x1-x0)/200, std::bind(cubic_spline, std::placeholders::_1, xi, xi.size()-1, a, b, c, d), "dat/spline"+TOSTR(m)+".txt");
+
+	// 真値のグラフ作成用ファイル出力
+	OutputFunction(x0, x1, (x1-x0)/200, func, "dat/spline_ground_truth.txt");
+	
 	return 0;
 }
 

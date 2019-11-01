@@ -23,14 +23,12 @@
  * @param[in] f 関数値(2つ)
  * @param[in] a,b 関数値fに対応する位置x
  * @param[in] x 補間した値が必要な位置x
- * @param[out] ans 解
- * @return 
+ * @return 補間値
  */
-int linear_interpolation(const vector<double> &f, double a, double b, double x, double &ans)
+double linear_interpolation(const vector<double> &f, double a, double b, double x)
 {
 	double l = b-a;
-	ans = ((x-a)*f[1]+(b-x)*f[0])/l;
-	return 0;
+	return ((x-a)*f[1]+(b-x)*f[0])/l;
 }
 
 
@@ -41,10 +39,9 @@ int linear_interpolation(const vector<double> &f, double a, double b, double x, 
  * @param[in] xi 関数値に対応する位置を格納した配列
  * @param[in] n データ数
  * @param[in] x 補間した値が必要な位置x
- * @param[out] f 位置xでの関数値
- * @return
+ * @return 位置xでの補間値
  */
-int lagrangian_interpolation(const vector<double> &fi, const vector<double> &xi, int n, double x, double &f)
+double lagrangian_interpolation(const vector<double> &fi, const vector<double> &xi, int n, double x)
 {
 	double Ln = 0.0;
 	for(int i = 0; i < n; ++i){
@@ -57,9 +54,33 @@ int lagrangian_interpolation(const vector<double> &fi, const vector<double> &xi,
 		// 補間値
 		Ln += fi[i]*l;
 	}
-	f = Ln;
-	return 0;
+	return Ln;
 }
+
+
+/*!
+ * サンプリング点(データ点)の生成(1次元)
+ *  - チェビシェフ節点
+ * @param[in] x0,x1 サンプリング範囲
+ * @param[in] dx サンプリング間隔
+ * @param[in] func 関数値を与える関数ポインタ
+ * @param[out] xi,yi サンプリングデータ
+ * @return 生成されたデータ個数
+ */
+static int MakeChebyshevNodes(double x0, double x1, double dx, double func(double), vector<double> &xi, vector<double> &yi)
+{
+	xi.clear(); yi.clear();
+	int cnt = 0;
+	int n = (x1-x0)/dx+1;
+	for(int i = n; i >= 1; --i){
+		double x = cos((2.0*i-1.0)/(2.0*n)*RX_PI);
+		x = x0+(x/2.0+0.5)*(x1-x0);
+		xi.push_back(x);
+		yi.push_back(func(x));
+	}
+	return n;
+}
+
 
 
 //-----------------------------------------------------------------------------
@@ -68,53 +89,55 @@ int lagrangian_interpolation(const vector<double> &fi, const vector<double> &xi,
 int main(void)
 {
 	double(*func)(double) = FuncExp;
-	//double(*func)(double) = FuncLinear;
+	double x0 = 0, x1 = 1;
 
-	double x = 0.5;
-	double fx;
+	//double(*func)(double) = FuncRunge;
+	//double x0 = -1, x1 = 1;
+
+	double x = 0.5, fx;
 	double gt = func(x); // 真値
-	cout.precision(10);
+	cout.precision(6);
 
 	// 補間用の点
 	vector<double> xi, yi;
-	xi.push_back(0.0);
-	yi.push_back(func(xi.back()));
-	xi.push_back(1.0);
-	yi.push_back(func(xi.back()));
-
-	cout << "sampling points : ";
-	for(int i = 0; i < xi.size(); ++i){
-		cout << "(" << xi[i] << ", " << yi[i] << ")" << (i == xi.size()-1 ? "" : ",  ");
-	}
-	cout << endl;
+	MakeSamplingPoints(x0, x1, x1-x0, func, xi, yi);
+	OutputSamplingPoints(xi, yi); // サンプリング点の画面出力
 
 	// 線形補間
-	linear_interpolation(yi, xi[0], xi[1], x, fx);
+	fx = linear_interpolation(yi, xi[0], xi[1], x);
 	cout << "f_linear(" << x << ") = " << fx << ",  error = " << fabs(fx-gt) << endl;
 
 	// 2点ラグランジュ補間(=線形補間)
-	lagrangian_interpolation(yi, xi, 2, x, fx);
+	fx = lagrangian_interpolation(yi, xi, xi.size(), x);
 	cout << "f_lagrangian(" << x << ") = " << fx << ",  error = " << fabs(fx-gt) << endl;
-
-	// 補間用の点の追加
-	xi.push_back(0.33);
-	yi.push_back(func(xi.back()));
-	xi.push_back(0.66);
-	yi.push_back(func(xi.back()));
-
-	cout << "sampling points : ";
-	for(int i = 0; i < xi.size(); ++i){
-		cout << "(" << xi[i] << ", " << yi[i] << ")" << (i == xi.size()-1 ? "" : ",  ");
-	}
 	cout << endl;
 
-	// 4点ラグランジュ補間
-	lagrangian_interpolation(yi, xi, 4, x, fx);
-	cout << "f_lagrangian(" << x << ") = " << fx << ",  error = " << fabs(fx-gt) << endl;
 
+	// 補間用の点を増やす(6点⇒5区間なので5次多項式で補間)
+	MakeSamplingPoints(x0, x1, (x1-x0)/5.0, func, xi, yi);
+	OutputSamplingPoints(xi, yi); // サンプリング点の画面出力
+
+	// 6点ラグランジュ補間(5次多項式補間)
+	fx = lagrangian_interpolation(yi, xi, xi.size(), x);
+	cout << "f_lagrangian(" << x << ") = " << fx << ",  error = " << fabs(fx-gt) << endl;
 	cout << "ground truth = " << gt << endl;
 
-		
+
+
+	// グラフ描画用にデータ出力
+	int m = 6; // データ点数(次数はデータ点数-1)
+	MakeSamplingPoints(x0, x1, (x1-x0)/(m-1.0), func, xi, yi);
+	OutputSamplingPoints(xi, yi, "dat/lagrangian"+TOSTR(m)+"_data.txt");
+	OutputFunction(x0, x1, (x1-x0)/200, std::bind(lagrangian_interpolation, yi, xi, xi.size(), std::placeholders::_1), "dat/lagrangian"+TOSTR(m)+".txt");
+	// チェビシェフ節点を用いる場合
+	MakeChebyshevNodes(x0, x1, (x1-x0)/(m-1.0), func, xi, yi);
+	OutputSamplingPoints(xi, yi, "dat/lagrangian"+TOSTR(m)+"c_data.txt");
+	OutputFunction(x0, x1, (x1-x0)/200, std::bind(lagrangian_interpolation, yi, xi, xi.size(), std::placeholders::_1), "dat/lagrangian"+TOSTR(m)+"c.txt");
+
+	// 真値のグラフ作成用ファイル出力
+	OutputFunction(x0, x1, (x1-x0)/200, func, "dat/lagrangian_ground_truth.txt");
+
+
 	return 0;
 }
 

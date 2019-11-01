@@ -25,33 +25,33 @@
  *  - LとUを一つの行列にまとめた形で結果を返す
  * @param[inout] A n×nの係数行列．LU分解した結果を格納する．
  * @param[in] n 行列の大きさ
- * @return 1:成功,0:失敗
+ * @return 0:成功,1:失敗
  */
-int luDecomp(vector<double> &A, int n)
+int LUDecomp(vector< vector<double> > &A, int n)
 {
-	if(n <= 0) return 0;
+	if(n <= 0) return 1;
 
 	for(int i = 0; i < n; ++i){
 		// l_ijの計算(i >= j)
 		for(int j = 0; j <= i; ++j){
-			double lu = A[i*n+j];
+			double lu = A[i][j];
 			for(int k = 0; k < j; ++k){
-				lu -= A[i*n+k]*A[k*n+j];    // l_ik * u_kj
+				lu -= A[i][k]*A[k][j];	// l_ik * u_kj
 			}
-			A[i*n+j] = lu;
+			A[i][j] = lu;
 		}
 
 		// u_ijの計算(i < j)
 		for(int j = i+1; j < n; ++j){
-			double lu = A[i*n+j];
+			double lu = A[i][j];
 			for(int k = 0; k < i; ++k){
-				lu -= A[i*n+k]*A[k*n+j];    // l_ik * u_kj
+				lu -= A[i][k]*A[k][j];	// l_ik * u_kj
 			}
-			A[i*n+j] = lu/A[i*n+i];
+			A[i][j] = lu/A[i][i];
 		}
 	}
 
-	return 1;
+	return 0;
 }
 
 /*!
@@ -60,20 +60,20 @@ int luDecomp(vector<double> &A, int n)
  * @param[in] b 右辺ベクトル
  * @param[out] x 結果ベクトル
  * @param[in] n 行列の大きさ
- * @return 1:成功,0:失敗
+ * @return 0:成功,1:失敗
  */
-int luSolver(const vector<double> &A, const vector<double> &b, vector<double> &x, int n)
+int LUSolver(const vector< vector<double> > &A, const vector<double> &b, vector<double> &x, int n)
 {
-	if(n <= 0) return 0;
+	if(n <= 0) return 1;
 
 	// 前進代入(forward substitution)
 	//  LY=bからYを計算
 	for(int i = 0; i < n; ++i){
 		double bly = b[i];
 		for(int j = 0; j < i; ++j){
-			bly -= A[i*n+j]*x[j];
+			bly -= A[i][j]*x[j];
 		}
-		x[i] = bly/A[i*n+i];
+		x[i] = bly/A[i][i];
 	}
 
 	// 後退代入(back substitution)
@@ -81,13 +81,14 @@ int luSolver(const vector<double> &A, const vector<double> &b, vector<double> &x
 	for(int i = n-1; i >= 0; --i){
 		double yux = x[i];
 		for(int j = i+1; j < n; ++j){
-			yux -= A[i*n+j]*x[j];
+			yux -= A[i][j]*x[j];
 		}
 		x[i] = yux;
 	}
 
-	return 1;
+	return 0;
 }
+
 
 //! 階乗計算
 inline int factorial(int n)
@@ -108,51 +109,65 @@ inline int factorial(int n)
  * @param[in] n データ数
  * @param[in] m フィッティングする多項式の次数
  * @param[in] x 補間した値が必要な位置x
- * @param[out] ans 解
- * @return
+ * @param[out] c 係数ベクトル
+ * @return 補間値
  */
-int leastsquare_interpolation(const vector<double> &yi, const vector<double> &xi, int n, int m, double x, double &ans)
+double leastsquare_interpolation(const vector<double> &fi, const vector<double> &xi, int n, int m, double x, vector<double> &c)
 {
 	int dim = 1;	// 空間次元数(今回は1次元データなので1)
-	int dim_basis = factorial(dim+m)/(factorial(m)*factorial(dim)); // 多項式の次数から行列のサイズ(=基底ベクトルの次元数)を計算
+	int dim_b = factorial(dim+m)/(factorial(m)*factorial(dim)); // 多項式の次数から行列のサイズ(=基底ベクトルの次元数)を計算
 
-	vector<double> A, b, c; // Ac=b -> c=A^-1 b
-	A.resize(dim_basis*dim_basis, 0.0);		// 左辺係数行列
-	b.resize(dim_basis, 0.0);				// 右辺項
-	c.resize(dim_basis, 0.0);				// 計算結果の多項式係数
+	// Ac=y -> c=A^-1 y
+	c.resize(dim_b, 0.0);	// 結果の係数ベクトル
+	vector<double> b(dim_b, 0.0), y(dim_b, 0.0); // 基底ベクトルと右辺項
+	vector< vector<double> > A(dim_b, b);
 
-	// 係数行列Aと右辺項bの計算
-	vector<double> basis(dim_basis, 0.0);
-	for(int k = 0; k < n; ++k){
+	// 係数行列Aと右辺項yの計算
+	for(int k = 0; k < n; ++k){ // データ分だけ反復
 		// 多項式の基底ベクトルの計算(多項式以外でフィッティングする場合はこの部分を変えれば良い)
 		double xb = 1;
-		for(int i = 0; i < dim_basis; ++i){
-			basis[i] = xb; xb *= xi[k];
+		for(int i = 0; i < dim_b; ++i){
+			b[i] = xb; xb *= xi[k];
 		}
 
 		// 係数行列Aと右辺項bの計算
-		for(int i = 0; i < dim_basis; ++i){
-			for(int j = 0; j < dim_basis; ++j){
-				A[i*dim_basis+j] += basis[i]*basis[j];
+		for(int i = 0; i < dim_b; ++i){
+			for(int j = 0; j < dim_b; ++j){
+				A[i][j] += b[i]*b[j];
 			}
-			b[i] += basis[i]*yi[k];
+			y[i] += b[i]*fi[k];
 		}
 	}
 
-	// Ax=bをLU分解で解く(疎行列とは限らないのでCGソルバは使わない)
-	luDecomp(A, dim_basis);
-	luSolver(A, b, c, dim_basis);
+	// Ac=yをLU分解で解く(疎行列とは限らないのでCGソルバは使わない)
+	LUDecomp(A, dim_b);
+	LUSolver(A, y, c, dim_b);
 
 	// 基底ベクトルに求めた係数を掛けて行くことで位置xにおける値yを計算
-	ans = 0;
+	double fx = 0;
 	double xb = 1;
-	for(int i = 0; i < dim_basis; ++i){
-		ans += c[i]*xb; xb *= x;
+	for(int i = 0; i < dim_b; ++i){
+		fx += c[i]*xb; xb *= x;
 	}
-
-	return 0;
+	return fx;
 }
 
+/*!
+ * 多項式を計算
+ * @param[in] x 値が必要な位置
+ * @param[in] c 多項式の係数
+ * @param[in] n 多項式の係数の数(n-1次多項式となる)
+ * @return 多項式を計算した結果
+ */
+double polynominal(double x, const vector<double> &c, int n)
+{
+	double fx = 0;
+	double xb = 1;
+	for(int i = 0; i < n; ++i){
+		fx += c[i]*xb; xb *= x;
+	}
+	return fx;
+}
 
 
 //-----------------------------------------------------------------------------
@@ -161,41 +176,54 @@ int leastsquare_interpolation(const vector<double> &yi, const vector<double> &xi
 int main(void)
 {
 	double(*func)(double) = FuncExp;
-	//double(*func)(double) = FuncLinear;
+	double x0 = 0, x1 = 1;
 
-	double x = 0.5;
-	double fx;
+	//double(*func)(double) = FuncRunge;
+	//double x0 = -1, x1 = 1;
+
+	double x = 0.5, fx;
 	double gt = func(x); // 真値
-	cout.precision(10);
+	cout.precision(6);
 
-	// 補間用の点
+	// 補間用の点(サンプリング点の数=6)
 	vector<double> xi, yi;
-	xi.push_back(0.0);
-	yi.push_back(func(xi.back()));
-	xi.push_back(0.2);
-	yi.push_back(func(xi.back()));
-	xi.push_back(0.4);
-	yi.push_back(func(xi.back()));
-	xi.push_back(0.6);
-	yi.push_back(func(xi.back()));
-	xi.push_back(0.8);
-	yi.push_back(func(xi.back()));
-	xi.push_back(1.0);
-	yi.push_back(func(xi.back()));
+	MakeSamplingPoints(x0, x1, (x1-x0)/5, func, xi, yi);
+	OutputSamplingPoints(xi, yi); // サンプリング点の画面出力
 
-	// n次多項式による補間
-	leastsquare_interpolation(yi, xi, xi.size(), 2, x, fx);
-	cout << "f_ls2(" << x << ") = " << fx << ",  error = " << fabs(fx-gt) << endl;
-	leastsquare_interpolation(yi, xi, xi.size(), 3, x, fx);
+	// 3次多項式による補間
+	vector<double> c; // 係数ベクトル
+	fx = leastsquare_interpolation(yi, xi, xi.size(), 3, x, c);
 	cout << "f_ls3(" << x << ") = " << fx << ",  error = " << fabs(fx-gt) << endl;
-	leastsquare_interpolation(yi, xi, xi.size(), 4, x, fx);
-	cout << "f_ls4(" << x << ") = " << fx << ",  error = " << fabs(fx-gt) << endl;
-	leastsquare_interpolation(yi, xi, xi.size(), 5, x, fx);
-	cout << "f_ls5(" << x << ") = " << fx << ",  error = " << fabs(fx-gt) << endl;
-
 	cout << "ground truth = " << gt << endl;
 
-		
+
+
+	// グラフ描画用にデータ出力
+	int d = 3;  // 多項式の次数
+	int m = 6; // サンプリング点数
+	MakeSamplingPoints(x0, x1, (x1-x0)/(m-1.0), func, xi, yi);
+	leastsquare_interpolation(yi, xi, xi.size(), d, x, c);
+	OutputSamplingPoints(xi, yi, "dat/leastsquare"+TOSTR(m)+"_data.txt"); // サンプリング点のファイル出力
+	OutputFunction(x0, x1, (x1-x0)/200, std::bind(polynominal, std::placeholders::_1, c, c.size()), "dat/leastsquare"+TOSTR(m)+"_d"+TOSTR(d)+".txt");
+
+	// 真値のグラフ作成用ファイル出力
+	OutputFunction(x0, x1, (x1-x0)/200, func, "dat/leastsquare_ground_truth.txt");
+
+
+	// ノイズ付きデータに対する最小２乗法
+	d = 3;  // 多項式の次数
+	m = 11; // サンプリング点数
+	MakeSamplingPointsWithWhiteNoise(x0, x1, (x1-x0)/(m-1.0), func, 0.15, xi, yi);
+	leastsquare_interpolation(yi, xi, xi.size(), d, x, c);
+	OutputSamplingPoints(xi, yi, "dat/leastsquare"+TOSTR(m)+"n_data.txt"); // サンプリング点のファイル出力
+	OutputFunction(x0, x1, (x1-x0)/200, std::bind(polynominal, std::placeholders::_1, c, c.size()), "dat/leastsquare"+TOSTR(m)+"n_d"+TOSTR(d)+".txt");
+
+	MakeSamplingPointsWithWhiteNoise(x0, x1, (x1-x0)/(m-1.0), func, 0.01, xi, yi);
+	yi[2] = func(xi[2])+1.2; // 外れ値を意図的に追加
+	leastsquare_interpolation(yi, xi, xi.size(), d, x, c);
+	OutputSamplingPoints(xi, yi, "dat/leastsquare"+TOSTR(m)+"o_data.txt"); // サンプリング点のファイル出力
+	OutputFunction(x0, x1, (x1-x0)/200, std::bind(polynominal, std::placeholders::_1, c, c.size()), "dat/leastsquare"+TOSTR(m)+"o_d"+TOSTR(d)+".txt");
+
 	return 0;
 }
 
