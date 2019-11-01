@@ -23,6 +23,7 @@
 #include <map>
 #include <set>
 #include <algorithm>
+#include <functional>
 
 #include <cstdio>
 #include <cstdlib>
@@ -115,6 +116,14 @@ inline T RX_CLAMP(const T &x, const T &a, const T &b){ return ((x < a) ? a : (x 
 //-----------------------------------------------------------------------------
 template<class T>
 inline string RX_TO_STRING(T x)
+{
+	stringstream ss;
+	ss << x;
+	return ss.str();
+}
+
+template<class T>
+inline string TOSTR(T x)
 {
 	stringstream ss;
 	ss << x;
@@ -397,6 +406,113 @@ inline double dot(const vector<double> &a, const vector<double> &b, int n)
 	}
 	return d;
 }
+
+
+
+//-----------------------------------------------------------------------------
+// サンプリング点(データ点)
+//-----------------------------------------------------------------------------
+/*!
+ * サンプリング点(データ点)の生成(1次元)
+ * @param[in] x0,x1 サンプリング範囲
+ * @param[in] dx サンプリング間隔
+ * @param[in] func 関数値を与える関数ポインタ
+ * @param[out] xi,yi サンプリングデータ
+ * @return 生成されたデータ個数
+ */
+static int MakeSamplingPoints(double x0, double x1, double dx, double func(double), vector<double> &xi, vector<double> &yi)
+{
+	xi.clear(); yi.clear();
+	int cnt = 0;
+	double x = x0;
+	while(x <= x1){
+		xi.push_back(x);
+		yi.push_back(func(x));
+		x += dx;
+		cnt++;
+	}
+	return cnt;
+}
+
+/*!
+ * サンプリング点(データ点)のファイル出力
+ * @param[in] xi,yi サンプリングデータ
+ * @param[in] filename 出力ファイル名
+ */
+static void OutputSamplingPoints(vector<double> &xi, vector<double> &yi, string filename)
+{
+	ofstream fo;
+	fo.open(filename.c_str(), ios::out);
+	for(int i = 0; i < xi.size(); ++i){
+		fo << xi[i] << ", " << yi[i] << endl;
+	}
+	fo.close();
+}
+
+/*!
+ * サンプリング点(データ点)の画面出力
+ * @param[in] xi,yi サンプリングデータ
+ * @param[in] filename 出力ファイル名
+ */
+static void OutputSamplingPoints(vector<double> &xi, vector<double> &yi)
+{
+	cout << "sampling points : ";
+	for(int i = 0; i < xi.size(); ++i){
+		cout << "(" << xi[i] << ", " << yi[i] << ")" << (i == xi.size()-1 ? "" : ",  ");
+	}
+	cout << endl;
+}
+
+/*!
+ * 関数値のファイル出力
+ * @param[in] x0,x1 サンプリング範囲
+ * @param[in] dx サンプリング間隔
+ * @param[in] func 関数値を与える関数ポインタ(std::bindをつかうためにstd::functionにしている)
+ * @param[in] filename 出力ファイル名
+ * @return 生成されたデータ個数
+ */
+static int OutputFunction(double x0, double x1, double dx, std::function<double(double)> func, string filename)
+{
+	ofstream fo;
+	fo.open(filename.c_str(), ios::out);
+	int cnt = 0;
+	double x = x0;
+	while(x <= x1){
+		fo << x << ", ";
+		fo << func(x) << endl;
+		x += dx;
+		cnt++;
+	}
+	fo.close();
+	return cnt;
+}
+
+
+/*!
+ * サンプリング点(データ点)の生成(1次元,ホワイトノイズ付き)
+ * @param[in] x0,x1 サンプリング範囲
+ * @param[in] dx サンプリング間隔
+ * @param[in] func 関数値を与える関数ポインタ
+ * @param[in] nwidth ノイズのサイズ([-0.5nsize, 0.5nsize]のノイズを追加する)
+ * @param[out] xi,yi サンプリングデータ
+ * @return 生成されたデータ個数
+ */
+static int MakeSamplingPointsWithWhiteNoise(double x0, double x1, double dx, double func(double), double nwidth, vector<double> &xi, vector<double> &yi)
+{
+	srand((unsigned int)time(0)); // 乱数のシード値を時間によって変える
+	xi.clear(); yi.clear();
+	int cnt = 0;
+	double x = x0;
+	while(x <= x1){
+		double noise = ((double)rand()/(double)RAND_MAX-0.5)*nwidth;
+		xi.push_back(x);
+		yi.push_back(func(x)+noise);
+		x += dx;
+		cnt++;
+	}
+	return cnt;
+}
+
 
 
 #endif // #ifndef _RX_COMMON_H_

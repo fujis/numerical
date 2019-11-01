@@ -169,5 +169,21 @@ inline double DFuncLinear(const double x)
 	return 2.0;
 }
 
+/*!
+ * 1次元のルンゲ関数
+ * @param[in] x 変数
+ * @return 方程式の値
+ */
+const double ainv = 25;
+inline double FuncRunge(const double x)
+{
+	return 1.0/(1.0+ainv*x*x);
+}
+inline double DFuncRunge(const double x)
+{
+	return -2*ainv*x/((1.0+ainv*x*x)*(1.0+ainv*x*x));
+}
+
+
 
 #endif // #ifndef _RX_FUNC_H_
