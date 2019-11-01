@@ -78,14 +78,15 @@ int main(void)
 	double x = 0.0;
 
 	// 探索範囲
-	x1 = 3.0;
-	x2 = 4.0;
+	x1 = -1.0;
+	x2 = 1.0;
 
 	// 二分法でf(x)=0を解く
 	int max_iter = 100;
-	double eps = 1e-6;
-	bisection(FuncPi, x1, x2, x, max_iter, eps);
+	double eps = 1e-10;
+	bisection(Func1, x1, x2, x, max_iter, eps);
 
+	cout.precision(15);
 	// 結果の画面表示
 	cout << "x = " << x << endl;
 	cout << "iter = " << max_iter << ", eps = " << eps << endl;
