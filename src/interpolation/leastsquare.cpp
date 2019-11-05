@@ -169,17 +169,40 @@ double polynominal(double x, const vector<double> &c, int n)
 	return fx;
 }
 
+/*!
+ * サンプリング点(データ点)の生成(1次元)
+ *  - チェビシェフ節点
+ * @param[in] x0,x1 サンプリング範囲
+ * @param[in] dx サンプリング間隔
+ * @param[in] func 関数値を与える関数ポインタ
+ * @param[out] xi,yi サンプリングデータ
+ * @return 生成されたデータ個数
+ */
+static int MakeChebyshevNodes(double x0, double x1, double dx, double func(double), vector<double> &xi, vector<double> &yi)
+{
+	xi.clear(); yi.clear();
+	int cnt = 0;
+	int n = (x1-x0)/dx+1;
+	for(int i = n; i >= 1; --i){
+		double x = cos((2.0*i-1.0)/(2.0*n)*RX_PI);
+		x = x0+(x/2.0+0.5)*(x1-x0);
+		xi.push_back(x);
+		yi.push_back(func(x));
+	}
+	return n;
+}
+
 
 //-----------------------------------------------------------------------------
 //! メイン関数
 //-----------------------------------------------------------------------------
 int main(void)
 {
-	double(*func)(double) = FuncExp;
-	double x0 = 0, x1 = 1;
+	//double(*func)(double) = FuncExp;
+	//double x0 = 0, x1 = 1;
 
-	//double(*func)(double) = FuncRunge;
-	//double x0 = -1, x1 = 1;
+	double(*func)(double) = FuncRunge;
+	double x0 = -1, x1 = 1;
 
 	double x = 0.5, fx;
 	double gt = func(x); // 真値
@@ -199,12 +222,17 @@ int main(void)
 
 
 	// グラフ描画用にデータ出力
-	int d = 3;  // 多項式の次数
-	int m = 6; // サンプリング点数
+	int d = 15;  // 多項式の次数
+	int m = 21; // サンプリング点数
 	MakeSamplingPoints(x0, x1, (x1-x0)/(m-1.0), func, xi, yi);
 	leastsquare_interpolation(yi, xi, xi.size(), d, x, c);
 	OutputSamplingPoints(xi, yi, "dat/leastsquare"+TOSTR(m)+"_data.txt"); // サンプリング点のファイル出力
 	OutputFunction(x0, x1, (x1-x0)/200, std::bind(polynominal, std::placeholders::_1, c, c.size()), "dat/leastsquare"+TOSTR(m)+"_d"+TOSTR(d)+".txt");
+	// チェビシェフ節点を用いる場合
+	MakeChebyshevNodes(x0, x1, (x1-x0)/(m-1.0), func, xi, yi);
+	leastsquare_interpolation(yi, xi, xi.size(), d, x, c);
+	OutputSamplingPoints(xi, yi, "dat/leastsquare"+TOSTR(m)+"c_data.txt");
+	OutputFunction(x0, x1, (x1-x0)/200, std::bind(polynominal, std::placeholders::_1, c, c.size()), "dat/leastsquare"+TOSTR(m)+"_d"+TOSTR(d)+"c.txt");
 
 	// 真値のグラフ作成用ファイル出力
 	OutputFunction(x0, x1, (x1-x0)/200, func, "dat/leastsquare_ground_truth.txt");
