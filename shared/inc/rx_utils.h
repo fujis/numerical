@@ -164,7 +164,7 @@ inline std::ostream &operator<<(std::ostream &out, const vector<T> &x)
  * @param[in] pos 探索開始位置
  * @return 次の抽出開始位置(sepの後にスペースがあればそのスペースの後)
  */
-inline int GetNextString(const string &src, string &sub, string sep, int pos)
+inline size_t GetNextString(const string &src, string &sub, string sep, size_t pos)
 {
 	bool extracted = false;
 	if(src[pos] == '\"'){	// ダブルクオーテーションのチェック
@@ -179,7 +179,7 @@ inline int GetNextString(const string &src, string &sub, string sep, int pos)
 	size_t i = src.find(sep, pos);
 	if(i == string::npos){		
 		if(!extracted) sub = src.substr(pos, string::npos);
-		return (int)string::npos;
+		return string::npos;
 	}
 	else{
 		int cnt = 1;
@@ -187,7 +187,7 @@ inline int GetNextString(const string &src, string &sub, string sep, int pos)
 			cnt++;
 		}
 		if(!extracted) sub = src.substr(pos, i-pos);
-		return (int)(i+cnt >= src.size() ? (int)string::npos : i+cnt);
+		return (i+cnt >= src.size() ? string::npos : i+cnt);
 	}
 }
  
@@ -198,7 +198,7 @@ inline int GetNextString(const string &src, string &sub, string sep, int pos)
  * @param[in] sep 区切り文字
  * @return 次の抽出開始位置(sepの後にスペースがあればそのスペースの後)
  */
-inline int GetFirstString(const string &src, string &sub, string sep)
+inline size_t GetFirstString(const string &src, string &sub, string sep)
 {
 	return GetNextString(src, sub, sep, 0);
 }
@@ -323,7 +323,7 @@ bool ReadAlgebra(string file_name, string sep, vector<double> &c)
  * @param[in] matrix 行列を格納した配列
  * @param[in] nx,ny  行列の大きさ
  */
-static void OutputMatrix(vector< vector<double> > matrix, int nx, int ny)
+inline void OutputMatrix(vector< vector<double> > matrix, int nx, int ny)
 {
 	for(int i = 0; i < nx; ++i){
 		for(int j = 0; j < ny; ++j){
@@ -420,7 +420,7 @@ inline double dot(const vector<double> &a, const vector<double> &b, int n)
  * @param[out] xi,yi サンプリングデータ
  * @return 生成されたデータ個数
  */
-static int MakeSamplingPoints(double x0, double x1, double dx, double func(double), vector<double> &xi, vector<double> &yi)
+inline int MakeSamplingPoints(double x0, double x1, double dx, double func(double), vector<double> &xi, vector<double> &yi)
 {
 	xi.clear(); yi.clear();
 	int cnt = 0;
@@ -439,7 +439,7 @@ static int MakeSamplingPoints(double x0, double x1, double dx, double func(doubl
  * @param[in] xi,yi サンプリングデータ
  * @param[in] filename 出力ファイル名
  */
-static void OutputSamplingPoints(vector<double> &xi, vector<double> &yi, string filename)
+inline void OutputSamplingPoints(vector<double> &xi, vector<double> &yi, string filename)
 {
 	ofstream fo;
 	fo.open(filename.c_str(), ios::out);
@@ -454,7 +454,7 @@ static void OutputSamplingPoints(vector<double> &xi, vector<double> &yi, string 
  * @param[in] xi,yi サンプリングデータ
  * @param[in] filename 出力ファイル名
  */
-static void OutputSamplingPoints(vector<double> &xi, vector<double> &yi)
+inline void OutputSamplingPoints(vector<double> &xi, vector<double> &yi)
 {
 	cout << "sampling points : ";
 	for(int i = 0; i < xi.size(); ++i){
@@ -471,7 +471,7 @@ static void OutputSamplingPoints(vector<double> &xi, vector<double> &yi)
  * @param[in] filename 出力ファイル名
  * @return 生成されたデータ個数
  */
-static int OutputFunction(double x0, double x1, double dx, std::function<double(double)> func, string filename)
+inline int OutputFunction(double x0, double x1, double dx, std::function<double(double)> func, string filename)
 {
 	ofstream fo;
 	fo.open(filename.c_str(), ios::out);
@@ -497,7 +497,7 @@ static int OutputFunction(double x0, double x1, double dx, std::function<double(
  * @param[out] xi,yi サンプリングデータ
  * @return 生成されたデータ個数
  */
-static int MakeSamplingPointsWithWhiteNoise(double x0, double x1, double dx, double func(double), double nwidth, vector<double> &xi, vector<double> &yi)
+inline int MakeSamplingPointsWithWhiteNoise(double x0, double x1, double dx, double func(double), double nwidth, vector<double> &xi, vector<double> &yi)
 {
 	srand((unsigned int)time(0)); // 乱数のシード値を時間によって変える
 	xi.clear(); yi.clear();
@@ -522,10 +522,9 @@ static int MakeSamplingPointsWithWhiteNoise(double x0, double x1, double dx, dou
  * @param[out] xi,yi サンプリングデータ
  * @return 生成されたデータ個数
  */
-static int MakeChebyshevNodes(double x0, double x1, double dx, double func(double), vector<double> &xi, vector<double> &yi)
+inline int MakeChebyshevNodes(double x0, double x1, double dx, double func(double), vector<double> &xi, vector<double> &yi)
 {
 	xi.clear(); yi.clear();
-	int cnt = 0;
 	int n = (x1-x0)/dx+1;
 	for(int i = n; i >= 1; --i){
 		double x = cos((2.0*i-1.0)/(2.0*n)*RX_PI);
