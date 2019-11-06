@@ -103,21 +103,27 @@ int simpson_integration(double func(const double), double a, double b, int n, do
 //-----------------------------------------------------------------------------
 int main(void)
 {
-	double a = 0.0, b = 1.0;
-	double s = 0.0;
-	int n = 10;
-	double t = (exp(1.0)-1); // 真値
+	//double(*func)(double) = FuncExp;
+	//double a = 0.0, b = 1.0;
+	//double t = (exp(1.0)-1); // 真値
+
+	double(*func)(double) = FuncT17;
+	double a = 0.5, b = 2.0;
+	double t = -99.0/8.0+18.0*log(2.0); // 真値
+
 	cout.precision(10);
+	int n = 10;
+	double s = 0.0;
 
 	// 指数関数の[0,1]での積分 (解析解はe-1=1.718281828459045235360287471352...)
-	segment_integration(FuncExp, a, b, n, s);
-	cout << "segment int f(x) = " << s << ",  error = " << fabs(s-t) << endl;
+	segment_integration(func, a, b, n, s);
+	cout << "segment int f(x) = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
 
-	trapezoidal_integration(FuncExp, a, b, n, s);
-	cout << "trapezoidal int f(x) = " << s << ",  error = " << fabs(s-t) << endl;
+	trapezoidal_integration(func, a, b, n, s);
+	cout << "trapezoidal int f(x) = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
 
-	simpson_integration(FuncExp, a, b, n, s);
-	cout << "simpson int f(x) = " << s << ",  error = " << fabs(s-t) << endl;
+	simpson_integration(func, a, b, n, s);
+	cout << "simpson int f(x) = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
 
 	cout << "ground truth = " << t << endl;
 

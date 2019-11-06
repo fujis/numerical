@@ -184,6 +184,20 @@ inline double DFuncRunge(const double x)
 	return -2*ainv*x/((1.0+ainv*x*x)*(1.0+ainv*x*x));
 }
 
+/*!
+ * 2017年度筑波大前期日程入試問題[4]の数式
+ * @param[in] x 変数
+ * @return 方程式の値
+ */
+inline double FuncT17(const double x)
+{
+	return 2*x*x-9*x+14-9/x+2/(x*x);
+}
+inline double DFuncT17(const double x)
+{
+	return 4*x-9+9/(x*x)-4/(x*x*x);
+}
+
 
 
 #endif // #ifndef _RX_FUNC_H_

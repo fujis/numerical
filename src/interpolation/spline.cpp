@@ -212,15 +212,15 @@ int main(void)
 
 
 
-	// グラフ描画用にデータ出力
-	int m = 11; // データ点数
-	MakeSamplingPoints(x0, x1, (x1-x0)/(m-1.0), func, xi, yi);
-	spline_interpolation(yi, xi, xi.size(), x, fx, a, b, c, d);
-	OutputSamplingPoints(xi, yi, "dat/spline"+TOSTR(m)+"_data.txt"); // サンプリング点のファイル出力
-	OutputFunction(x0, x1, (x1-x0)/200, std::bind(cubic_spline, std::placeholders::_1, xi, xi.size()-1, a, b, c, d), "dat/spline"+TOSTR(m)+".txt");
+	//// グラフ描画用にデータ出力
+	//int m = 11; // データ点数
+	//MakeSamplingPoints(x0, x1, (x1-x0)/(m-1.0), func, xi, yi);
+	//spline_interpolation(yi, xi, xi.size(), x, fx, a, b, c, d);
+	//OutputSamplingPoints(xi, yi, "dat/spline"+TOSTR(m)+"_data.txt"); // サンプリング点のファイル出力
+	//OutputFunction(x0, x1, (x1-x0)/200, std::bind(cubic_spline, std::placeholders::_1, xi, xi.size()-1, a, b, c, d), "dat/spline"+TOSTR(m)+".txt");
 
-	// 真値のグラフ作成用ファイル出力
-	OutputFunction(x0, x1, (x1-x0)/200, func, "dat/spline_ground_truth.txt");
+	//// 真値のグラフ作成用ファイル出力
+	//OutputFunction(x0, x1, (x1-x0)/200, func, "dat/spline_ground_truth.txt");
 	
 	return 0;
 }

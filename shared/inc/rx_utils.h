@@ -513,6 +513,30 @@ static int MakeSamplingPointsWithWhiteNoise(double x0, double x1, double dx, dou
 	return cnt;
 }
 
+/*!
+ * サンプリング点(データ点)の生成(1次元)
+ *  - チェビシェフ節点
+ * @param[in] x0,x1 サンプリング範囲
+ * @param[in] dx サンプリング間隔
+ * @param[in] func 関数値を与える関数ポインタ
+ * @param[out] xi,yi サンプリングデータ
+ * @return 生成されたデータ個数
+ */
+static int MakeChebyshevNodes(double x0, double x1, double dx, double func(double), vector<double> &xi, vector<double> &yi)
+{
+	xi.clear(); yi.clear();
+	int cnt = 0;
+	int n = (x1-x0)/dx+1;
+	for(int i = n; i >= 1; --i){
+		double x = cos((2.0*i-1.0)/(2.0*n)*RX_PI);
+		x = x0+(x/2.0+0.5)*(x1-x0);
+		xi.push_back(x);
+		yi.push_back(func(x));
+	}
+	return n;
+}
+
+
 
 
 #endif // #ifndef _RX_COMMON_H_

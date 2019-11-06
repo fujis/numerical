@@ -89,41 +89,32 @@ int LUSolver(const vector< vector<double> > &A, const vector<double> &b, vector<
 	return 0;
 }
 
-
-//! 階乗計算
-inline int factorial(int n)
-{
-	int f = 1;
-	for(int i = 1; i <= n; ++i) f *= i;
-	return f;
-}
-
 //-----------------------------------------------------------------------------
 // 補間法
 //-----------------------------------------------------------------------------
 /*!
  * 最小二乗法による補間
- *  - 
- * @param[in] yi 関数値を格納した配列
+ *  - 1次元データ(xi,fi)に対して，1次元n次多項式をフィッティング
+ * @param[in] fi 関数値を格納した配列
  * @param[in] xi 関数値に対応する位置を格納した配列(位置は昇順でソートされている必要がある)
- * @param[in] n データ数
- * @param[in] m フィッティングする多項式の次数
+ * @param[in] m データ数
+ * @param[in] n フィッティングする多項式の次数
  * @param[in] x 補間した値が必要な位置x
  * @param[out] c 係数ベクトル
  * @return 補間値
  */
-double leastsquare_interpolation(const vector<double> &fi, const vector<double> &xi, int n, int m, double x, vector<double> &c)
+double leastsquare_interpolation(const vector<double> &fi, const vector<double> &xi, int m, int n, double x, vector<double> &c)
 {
-	int dim = 1;	// 空間次元数(今回は1次元データなので1)
-	int dim_b = factorial(dim+m)/(factorial(m)*factorial(dim)); // 多項式の次数から行列のサイズ(=基底ベクトルの次元数)を計算
+	// 多項式の次数から行列のサイズ(=基底ベクトルの次元数)を計算
+	int dim_b = n+1; // 1次元の場合
 
-	// Ac=y -> c=A^-1 y
+	// Ac=y, bは基底ベクトル
 	c.resize(dim_b, 0.0);	// 結果の係数ベクトル
 	vector<double> b(dim_b, 0.0), y(dim_b, 0.0); // 基底ベクトルと右辺項
 	vector< vector<double> > A(dim_b, b);
 
 	// 係数行列Aと右辺項yの計算
-	for(int k = 0; k < n; ++k){ // データ分だけ反復
+	for(int k = 0; k < m; ++k){ // データ分だけ反復
 		// 多項式の基底ベクトルの計算(多項式以外でフィッティングする場合はこの部分を変えれば良い)
 		double xb = 1;
 		for(int i = 0; i < dim_b; ++i){
@@ -153,44 +144,22 @@ double leastsquare_interpolation(const vector<double> &fi, const vector<double> 
 }
 
 /*!
- * 多項式を計算
+ * 1次元n次多項式を計算
  * @param[in] x 値が必要な位置
  * @param[in] c 多項式の係数
- * @param[in] n 多項式の係数の数(n-1次多項式となる)
+ * @param[in] n 多項式の次数
  * @return 多項式を計算した結果
  */
-double polynominal(double x, const vector<double> &c, int n)
+double polynominal1d(double x, const vector<double> &c, int n)
 {
 	double fx = 0;
 	double xb = 1;
-	for(int i = 0; i < n; ++i){
+	for(int i = 0; i <= n; ++i){
 		fx += c[i]*xb; xb *= x;
 	}
 	return fx;
 }
 
-/*!
- * サンプリング点(データ点)の生成(1次元)
- *  - チェビシェフ節点
- * @param[in] x0,x1 サンプリング範囲
- * @param[in] dx サンプリング間隔
- * @param[in] func 関数値を与える関数ポインタ
- * @param[out] xi,yi サンプリングデータ
- * @return 生成されたデータ個数
- */
-static int MakeChebyshevNodes(double x0, double x1, double dx, double func(double), vector<double> &xi, vector<double> &yi)
-{
-	xi.clear(); yi.clear();
-	int cnt = 0;
-	int n = (x1-x0)/dx+1;
-	for(int i = n; i >= 1; --i){
-		double x = cos((2.0*i-1.0)/(2.0*n)*RX_PI);
-		x = x0+(x/2.0+0.5)*(x1-x0);
-		xi.push_back(x);
-		yi.push_back(func(x));
-	}
-	return n;
-}
 
 
 //-----------------------------------------------------------------------------
@@ -198,11 +167,11 @@ static int MakeChebyshevNodes(double x0, double x1, double dx, double func(doubl
 //-----------------------------------------------------------------------------
 int main(void)
 {
-	//double(*func)(double) = FuncExp;
-	//double x0 = 0, x1 = 1;
+	double(*func)(double) = FuncExp;
+	double x0 = 0, x1 = 1;
 
-	double(*func)(double) = FuncRunge;
-	double x0 = -1, x1 = 1;
+	//double(*func)(double) = FuncRunge;
+	//double x0 = -1, x1 = 1;
 
 	double x = 0.5, fx;
 	double gt = func(x); // 真値
@@ -221,36 +190,35 @@ int main(void)
 
 
 
-	// グラフ描画用にデータ出力
-	int d = 15;  // 多項式の次数
-	int m = 21; // サンプリング点数
-	MakeSamplingPoints(x0, x1, (x1-x0)/(m-1.0), func, xi, yi);
-	leastsquare_interpolation(yi, xi, xi.size(), d, x, c);
-	OutputSamplingPoints(xi, yi, "dat/leastsquare"+TOSTR(m)+"_data.txt"); // サンプリング点のファイル出力
-	OutputFunction(x0, x1, (x1-x0)/200, std::bind(polynominal, std::placeholders::_1, c, c.size()), "dat/leastsquare"+TOSTR(m)+"_d"+TOSTR(d)+".txt");
-	// チェビシェフ節点を用いる場合
-	MakeChebyshevNodes(x0, x1, (x1-x0)/(m-1.0), func, xi, yi);
-	leastsquare_interpolation(yi, xi, xi.size(), d, x, c);
-	OutputSamplingPoints(xi, yi, "dat/leastsquare"+TOSTR(m)+"c_data.txt");
-	OutputFunction(x0, x1, (x1-x0)/200, std::bind(polynominal, std::placeholders::_1, c, c.size()), "dat/leastsquare"+TOSTR(m)+"_d"+TOSTR(d)+"c.txt");
+	//// グラフ描画用にデータ出力
+	//int d = 3;  // 多項式の次数
+	//int m = 11; // サンプリング点数
+	//MakeSamplingPoints(x0, x1, (x1-x0)/(m-1.0), func, xi, yi);
+	//leastsquare_interpolation(yi, xi, xi.size(), d, x, c);
+	//OutputSamplingPoints(xi, yi, "dat/leastsquare"+TOSTR(m)+"_data.txt"); // サンプリング点のファイル出力
+	//OutputFunction(x0, x1, (x1-x0)/200, std::bind(polynominal1d, std::placeholders::_1, c, c.size()), "dat/leastsquare"+TOSTR(m)+"_d"+TOSTR(d)+".txt");
+	//// チェビシェフ節点を用いる場合
+	//MakeChebyshevNodes(x0, x1, (x1-x0)/(m-1.0), func, xi, yi);
+	//leastsquare_interpolation(yi, xi, xi.size(), d, x, c);
+	//OutputSamplingPoints(xi, yi, "dat/leastsquare"+TOSTR(m)+"c_data.txt");
+	//OutputFunction(x0, x1, (x1-x0)/200, std::bind(polynominal1d, std::placeholders::_1, c, c.size()), "dat/leastsquare"+TOSTR(m)+"_d"+TOSTR(d)+"c.txt");
 
-	// 真値のグラフ作成用ファイル出力
-	OutputFunction(x0, x1, (x1-x0)/200, func, "dat/leastsquare_ground_truth.txt");
+	//// 真値のグラフ作成用ファイル出力
+	//OutputFunction(x0, x1, (x1-x0)/200, func, "dat/leastsquare_ground_truth.txt");
 
 
-	// ノイズ付きデータに対する最小２乗法
-	d = 3;  // 多項式の次数
-	m = 11; // サンプリング点数
-	MakeSamplingPointsWithWhiteNoise(x0, x1, (x1-x0)/(m-1.0), func, 0.15, xi, yi);
-	leastsquare_interpolation(yi, xi, xi.size(), d, x, c);
-	OutputSamplingPoints(xi, yi, "dat/leastsquare"+TOSTR(m)+"n_data.txt"); // サンプリング点のファイル出力
-	OutputFunction(x0, x1, (x1-x0)/200, std::bind(polynominal, std::placeholders::_1, c, c.size()), "dat/leastsquare"+TOSTR(m)+"n_d"+TOSTR(d)+".txt");
+	//// ノイズ付きデータに対する最小２乗法
+	//MakeSamplingPointsWithWhiteNoise(x0, x1, (x1-x0)/(m-1.0), func, 0.15, xi, yi);
+	//leastsquare_interpolation(yi, xi, xi.size(), d, x, c);
+	//OutputSamplingPoints(xi, yi, "dat/leastsquare"+TOSTR(m)+"n_data.txt"); // サンプリング点のファイル出力
+	//OutputFunction(x0, x1, (x1-x0)/200, std::bind(polynominal1d, std::placeholders::_1, c, c.size()), "dat/leastsquare"+TOSTR(m)+"n_d"+TOSTR(d)+".txt");
 
-	MakeSamplingPointsWithWhiteNoise(x0, x1, (x1-x0)/(m-1.0), func, 0.01, xi, yi);
-	yi[2] = func(xi[2])+1.2; // 外れ値を意図的に追加
-	leastsquare_interpolation(yi, xi, xi.size(), d, x, c);
-	OutputSamplingPoints(xi, yi, "dat/leastsquare"+TOSTR(m)+"o_data.txt"); // サンプリング点のファイル出力
-	OutputFunction(x0, x1, (x1-x0)/200, std::bind(polynominal, std::placeholders::_1, c, c.size()), "dat/leastsquare"+TOSTR(m)+"o_d"+TOSTR(d)+".txt");
+	//// 外れ値付きデータに対する最小２乗法
+	//MakeSamplingPointsWithWhiteNoise(x0, x1, (x1-x0)/(m-1.0), func, 0.01, xi, yi);
+	//yi[2] = func(xi[2])+1.2; // 外れ値を意図的に追加
+	//leastsquare_interpolation(yi, xi, xi.size(), d, x, c);
+	//OutputSamplingPoints(xi, yi, "dat/leastsquare"+TOSTR(m)+"o_data.txt"); // サンプリング点のファイル出力
+	//OutputFunction(x0, x1, (x1-x0)/200, std::bind(polynominal1d, std::placeholders::_1, c, c.size()), "dat/leastsquare"+TOSTR(m)+"o_d"+TOSTR(d)+".txt");
 
 	return 0;
 }
