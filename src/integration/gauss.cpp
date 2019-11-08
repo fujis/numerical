@@ -44,9 +44,9 @@ int gauss2(double func(const double), double a, double b, double &S)
 }
 int gauss3(double func(const double), double a, double b, double &S)
 {
-	double x[3], w[3];
 
-	// 分点と重みの計算(n=2)
+	// 分点と重みの計算(n=3)
+	double x[3], w[3];
 	x[0] = -sqrt(3.0/5.0);
 	x[1] = 0;
 	x[2] = -x[0];

@@ -66,6 +66,22 @@ int trapezoidal_integration(double func(const double), double a, double b, int n
 }
 
 
+int monte_carlo(double func(const double), double a, double b, double fmin, double fmax, int n, double &S)
+{
+	int nu = 0;
+	for(int i = 0; i < n; ++i){
+		double rnd1 = (double)rand()/(double)RAND_MAX; // [0,1]の乱数1
+		double rnd2 = (double)rand()/(double)RAND_MAX; // [0,1]の乱数2
+		double x = a+(b-a)*rnd1;
+		double y = fmin+(fmax-fmin)*rnd2;
+
+		double f = func(x);
+		if(y <= f) nu++;
+	}
+	S = (double)nu/(double)n*(b-a)*(fmax-fmin);
+
+	return 0;
+}
 
 
 
@@ -96,7 +112,9 @@ int main(void)
 
 	cout << "ground truth = " << t << endl;
 
-		
+	monte_carlo(func, a, b, 0.0, 3.0, 10000, s);
+	cout << "monte carlo int f(x) = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
+
 	return 0;
 }
 
