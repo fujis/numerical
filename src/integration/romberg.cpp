@@ -1,7 +1,8 @@
 /*! 
-  @file integration.chpp
+  @file romberg.cpp
 	
   @brief 数値積分法
+		 ロンバーグ法
  
   @author Makoto Fujisawa
   @date 2019-08
@@ -28,15 +29,15 @@
  */
 double trapezoidal_integration(double func(const double), double a, double b, int n)
 {
-	double dx = (b-a)/n; // 分割区間の横幅
+	double h = (b-a)/n; // 分割区間の横幅
 	double f1, f2;		// 分割区間の縦幅(台形の長辺と短辺)
 
 	f2 = func(a);
 	double S = 0;
 	for(int i = 0; i < n; ++i){
 		f1 = f2;
-		f2 = func(a+(i+1)*dx);
-		S += (f1+f2)*dx/2;
+		f2 = func(a+(i+1)*h);
+		S += (f1+f2)*h/2;
 	}
 	return S;
 }
@@ -50,11 +51,11 @@ double trapezoidal_integration(double func(const double), double a, double b, in
  * @param[out] ans 解
  * @return
  */
-int romberg(double func(const double), double a, double b, int &m_max, double &eps, double &S)
+int romberg(double func(const double), double a, double b, int &k_max, double &eps, double &S)
 {
 	double h = b-a; // 分割幅(初期分割幅はn=1のもの)
 	double e = 0.0;		// 誤差
-	vector<double> I(m_max+1, 0.0);
+	vector<double> I(k_max+1, 0.0);
 
 	I[0] = (h/2)*(func(a)+func(b)); // I_0,0の計算
 
@@ -62,7 +63,7 @@ int romberg(double func(const double), double a, double b, int &m_max, double &e
 	cout << setw(10) << I[0] << endl;
 
 	int k, n = 1, l;
-	for(k = 1; k <= m_max; ++k){
+	for(k = 1; k <= k_max; ++k){
 		h = h/2; n *= 2; // 分割幅を1/2にしていく
 		I[k] = trapezoidal_integration(func, a, b, n); // 台形公式でI_k,0を計算
 
@@ -95,13 +96,11 @@ int romberg(double func(const double), double a, double b, int &m_max, double &e
 		if(m <= k) break;
 	}
 	S = I[l];
-	m_max = k;
+	k_max = k;
 	eps = e;
 
 	return 0;
 }
-
-
 
 
 //-----------------------------------------------------------------------------
@@ -122,15 +121,21 @@ int main(void)
 	cout.precision(10);
 	double s = 0.0;
 
-	int mmax = 5; // n=2^mmaxまで分割
+	int kmax = 5; // n=2^mmaxまで分割
 	double eps = 1.0e-6;
-	romberg(func, a, b, mmax, eps, s);
+	romberg(func, a, b, kmax, eps, s);
 	cout << "romberg int f(x) = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
-	cout << "n = " << (int)pow(2.0, (double)mmax) << ", eps = " << eps << endl;
+	cout << "n = " << (int)pow(2.0, (double)kmax) << ", eps = " << eps << endl;
 
 	cout << "ground truth = " << t << endl;
 
-		
+
+	cout << endl;
+	gauss2(func, a, b, s);
+	cout << "gauss2 int f(x) = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
+	gauss3(func, a, b, s);
+	cout << "gauss3 int f(x) = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
+
 	return 0;
 }
 

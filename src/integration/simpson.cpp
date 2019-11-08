@@ -1,5 +1,5 @@
 /*! 
-  @file integration.cpp
+  @file simpson.cpp
 	
   @brief 数値積分法
 		 シンプソン公式
@@ -29,22 +29,22 @@
  */
 int simpson_integration(double func(const double), double a, double b, int n, double &S)
 {
-	double dx = (b-a)/(2*n); // 分割区間の横幅
+	double h = (b-a)/(2*n); // 分割区間の横幅
 	double f;			// 分割区間の縦幅
 
 	S = func(a)+func(b);
 
 	// 奇数項
 	for(int i = 1; i <= n; ++i){
-		f = func(a+(2*i-1)*dx);
+		f = func(a+(2*i-1)*h);
 		S += 4*f;
 	}
 	// 偶数項
 	for(int i = 1; i <= n-1; ++i){
-		f = func(a+(2*i)*dx);
+		f = func(a+(2*i)*h);
 		S += 2*f;
 	}
-	S *= dx/3;
+	S *= h/3;
 
 	return 0;
 }
@@ -60,27 +60,27 @@ int simpson_integration(double func(const double), double a, double b, int n, do
  */
 int simpson38_integration(double func(const double), double a, double b, int n, double &S)
 {
-	double dx = (b-a)/(3*n); // 分割区間の横幅
+	double h = (b-a)/(3*n); // 分割区間の横幅
 	double f;			// 分割区間の縦幅
 
 	S = func(a)+func(b);
 
 	// 3の倍数-2の項
 	for(int i = 1; i <= n; ++i){
-		f = func(a+(3*i-2)*dx);
+		f = func(a+(3*i-2)*h);
 		S += 3*f;
 	}
 	// 3の倍数-1の項
 	for(int i = 1; i <= n; ++i){
-		f = func(a+(3*i-1)*dx);
+		f = func(a+(3*i-1)*h);
 		S += 3*f;
 	}
 	// 3の倍数の項
 	for(int i = 1; i <= n-1; ++i){
-		f = func(a+(3*i)*dx);
+		f = func(a+(3*i)*h);
 		S += 2*f;
 	}
-	S *= 3*dx/8;
+	S *= 3*h/8;
 
 	return 0;
 }
@@ -103,7 +103,7 @@ int main(void)
 	//double t = -99.0/8.0+18.0*log(2.0); // 真値
 
 	cout.precision(10);
-	int n = 120; // シンプソン公式のためにnは2と3の公倍数にしておくこと
+	int n = 8; // シンプソン公式のためにnは2と3の公倍数にしておくこと
 	double s = 0.0;
 
 	simpson_integration(func, a, b, n/2, s);

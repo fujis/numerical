@@ -29,12 +29,12 @@
  */
 int segment_integration(double func(const double), double a, double b, int n, double &S)
 {
-	double dx = (b-a)/n; // 分割区間の横幅
+	double h = (b-a)/n; // 分割区間の横幅
 
 	S = 0;
 	for(int i = 0; i < n; ++i){
-		double f = func(a+(i+1)*dx); // xの大きい方の辺の長さを縦幅とする
-		S += f*dx;
+		double f = func(a+(i+1)*h); // xの大きい方の辺の長さを縦幅とする
+		S += f*h;
 	}
 
 	return 0;
@@ -51,15 +51,15 @@ int segment_integration(double func(const double), double a, double b, int n, do
  */
 int trapezoidal_integration(double func(const double), double a, double b, int n, double &S)
 {
-	double dx = (b-a)/n; // 分割区間の横幅
+	double h = (b-a)/n; // 分割区間の横幅
 	double f1, f2;		// 分割区間の縦幅(台形の長辺と短辺)
 
 	f2 = func(a);
 	S = 0;
 	for(int i = 0; i < n; ++i){
 		f1 = f2;
-		f2 = func(a+(i+1)*dx);
-		S += (f1+f2)*dx/2;
+		f2 = func(a+(i+1)*h);
+		S += (f1+f2)*h/2;
 	}
 
 	return 0;
@@ -85,7 +85,7 @@ int main(void)
 	//double t = -99.0/8.0+18.0*log(2.0); // 真値
 
 	cout.precision(10);
-	int n = 100;
+	int n = 8;
 	double s = 0.0;
 
 	segment_integration(func, a, b, n, s);
