@@ -51,7 +51,7 @@ double trapezoidal_integration(double func(const double), double a, double b, in
  * @param[out] ans 解
  * @return
  */
-int romberg(double func(const double), double a, double b, int &k_max, double &eps, double &S)
+double romberg(double func(const double), double a, double b, int &k_max, double &eps)
 {
 	double h = b-a; // 分割幅(初期分割幅はn=1のもの)
 	double e = 0.0;		// 誤差
@@ -82,24 +82,23 @@ int romberg(double func(const double), double a, double b, int &k_max, double &e
 			int i = k-m; // I_k,mを格納する配列上の位置
 			I[i] = (m4*I[i+1]-I[i])/(m4-1); // I_k,mを計算
 			m4 *= 4;
+			l = i; // 結果が格納されている位置
 
 			// 計算の途中経過確認用出力
 			cout << "   " << setw(10) << I[i];
 
-			// 収束判定2
+			// 収束判定2(ロンバーグ表で1つ上の値と比較
 			if(i >= 1 && (e = fabs(I[i]-I[i-1])) < eps){
-				l = i; // 結果が格納されている位置
 				break;
 			}
 		}
 		cout << endl;
 		if(m <= k) break;
 	}
-	S = I[l];
 	k_max = k;
 	eps = e;
 
-	return 0;
+	return I[l];
 }
 
 
@@ -123,18 +122,22 @@ int main(void)
 
 	int kmax = 5; // n=2^mmaxまで分割
 	double eps = 1.0e-6;
-	romberg(func, a, b, kmax, eps, s);
+	s = romberg(func, a, b, kmax, eps);
 	cout << "romberg int f(x) = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
 	cout << "n = " << (int)pow(2.0, (double)kmax) << ", eps = " << eps << endl;
 
 	cout << "ground truth = " << t << endl;
 
 
-	cout << endl;
-	gauss2(func, a, b, s);
-	cout << "gauss2 int f(x) = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
-	gauss3(func, a, b, s);
-	cout << "gauss3 int f(x) = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
+	// 円の面積の計算(上半分の積分-下半分の積分)
+	int kmax1 = 7, kmax2 = 7; // n=2^mmaxまで分割
+	double eps1 = 1.0e-6, eps2 = 1.0e-6;
+	double r = sr;
+	a = -r; b = r;
+	t = RX_PI*r*r;
+	s = romberg(FuncCircleTop, a, b, kmax1, eps1)-romberg(FuncCircleBottom, a, b, kmax2, eps2);
+	cout << "area of circle = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
+	cout << "ground truth = " << t << endl;
 
 	return 0;
 }

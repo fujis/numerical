@@ -27,12 +27,12 @@
  * @param[out] ans 解
  * @return
  */
-int simpson_integration(double func(const double), double a, double b, int n, double &S)
+double simpson_integration(double func(const double), double a, double b, int n)
 {
 	double h = (b-a)/(2*n); // 分割区間の横幅
 	double f;			// 分割区間の縦幅
 
-	S = func(a)+func(b);
+	double S = func(a)+func(b);
 
 	// 奇数項
 	for(int i = 1; i <= n; ++i){
@@ -46,7 +46,7 @@ int simpson_integration(double func(const double), double a, double b, int n, do
 	}
 	S *= h/3;
 
-	return 0;
+	return S;
 }
 
 /*!
@@ -58,12 +58,12 @@ int simpson_integration(double func(const double), double a, double b, int n, do
  * @param[out] ans 解
  * @return
  */
-int simpson38_integration(double func(const double), double a, double b, int n, double &S)
+double simpson38_integration(double func(const double), double a, double b, int n)
 {
 	double h = (b-a)/(3*n); // 分割区間の横幅
 	double f;			// 分割区間の縦幅
 
-	S = func(a)+func(b);
+	double S = func(a)+func(b);
 
 	// 3の倍数-2の項
 	for(int i = 1; i <= n; ++i){
@@ -82,7 +82,7 @@ int simpson38_integration(double func(const double), double a, double b, int n, 
 	}
 	S *= 3*h/8;
 
-	return 0;
+	return S;
 }
 
 
@@ -106,12 +106,22 @@ int main(void)
 	int n = 8; // シンプソン公式のためにnは2と3の公倍数にしておくこと
 	double s = 0.0;
 
-	simpson_integration(func, a, b, n/2, s);
+	s = simpson_integration(func, a, b, n/2);
 	cout << "simpson int f(x) = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
 
-	simpson38_integration(func, a, b, n/3, s);
+	s = simpson38_integration(func, a, b, n/3);
 	cout << "simpson(3/8) int f(x) = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
 
+	cout << "ground truth = " << t << endl;
+
+
+	// 円の面積の計算(上半分の積分-下半分の積分)
+	n = 32;
+	double r = 1.0;
+	a = -r; b = r;
+	t = RX_PI*r*r;
+	s = simpson_integration(FuncCircleTop, a, b, n)-simpson_integration(FuncCircleBottom, a, b, n);
+	cout << "area of circle = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
 	cout << "ground truth = " << t << endl;
 
 		

@@ -200,4 +200,92 @@ inline double DFuncT17(const double x)
 
 
 
+/*!
+ * 2次元関数(積分用2次多項式)
+ * @param[in] x 変数
+ * @return 方程式の値
+ */
+inline double FuncP2(const double x, const double y)
+{
+	return 8*x*x+4*y;
+}
+inline double FuncY1(const double x)
+{
+	return 2-x;
+}
+inline double FuncY2(const double x)
+{
+	return x*x;
+}
+
+
+
+//-----------------------------------------------------------------------------
+// 円,球の面積,体積計算用
+//-----------------------------------------------------------------------------
+const double sr = 1.0; // 円,球の半径
+/*!
+ * 円の上半分の形状
+ * @param[in] x 変数
+ * @return 方程式の値
+ */
+inline double FuncCircleTop(const double x)
+{
+	double y = sr*sr-x*x;
+	return (y <= 0 ? 0.0 : sqrt(y));
+}
+inline double DFuncCircleTop(const double x)
+{
+	double y = sr*sr-x*x;
+	return (y <= 1e-10 ? 0.0 : -x/sqrt(y));
+}
+/*!
+ * 円の下半分の形状
+ * @param[in] x 変数
+ * @return 方程式の値
+ */
+inline double FuncCircleBottom(const double x)
+{
+	double y = sr*sr-x*x;
+	return (y <= 0 ? 0.0 : -sqrt(y));
+}
+inline double DFuncCircleBottom(const double x)
+{
+	double y = sr*sr-x*x;
+	return (y <= 1e-10 ? 0.0 : x/sqrt(y));
+}
+
+/*!
+ * 2次元関数(球体の体積計算用)
+ * @param[in] x 変数
+ * @return 方程式の値
+ */
+inline double FuncSphere(const double x, const double y)
+{
+	double z = sr*sr-x*x-y*y;
+	return (z <= 0 ? 0.0 : sqrt(z));
+}
+inline double FuncSphereY1(const double x)
+{
+	double z = sr*sr-x*x;
+	return (z <= 0 ? 0.0 : -sqrt(z));
+}
+inline double FuncSphereY2(const double x)
+{
+	double z = sr*sr-x*x;
+	return (z <= 0 ? 0.0 : sqrt(z));
+}
+
+/*!
+ * 与えられた点が円の内なら1，外なら0を返す関数
+ * @param[in] x 変数
+ * @return 円の内なら1，外なら0
+ */
+inline int FuncCircle(const vector<double> &x)
+{
+	return (x[0]*x[0]+x[1]*x[1] <= sr*sr ? 1 : 0);
+}
+
+
+
 #endif // #ifndef _RX_FUNC_H_
