@@ -100,22 +100,6 @@ double trapezoidal_integration2(double func(const double, const double), double 
 	return S;
 }
 
-double monte_carlo(double func(const double), double a, double b, double fmin, double fmax, int n)
-{
-	int nu = 0;
-	for(int i = 0; i < n; ++i){
-		double rnd1 = (double)rand()/(double)RAND_MAX; // [0,1]の乱数1
-		double rnd2 = (double)rand()/(double)RAND_MAX; // [0,1]の乱数2
-		double x = a+(b-a)*rnd1;
-		double y = fmin+(fmax-fmin)*rnd2;
-
-		double f = func(x);
-		if(y <= f) nu++;
-	}
-	double S = (double)nu/(double)n*(b-a)*(fmax-fmin);
-	return S;
-}
-
 
 
 //-----------------------------------------------------------------------------
@@ -134,7 +118,7 @@ int main(void)
 	//double t = -99.0/8.0+18.0*log(2.0); // 真値
 
 	cout.precision(10);
-	int n = 32;
+	int n = 100;
 	double s = 0.0;
 
 	s = segment_integration(func, a, b, n);
@@ -145,9 +129,6 @@ int main(void)
 
 	cout << "ground truth = " << t << endl;
 
-	s = monte_carlo(func, a, b, 0.0, 3.0, 10000);
-	cout << "monte carlo int f(x) = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
-	cout << endl;
 
 	// 円の面積の計算(上半分の積分-下半分の積分)
 	double r = 1.0;
@@ -166,11 +147,11 @@ int main(void)
 	//cout << "ground truth = " << t << endl;
 
 	// 球の体積(こちらは上半分の積分x2で計算)
-	//a = -sr, b = sr;
-	//t = (4*RX_PI*sr*sr*sr)/3.0; // 真値
-	//s = 2*trapezoidal_integration2(FuncSphere, a, b, FuncSphereY1, FuncSphereY2, n, n);
-	//cout << "trapezoidal int2 f(x) = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
-	//cout << "ground truth = " << t << endl;
+	a = -sr, b = sr;
+	t = (4*RX_PI*sr*sr*sr)/3.0; // 真値
+	s = 2*trapezoidal_integration2(FuncSphere, a, b, FuncSphereY1, FuncSphereY2, n, n);
+	cout << "trapezoidal int2 f(x) = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
+	cout << "ground truth = " << t << endl;
 
 
 	return 0;

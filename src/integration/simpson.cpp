@@ -103,7 +103,7 @@ int main(void)
 	//double t = -99.0/8.0+18.0*log(2.0); // 真値
 
 	cout.precision(10);
-	int n = 8; // シンプソン公式のためにnは2と3の公倍数にしておくこと
+	int n = 120; // シンプソン公式のためにnは2と3の公倍数にしておくこと
 	double s = 0.0;
 
 	s = simpson_integration(func, a, b, n/2);
@@ -116,7 +116,7 @@ int main(void)
 
 
 	// 円の面積の計算(上半分の積分-下半分の積分)
-	n = 32;
+	n = 120;
 	double r = 1.0;
 	a = -r; b = r;
 	t = RX_PI*r*r;
