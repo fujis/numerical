@@ -287,5 +287,32 @@ inline int FuncCircle(const vector<double> &x)
 }
 
 
+//-----------------------------------------------------------------------------
+// 常微分方程式(ODE:Ordinary Differential Equation)用
+//-----------------------------------------------------------------------------
+
+/*!
+ * f(x,y)=y
+ *  - dy/dx=f(x,y)の真値 : y = C e^x
+ * @param[in] x,y 変数
+ * @return f(x,y)の値
+ */
+inline double FuncOdeY(double x, double y)
+{
+	return y;
+}
+
+/*!
+ * f(x,y)=xy (変数分離型)
+ *  - dy/dx=f(x,y)の真値 : y = C e^(x^2)
+ * @param[in] x,y 変数
+ * @return f(x,y)の値
+ */
+inline double FuncOdeXY(double x, double y)
+{
+	return 2*x*y;
+}
+
+
 
 #endif // #ifndef _RX_FUNC_H_

@@ -5,6 +5,7 @@ VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{F6210CCC-576C-428C-A343-5F0E77C10C3D}"
 	ProjectSection(SolutionItems) = preProject
+		..\..\shared\inc\rx_funcs.h = ..\..\shared\inc\rx_funcs.h
 		..\..\shared\inc\rx_utils.h = ..\..\shared\inc\rx_utils.h
 	EndProjectSection
 EndProject
