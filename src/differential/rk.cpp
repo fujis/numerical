@@ -1,10 +1,10 @@
 /*! 
-  @file eular.cpp
+  @file rk.cpp
 	
-  @brief オイラー法，ホイン法(改良オイラー法)
+  @brief ルンゲ・クッタ法
  
   @author Makoto Fujisawa
-  @date 2019-10
+  @date 2019-11
 */
 
 
@@ -19,24 +19,28 @@
 //! 常微分方程式の近似解
 //-----------------------------------------------------------------------------
 /*!
- * オイラー法(1次精度)
- *  - y(n+1)=y(n)+hf(x(n),y(n))
+ * 3段3次のルンゲ・クッタ法(クッタの3次公式)(3次精度)
+ *  - y(n+1)=y(n)+(h/6)(k1+4*k2+k3)
  * @param[in] func 関数f(x,y)の値を与える関数ポインタ
  * @param[in] y0 初期値(y0=g(a))
  * @param[in] a,b 計算範囲
  * @param[in] n 計算半以内での分割数(h=(b-a)/n)
  * @return x=bでの解
  */
-double eular(double func(double,double), double y0, double a, double b, int n)
+double rk3(double func(double,double), double y0, double a, double b, int n)
 {
 	double h = (b-a)/n; // 刻み幅
 
 	double x = a;  // xの初期値
 	double y = y0; // yの初期値
 	//cout << x << ", " << y << ", " << y0*exp(-25*x) << ", " << fabs(y-y0*exp(-25*x)) << endl; // グラフ描画用に真値も出力
+	double k1, k2, k3;
 	for(int i = 0; i <= n-1; ++i){
-		double fi = func(x, y);
-		y = y+h*fi; // yの更新
+		k1 = func(x, y);				// k1の算出
+		k2 = func(x+h/2, y+(h/2)*k1);	// k2の算出
+		k3 = func(x+h, y-h*k1+2*h*k2);	// k3の算出
+
+		y = y+(h/6)*(k1+4*k2+k3); // yの更新
 		x = x+h;    // xの更新
 
 		// 出力用
@@ -47,29 +51,31 @@ double eular(double func(double,double), double y0, double a, double b, int n)
 	return y;
 }
 
+
 /*!
- * ホイン法(2次精度)
- *  - y(n+1)=y(n)+h/2(f(x(n),y(n))+f(x(n+1),y(n+1)))
+ * 4段4次のルンゲ・クッタ法(4次精度)
+ *  - y(n+1)=y(n)+(h/6)(k1+2*k2+2*k3+k4)
  * @param[in] func 関数f(x,y)の値を与える関数ポインタ
  * @param[in] y0 初期値(y0=g(a))
  * @param[in] a,b 計算範囲
  * @param[in] n 計算半以内での分割数(h=(b-a)/n)
  * @return x=bでの解
  */
-double heun(double func(double, double), double y0, double a, double b, int n)
+double rk4(double func(double, double), double y0, double a, double b, int n)
 {
 	double h = (b-a)/n; // 刻み幅
 
 	double x = a;  // xの初期値
 	double y = y0; // yの初期値
 	//cout << x << ", " << y << ", " << y0*exp(-25*x) << ", " << fabs(y-y0*exp(-25*x)) << endl; // グラフ描画用に真値も出力
+	double k1, k2, k3, k4;
 	for(int i = 0; i <= n-1; ++i){
-		// Y(i+1) = f(x(i+1)+y(i+1))をオイラー法で求める
-		double fi = func(x, y);
-		double Yi = y+h*fi; // Yiの計算
+		k1 = func(x, y);				// k1の算出
+		k2 = func(x+h/2, y+(h/2)*k1);	// k2の算出
+		k3 = func(x+h/2, y+(h/2)*k2);	// k3の算出
+		k4 = func(x+h, y+h*k3);			// k4の算出
 
-		// f(x,y)とY(i+1)の平均でyを更新
-		y = y+h*(fi+Yi)/2;
+		y = y+(h/6)*(k1+2*k2+2*k3+k4); // yの更新
 		x = x+h;    // xの更新
 
 		// 出力用
@@ -86,7 +92,7 @@ double heun(double func(double, double), double y0, double a, double b, int n)
 int main(void)
 {
 	// 常微分方程式dy/dx=ay (解析解はy = C e^ax = y0 e^ax)
-	double(*func)(double,double) = FuncOdeY;
+	double(*func)(double, double) = FuncOdeY;
 	double a = 0.0, b = 1.0; // 範囲[a,b]
 	double y0 = 1.0; // 初期値
 	double t = y0*exp(-25*b); // 真値
@@ -101,15 +107,15 @@ int main(void)
 	int n = 8;
 	double y = 0.0;
 
-	// オイラー法(1次精度)
-	cout << "[Eular method]" << endl;
-	y = eular(func, y0, a, b, n);
+	// 3段3次のルンゲ・クッタ法(3次精度)
+	cout << "[RK3]" << endl;
+	y = rk3(func, y0, a, b, n);
 	cout << "y(" << b << ") = " << y << ",  error = " << fabs(y-t) << endl;
 	cout << endl;
 
-	// ホイン法(2次精度)
-	cout << "[Heun method]" << endl;
-	y = heun(func, y0, a, b, n);
+	// 4段4次のルンゲ・クッタ法(3次精度)
+	cout << "[RK4]" << endl;
+	y = rk4(func, y0, a, b, n);
 	cout << "y(" << b << ") = " << y << ",  error = " << fabs(y-t) << endl;
 	cout << endl;
 
