@@ -297,9 +297,14 @@ inline int FuncCircle(const vector<double> &x)
  * @param[in] x,y 変数
  * @return f(x,y)の値
  */
+static double lambda = 1.0;
 inline double FuncOdeY(double x, double y)
 {
-	return y;
+	return -lambda*y;
+}
+inline double FuncOdeY_true(double x, double C) // 微分方程式の真値
+{
+	return C*exp(-lambda*x);
 }
 
 /*!
@@ -311,6 +316,10 @@ inline double FuncOdeY(double x, double y)
 inline double FuncOdeXY(double x, double y)
 {
 	return 2*x*y;
+}
+inline double FuncOdeXY_true(double x, double C) // 微分方程式の真値
+{
+	return C*exp(x*x);
 }
 
 
