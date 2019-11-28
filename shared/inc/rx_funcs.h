@@ -290,16 +290,15 @@ inline int FuncCircle(const vector<double> &x)
 //-----------------------------------------------------------------------------
 // 常微分方程式(ODE:Ordinary Differential Equation)用
 //-----------------------------------------------------------------------------
-
 /*!
- * f(x,y)=y
+ * f(x,y)=ay
  *  - dy/dx=f(x,y)の真値 : y = C e^x
  * @param[in] x,y 変数
  * @return f(x,y)の値
  */
 inline double FuncOdeY(double x, double y)
 {
-	return y;
+	return -25*y;
 }
 
 /*!
