@@ -14,6 +14,10 @@
 #include "rx_utils.h"
 #include "rx_funcs.h"
 
+//-----------------------------------------------------------------------------
+// デバッグ用変数
+//-----------------------------------------------------------------------------
+std::function<double(double)> TF;
 
 //-----------------------------------------------------------------------------
 //! 常微分方程式の近似解
@@ -33,7 +37,7 @@ double rk3(double func(double,double), double y0, double a, double b, int n)
 
 	double x = a;  // xの初期値
 	double y = y0; // yの初期値
-	//cout << x << ", " << y << ", " << y0*exp(-25*x) << ", " << fabs(y-y0*exp(-25*x)) << endl; // グラフ描画用に真値も出力
+	cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
 	double k1, k2, k3;
 	for(int i = 0; i <= n-1; ++i){
 		k1 = func(x, y);				// k1の算出
@@ -44,8 +48,8 @@ double rk3(double func(double,double), double y0, double a, double b, int n)
 		x = x+h;    // xの更新
 
 		// 出力用
-		cout << "y(" << x << ") = " << y << endl;
-		//cout << x << ", " << y << ", " << y0*exp(-25*x) << ", " << fabs(y-y0*exp(-25*x)) << endl; // グラフ描画用に真値も出力
+		//cout << "y(" << x << ") = " << y << endl;
+		cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
 	}
 
 	return y;
@@ -67,7 +71,7 @@ double rk4(double func(double, double), double y0, double a, double b, int n)
 
 	double x = a;  // xの初期値
 	double y = y0; // yの初期値
-	//cout << x << ", " << y << ", " << y0*exp(-25*x) << ", " << fabs(y-y0*exp(-25*x)) << endl; // グラフ描画用に真値も出力
+	//cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
 	double k1, k2, k3, k4;
 	for(int i = 0; i <= n-1; ++i){
 		k1 = func(x, y);				// k1の算出
@@ -80,7 +84,7 @@ double rk4(double func(double, double), double y0, double a, double b, int n)
 
 		// 出力用
 		cout << "y(" << x << ") = " << y << endl;
-		//cout << x << ", " << y << ", " << y0*exp(-25*x) << ", " << fabs(y-y0*exp(-25*x)) << endl; // グラフ描画用に真値も出力
+		//cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
 	}
 
 	return y;
@@ -92,20 +96,22 @@ double rk4(double func(double, double), double y0, double a, double b, int n)
 int main(void)
 {
 	// 常微分方程式dy/dx=ay (解析解はy = C e^ax = y0 e^ax)
-	double(*func)(double, double) = FuncOdeY;
-	double a = 0.0, b = 1.0; // 範囲[a,b]
+	double(*func)(double,double) = FuncOdeY;
+	double a = 0.0, b = 10.0; // 範囲[a,b]
 	double y0 = 1.0; // 初期値
-	double t = y0*exp(-25*b); // 真値
+	lambda = 25;
+	TF = std::bind(FuncOdeY_true, placeholders::_1, y0);// 真値
 
 	// 常微分方程式dy/dx=2xy (解析解はy = C e^(x^2) = y0 e^(x^2))
-	//double(*func)(double,double) = FuncOdeXY;
+	//double(*func)(double, double) = FuncOdeXY;
 	//double a = 0.0, b = 1.0; // 範囲[a,b]
 	//double y0 = 1.0; // 初期値
-	//double t = y0*exp(b*b); // 真値
+	//TF = std::bind(FuncOdeXY_true, placeholders::_1, y0);// 真値
 
 	cout.precision(10);
-	int n = 8;
+	int n = 100;
 	double y = 0.0;
+	double t = TF(b);  // 真値
 
 	// 3段3次のルンゲ・クッタ法(3次精度)
 	cout << "[RK3]" << endl;

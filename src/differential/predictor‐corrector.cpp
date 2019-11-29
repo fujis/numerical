@@ -1,10 +1,10 @@
 /*! 
-  @file eular.cpp
+  @file predictor‐corrector.cpp
 	
-  @brief オイラー法，ホイン法(改良オイラー法)
+  @brief アダムス・バッシュホース法とアダムス・ムルトン法を追加した予測子修正子法
  
   @author Makoto Fujisawa
-  @date 2019-10
+  @date 2019-11
 */
 
 
@@ -13,6 +13,7 @@
 //-----------------------------------------------------------------------------
 #include "rx_utils.h"
 #include "rx_funcs.h"
+
 
 //-----------------------------------------------------------------------------
 // デバッグ用変数
@@ -23,112 +24,134 @@ std::function<double(double)> TF;
 //! 常微分方程式の近似解
 //-----------------------------------------------------------------------------
 /*!
- * オイラー法(1次精度)
- *  - y(n+1)=y(n)+hf(x(n),y(n))
+ * アダムス・バッシュホース法(3点)+アダムスムルトン法(3点)による予測子修正子法
  * @param[in] func 関数f(x,y)の値を与える関数ポインタ
  * @param[in] y0 初期値(y0=g(a))
  * @param[in] a,b 計算範囲
  * @param[in] n 計算半以内での分割数(h=(b-a)/n)
  * @return x=bでの解
  */
-double eular(double func(double,double), double y0, double a, double b, int n)
+double predictorcorrector_abm3(double func(double,double), double y0, double a, double b, int n)
 {
 	double h = (b-a)/n; // 刻み幅
 
 	double x = a;  // xの初期値
 	double y = y0; // yの初期値
 	cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
+	double f[4] = { 0, 0, 0, 0 };  // f_(i-2), f_(i-1), f_(i), f_(i+1)
 	for(int i = 0; i <= n-1; ++i){
-		double fi = func(x, y);
-		y = y+h*fi; // yの更新
-		x = x+h;    // xの更新
+		f[2] = func(x, y);
+		if(i < 2){ // 最初の方はオイラー法を使う
+			// 前進オイラー法でy_(i+1)の予測値を計算
+			f[3] = func(x+h, y+h*f[2]);
 
-		// 出力用
-		//cout << "y(" << x << ") = " << y << endl;
-		cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
-	}
-
-	return y;
-}
-
-/*!
- * ホイン法(2次精度)
- *  - y(n+1)=y(n)+h/2(f(x(n),y(n))+f(x(n+1),y(n+1)))
- * @param[in] func 関数f(x,y)の値を与える関数ポインタ
- * @param[in] y0 初期値(y0=g(a))
- * @param[in] a,b 計算範囲
- * @param[in] n 計算半以内での分割数(h=(b-a)/n)
- * @return x=bでの解
- */
-double heun(double func(double, double), double y0, double a, double b, int n)
-{
-	double h = (b-a)/n; // 刻み幅
-
-	double x = a;  // xの初期値
-	double y = y0; // yの初期値
-	cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
-	for(int i = 0; i <= n-1; ++i){
-		// Y(i+1) = f(x(i+1)+y(i+1))をオイラー法で求める
-		double fi = func(x, y);
-		double Yi = y+h*fi; // Yiの計算
-
-		// f(x,y)とY(i+1)の平均でyを更新
-		y = y+h*(fi+func(x+h, Yi))/2.0;
-		x = x+h;    // xの更新
-
-		// 出力用
-		//cout << "y(" << x << ") = " << y << endl;
-		cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
-	}
-
-	return y;
-}
-
-/*!
- * 後退オイラー法(1次精度)
- *  - y(n+1)=y(n)+hf(x(n+1),y(n+1))
- *  - ニュートン法を使って計算
- * @param[in] func 関数f(x,y)の値を与える関数ポインタ
- * @param[in] y0 初期値(y0=g(a))
- * @param[in] a,b 計算範囲
- * @param[in] n 計算半以内での分割数(h=(b-a)/n)
- * @return x=bでの解
- */
-double backward_eular(double func(double, double), double dfunc(double, double), double y0, double a, double b, int n, int max_iter, double eps)
-{
-	int k_avg = 0;
-	double h = (b-a)/n; // 刻み幅
-	double x = a;  // xの初期値
-	double y = y0; // yの初期値
-	cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
-	for(int i = 0; i <= n-1; ++i){
-		double yk = y; // y_(i+1)計算用の一時変数
-
-		// ニュートン法でy_(i+1)を求める
-		int k;
-		for(k = 0; k < max_iter; ++k){
-			double g = yk-h*func(x+h, yk)-y;
-			double dg = 1-h*dfunc(x+h, yk);
-			yk = yk-g/dg;
-			if(fabs(g/dg) < eps || fabs(g) < eps) break;
+			// 改良オイラー法で解を修正
+			y = y+h*(f[2]+f[3])/2.0;
 		}
-		k_avg += k;
+		else{
+			// アダムス・バッシュフォース法でy_(i+1)の予測値を計算
+			double y1 = y+h*(5*f[0]-16*f[1]+23*f[2])/12.0;
+			f[3] = func(x+h, y1);
 
-		y = yk; // yの更新
-		//y = y/(1+25*h);
+			// アダムス・ムルトン法で解を修正
+			y = y+h*(-f[1]+8*f[2]+5*f[3])/12.0;
+		}
+
+		f[0] = f[1];
+		f[1] = f[2];
 		x = x+h;    // xの更新
 
 		// 出力用
 		//cout << "y(" << x << ") = " << y << endl;
 		cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
 	}
-	cout << "average number of iterations : " << k_avg/(double)n << endl;
+
+	return y;
+}
+
+/*!
+ * アダムス・バッシュホース法(4点)+アダムスムルトン法(4点)による予測子修正子法
+ * @param[in] func 関数f(x,y)の値を与える関数ポインタ
+ * @param[in] y0 初期値(y0=g(a))
+ * @param[in] a,b 計算範囲
+ * @param[in] n 計算半以内での分割数(h=(b-a)/n)
+ * @return x=bでの解
+ */
+double predictorcorrector_abm4(double func(double, double), double y0, double a, double b, int n)
+{
+	double h = (b-a)/n; // 刻み幅
+
+	double x = a;  // xの初期値
+	double y = y0; // yの初期値
+	cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
+	double f[5] = { 0, 0, 0, 0, 0 };  // f_(i-3), f_(i-2), f_(i-1), f_(i), f_(i+1)
+	for(int i = 0; i <= n-1; ++i){
+		f[3] = func(x, y);
+		if(i < 3){ // 最初の方はオイラー法を使う
+			// 前進オイラー法でy_(i+1)の予測値を計算
+			f[4] = func(x+h, y+h*f[3]);
+
+			// 改良オイラー法で解を修正
+			y = y+h*(f[3]+f[4])/2.0;
+		}
+		else{
+			// アダムス・バッシュフォース法でy_(i+1)の予測値を計算
+			double y1 = y+h*(-9*f[0]+37*f[1]-59*f[2]+55*f[3])/24.0;
+			f[4] = func(x+h, y1);
+
+			// アダムス・ムルトン法で解を修正
+			y = y+h*(f[1]-5*f[2]+19*f[3]+9*f[4])/24.0;
+		}
+
+		f[0] = f[1];
+		f[1] = f[2];
+		f[2] = f[3];
+		x = x+h;    // xの更新
+
+		// 出力用
+		//cout << "y(" << x << ") = " << y << endl;
+		cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
+	}
 
 	return y;
 }
 
 
+/*!
+ * 前進オイラー+改良オイラーによる予測子修正子法
+ * @param[in] func 関数f(x,y)の値を与える関数ポインタ
+ * @param[in] y0 初期値(y0=g(a))
+ * @param[in] a,b 計算範囲
+ * @param[in] n 計算半以内での分割数(h=(b-a)/n)
+ * @return x=bでの解
+ */
+double predictorcorrector_fbe(double func(double, double), double y0, double a, double b, int n)
+{
+	double h = (b-a)/n; // 刻み幅
 
+	double x = a;  // xの初期値
+	double y = y0; // yの初期値
+	cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
+	double f[2] = { 0, 0 };  // f_(i), f_(i+1)
+	for(int i = 0; i <= n-1; ++i){
+		f[0] = func(x, y);
+		
+		// 前進オイラー法でy_(i+1)の予測値を計算
+		double y1 = y+h*f[0];
+		f[1] = func(x+h, y1);
+
+		// 改良オイラー法で解を修正
+		y = y+h*(f[0]+f[1])/2.0;
+
+		x = x+h;    // xの更新
+
+		// 出力用
+		//cout << "y(" << x << ") = " << y << endl;
+		cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
+	}
+
+	return y;
+}
 
 //-----------------------------------------------------------------------------
 //! メイン関数
@@ -136,40 +159,38 @@ double backward_eular(double func(double, double), double dfunc(double, double),
 int main(void)
 {
 	// 常微分方程式dy/dx=ay (解析解はy = C e^ax = y0 e^ax)
-	double(*func)(double, double) = FuncOdeY;
-	double(*dfunc)(double, double) = DyFuncOdeY;
+	double(*func)(double,double) = FuncOdeY;
 	double a = 0.0, b = 1.0; // 範囲[a,b]
 	double y0 = 1.0; // 初期値
 	lambda = 25;
 	TF = std::bind(FuncOdeY_true, placeholders::_1, y0);// 真値
 
 	// 常微分方程式dy/dx=2xy (解析解はy = C e^(x^2) = y0 e^(x^2))
-	//double(*func)(double, double) = FuncOdeXY;
-	//double(*dfunc)(double, double) = DyFuncOdeXY;
+	//double(*func)(double,double) = FuncOdeXY;
 	//double a = 0.0, b = 1.0; // 範囲[a,b]
 	//double y0 = 1.0; // 初期値
 	//TF = std::bind(FuncOdeXY_true, placeholders::_1, y0);// 真値
 
 	cout.precision(10);
-	int n = 20;
+	int n = 10;
 	double y = 0.0;
 	double t = TF(b);  // 真値
 
-	// オイラー法(1次精度)
-	cout << "[Eular method]" << endl;
-	y = eular(func, y0, a, b, n);
+	// 予測子修正子法(4次精度)
+	cout << "[Predictor-Corrector method with Adams-Bashforth(4) + Adams-Moulton(4)]" << endl;
+	y = predictorcorrector_abm4(func, y0, a, b, n);
 	cout << "y(" << b << ") = " << y << ",  error = " << fabs(y-t) << endl;
 	cout << endl;
 
-	// ホイン法(2次精度)
-	cout << "[Heun method]" << endl;
-	y = heun(func, y0, a, b, n);
+	// 予測子修正子法(3次精度)
+	cout << "[Predictor-Corrector method with Adams-Bashforth(3) + Adams-Moulton(3)]" << endl;
+	y = predictorcorrector_abm3(func, y0, a, b, n);
 	cout << "y(" << b << ") = " << y << ",  error = " << fabs(y-t) << endl;
 	cout << endl;
 
-	// 後退オイラー法(1次精度)
-	cout << "[backward Eular method]" << endl;
-	y = backward_eular(func, dfunc, y0, a, b, n, 30, 1e-6);
+	// 予測子修正子法(2次精度)
+	cout << "[Predictor-Corrector method with Forward Eular + Modified Eular]" << endl;
+	y = predictorcorrector_fbe(func, y0, a, b, n);
 	cout << "y(" << b << ") = " << y << ",  error = " << fabs(y-t) << endl;
 	cout << endl;
 

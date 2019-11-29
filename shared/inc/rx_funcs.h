@@ -290,15 +290,25 @@ inline int FuncCircle(const vector<double> &x)
 //-----------------------------------------------------------------------------
 // 常微分方程式(ODE:Ordinary Differential Equation)用
 //-----------------------------------------------------------------------------
+
 /*!
- * f(x,y)=ay
- *  - dy/dx=f(x,y)の真値 : y = C e^x
+ * f(x,y)=-λy
+ *  - dy/dx=f(x,y)の真値 : y = C e^-λx
  * @param[in] x,y 変数
  * @return f(x,y)の値
  */
+static double lambda = 1.0;
 inline double FuncOdeY(double x, double y)
 {
-	return -25*y;
+	return -lambda*y;
+}
+inline double DyFuncOdeY(double x, double y)
+{
+	return -lambda;
+}
+inline double FuncOdeY_true(double x, double C) // 微分方程式の真値
+{
+	return C*exp(-lambda*x);
 }
 
 /*!
@@ -310,6 +320,48 @@ inline double FuncOdeY(double x, double y)
 inline double FuncOdeXY(double x, double y)
 {
 	return 2*x*y;
+}
+inline double DyFuncOdeXY(double x, double y)
+{
+	return 2*x;
+}
+inline double FuncOdeXY_true(double x, double C) // 微分方程式の真値
+{
+	return C*exp(x*x);
+}
+
+/*!
+ * ロトカ・ヴォルテラ方程式
+ *  - 多変数の場合の例
+ *  - 被食者と捕食者の生存競争をモデル化
+ *  - 現段階で解析的な解は求められないことが分かっている
+ * @param[in] t,y 変数 (y[0]:x,y[1]:y)
+ * @return f(t,x,y)の値
+ */
+static double lva = 0.01, lvb = 0.0005; // 被食者の増殖係数と被食者による減少係数
+static double lvc = 0.0005, lvd = 0.05; // 捕食者の被食者の数による増殖係数と捕食者の数が増えることによる減少係数
+inline vector<double> FuncOdeLV(double t, const vector<double> &y)
+{
+	vector<double> f(y.size(), 0.0);
+	f[0] = lva*y[0]-lvb*y[0]*y[1];
+	f[1] = lvc*y[0]*y[1]-lvd*y[1];
+	return f;
+}
+
+/*!
+ * 単振り子
+ *  - 多変数の場合の例2
+ * @param[in] t,y 変数 (y[0]:θ,y[1]:ω)
+ * @return f(x,y)の値
+ */
+static double g = 9.8; // 重力加速度
+static double lp = 1.0; // 振り子のひもの長さ(回転中心からの距離)
+inline vector<double> FuncOdePendulum(double x, const vector<double> &y)
+{
+	vector<double> f(y.size(), 0.0);
+	f[0] = y[1];
+	f[1] = -g*lp*sin(y[0]);
+	return f;
 }
 
 

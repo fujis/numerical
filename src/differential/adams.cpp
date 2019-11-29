@@ -2,7 +2,6 @@
   @file adams.cpp
 	
   @brief アダムス・バッシュホース法
-  　　　 アダムス・ムルトン法を追加した予測子修正子法
  
   @author Makoto Fujisawa
   @date 2019-11
@@ -14,6 +13,12 @@
 //-----------------------------------------------------------------------------
 #include "rx_utils.h"
 #include "rx_funcs.h"
+
+
+//-----------------------------------------------------------------------------
+// デバッグ用変数
+//-----------------------------------------------------------------------------
+std::function<double(double)> TF;
 
 
 //-----------------------------------------------------------------------------
@@ -33,7 +38,7 @@ double adamsbashforth3(double func(double,double), double y0, double a, double b
 
 	double x = a;  // xの初期値
 	double y = y0; // yの初期値
-	//cout << x << ", " << y << ", " << y0*exp(-25*x) << ", " << fabs(y-y0*exp(-25*x)) << endl; // グラフ描画用に真値も出力
+	//cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
 	double fi, fi1 = 0, fi2 = 0;  // f_i, f_(i-1), f_(i-2)
 	for(int i = 0; i <= n-1; ++i){
 		fi = func(x, y);
@@ -50,7 +55,7 @@ double adamsbashforth3(double func(double,double), double y0, double a, double b
 
 		// 出力用
 		cout << "y(" << x << ") = " << y << endl;
-		//cout << x << ", " << y << ", " << y0*exp(-25*x) << ", " << fabs(y-y0*exp(-25*x)) << endl; // グラフ描画用に真値も出力
+		//cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
 	}
 
 	return y;
@@ -70,7 +75,7 @@ double adamsbashforth4(double func(double, double), double y0, double a, double 
 
 	double x = a;  // xの初期値
 	double y = y0; // yの初期値
-	//cout << x << ", " << y << ", " << y0*exp(-25*x) << ", " << fabs(y-y0*exp(-25*x)) << endl; // グラフ描画用に真値も出力
+	//cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
 	double fi, fi1 = 0, fi2 = 0, fi3 = 0;  // f_i, f_(i-1), f_(i-2), f_(i-3)
 	for(int i = 0; i <= n-1; ++i){
 		fi = func(x, y);
@@ -87,7 +92,7 @@ double adamsbashforth4(double func(double, double), double y0, double a, double 
 
 		// 出力用
 		cout << "y(" << x << ") = " << y << endl;
-		//cout << x << ", " << y << ", " << y0*exp(-25*x) << ", " << fabs(y-y0*exp(-25*x)) << endl; // グラフ描画用に真値も出力
+		//cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
 	}
 
 	return y;
@@ -101,17 +106,19 @@ int main(void)
 	//double(*func)(double,double) = FuncOdeY;
 	//double a = 0.0, b = 1.0; // 範囲[a,b]
 	//double y0 = 1.0; // 初期値
-	//double t = y0*exp(-25*b); // 真値
+	//lambda = 25;
+	//TF = std::bind(FuncOdeY_true, placeholders::_1, y0);// 真値
 
 	// 常微分方程式dy/dx=2xy (解析解はy = C e^(x^2) = y0 e^(x^2))
-	double(*func)(double,double) = FuncOdeXY;
+	double(*func)(double, double) = FuncOdeXY;
 	double a = 0.0, b = 1.0; // 範囲[a,b]
 	double y0 = 1.0; // 初期値
-	double t = y0*exp(b*b); // 真値
+	TF = std::bind(FuncOdeXY_true, placeholders::_1, y0);// 真値
 
 	cout.precision(10);
 	int n = 10;
 	double y = 0.0;
+	double t = TF(b);  // 真値
 
 	// アダムス・バッシュホース法(3点,3次精度)
 	cout << "[Adams-Bashforth(3)]" << endl;
