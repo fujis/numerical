@@ -37,7 +37,7 @@ vector<double> eular(vector<double> func(double,const vector<double>&), vector<d
 
 	double x = a;  // xの初期値
 	vector<double> y(y0), f(y0.size(), 0.0);
-	cout << x << ", " << y << endl; // グラフ描画用
+	//cout << x << ", " << y << endl; // グラフ描画用
 	for(int k = 0; k <= n-1; ++k){
 		f = func(x, y);
 		for(int i = 0; i < y0.size(); ++i){
@@ -46,8 +46,8 @@ vector<double> eular(vector<double> func(double,const vector<double>&), vector<d
 		x = x+h;    // xの更新
 
 		// 出力用
-		//cout << "y(" << x << ") = " << y << endl;
-		cout << x << ", " << y << endl; // グラフ描画用
+		cout << "y(" << x << ") = " << y << endl;
+		//cout << x << ", " << y << endl; // グラフ描画用
 	}
 
 	return y;
@@ -69,7 +69,7 @@ vector<double> heun(vector<double> func(double, const vector<double>&), vector<d
 	double x = a;  // xの初期値
 	vector<double> y(y0), f(y0.size(), 0.0);
 	vector<double> Yi(y0), f1(y0.size(), 0.0);
-	cout << x << ", " << y << endl; // グラフ描画用
+	//cout << x << ", " << y << endl; // グラフ描画用
 	for(int k = 0; k <= n-1; ++k){
 		f = func(x, y);
 		for(int i = 0; i < y0.size(); ++i){
@@ -85,8 +85,8 @@ vector<double> heun(vector<double> func(double, const vector<double>&), vector<d
 		x = x+h;    // xの更新
 
 		// 出力用
-		//cout << "y(" << x << ") = " << y << endl;
-		cout << x << ", " << y << endl; // グラフ描画用
+		cout << "y(" << x << ") = " << y << endl;
+		//cout << x << ", " << y << endl; // グラフ描画用
 	}
 
 	return y;
@@ -110,7 +110,7 @@ vector<double> rk4(vector<double> func(double, const vector<double>&), vector<do
 	double x = a;  // xの初期値
 	vector<double> y(y0), f(y0.size(), 0.0);
 	vector<double> k1(y0), k2(y0), k3(y0), k4(y0), yk(y0);
-	cout << x << ", " << y << endl; // グラフ描画用
+	//cout << x << ", " << y << endl; // グラフ描画用
 	for(int k = 0; k <= n-1; ++k){
 		k1 = func(x, y);
 
@@ -137,8 +137,8 @@ vector<double> rk4(vector<double> func(double, const vector<double>&), vector<do
 		x = x+h;    // xの更新
 
 		// 出力用
-		//cout << "y(" << x << ") = " << y << endl;
-		cout << x << ", " << y << endl; // グラフ描画用
+		cout << "y(" << x << ") = " << y << endl;
+		//cout << x << ", " << y << endl; // グラフ描画用
 	}
 
 	return y;
