@@ -37,8 +37,8 @@ vector<double> eular(vector<double> func(double,const vector<double>&), vector<d
 
 	double x = a;  // xの初期値
 	vector<double> y(y0), f(y0.size(), 0.0);
-	cout << x << ", " << y << endl; // グラフ描画用
-	for(int i = 0; i <= n-1; ++i){
+	//cout << x << ", " << y << endl; // グラフ描画用
+	for(int k = 0; k <= n-1; ++k){
 		f = func(x, y);
 		for(int i = 0; i < y0.size(); ++i){
 			y[i] = y[i]+h*f[i]; // yの更新
@@ -46,8 +46,8 @@ vector<double> eular(vector<double> func(double,const vector<double>&), vector<d
 		x = x+h;    // xの更新
 
 		// 出力用
-		//cout << "y(" << x << ") = " << y << endl;
-		cout << x << ", " << y << endl; // グラフ描画用
+		cout << "y(" << x << ") = " << y << endl;
+		//cout << x << ", " << y << endl; // グラフ描画用
 	}
 
 	return y;
@@ -69,9 +69,8 @@ vector<double> heun(vector<double> func(double, const vector<double>&), vector<d
 	double x = a;  // xの初期値
 	vector<double> y(y0), f(y0.size(), 0.0);
 	vector<double> Yi(y0), f1(y0.size(), 0.0);
-	cout << x << ", " << y << endl; // グラフ描画用
-	for(int i = 0; i <= n-1; ++i){
-		// Y(i+1) = f(x(i+1)+y(i+1))をオイラー法で求める
+	//cout << x << ", " << y << endl; // グラフ描画用
+	for(int k = 0; k <= n-1; ++k){
 		f = func(x, y);
 		for(int i = 0; i < y0.size(); ++i){
 			Yi[i] = y[i]+h*f[i]; // Yiの計算
@@ -86,8 +85,8 @@ vector<double> heun(vector<double> func(double, const vector<double>&), vector<d
 		x = x+h;    // xの更新
 
 		// 出力用
-		//cout << "y(" << x << ") = " << y << endl;
-		cout << x << ", " << y << endl; // グラフ描画用
+		cout << "y(" << x << ") = " << y << endl;
+		//cout << x << ", " << y << endl; // グラフ描画用
 	}
 
 	return y;
@@ -111,9 +110,8 @@ vector<double> rk4(vector<double> func(double, const vector<double>&), vector<do
 	double x = a;  // xの初期値
 	vector<double> y(y0), f(y0.size(), 0.0);
 	vector<double> k1(y0), k2(y0), k3(y0), k4(y0), yk(y0);
-	cout << x << ", " << y << endl; // グラフ描画用
-	for(int i = 0; i <= n-1; ++i){
-		// Y(i+1) = f(x(i+1)+y(i+1))をオイラー法で求める
+	//cout << x << ", " << y << endl; // グラフ描画用
+	for(int k = 0; k <= n-1; ++k){
 		k1 = func(x, y);
 
 		for(int i = 0; i < y0.size(); ++i){
@@ -136,18 +134,11 @@ vector<double> rk4(vector<double> func(double, const vector<double>&), vector<do
 			y[i] = y[i]+(h/6)*(k1[i]+2*k2[i]+2*k3[i]+k4[i]);
 		}
 
-
-		//k1 = func(x, y);				// k1の算出
-		//k2 = func(x+h/2, y+(h/2)*k1);	// k2の算出
-		//k3 = func(x+h/2, y+(h/2)*k2);	// k3の算出
-		//k4 = func(x+h, y+h*k3);			// k4の算出
-		//y = y+(h/6)*(k1+2*k2+2*k3+k4); // yの更新
-
 		x = x+h;    // xの更新
 
 		// 出力用
-		//cout << "y(" << x << ") = " << y << endl;
-		cout << x << ", " << y << endl; // グラフ描画用
+		cout << "y(" << x << ") = " << y << endl;
+		//cout << x << ", " << y << endl; // グラフ描画用
 	}
 
 	return y;
