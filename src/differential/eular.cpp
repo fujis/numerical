@@ -37,15 +37,15 @@ double eular(double func(double,double), double y0, double a, double b, int n)
 
 	double x = a;  // xの初期値
 	double y = y0; // yの初期値
-	cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
+	//cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
 	for(int i = 0; i <= n-1; ++i){
 		double fi = func(x, y);
 		y = y+h*fi; // yの更新
 		x = x+h;    // xの更新
 
 		// 出力用
-		//cout << "y(" << x << ") = " << y << endl;
-		cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
+		cout << "y(" << x << ") = " << y << endl;
+		//cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
 	}
 
 	return y;
@@ -66,7 +66,7 @@ double heun(double func(double, double), double y0, double a, double b, int n)
 
 	double x = a;  // xの初期値
 	double y = y0; // yの初期値
-	cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
+	//cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
 	for(int i = 0; i <= n-1; ++i){
 		// Y(i+1) = f(x(i+1)+y(i+1))をオイラー法で求める
 		double fi = func(x, y);
@@ -77,8 +77,8 @@ double heun(double func(double, double), double y0, double a, double b, int n)
 		x = x+h;    // xの更新
 
 		// 出力用
-		//cout << "y(" << x << ") = " << y << endl;
-		cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
+		cout << "y(" << x << ") = " << y << endl;
+		//cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
 	}
 
 	return y;
@@ -100,7 +100,7 @@ double backward_eular(double func(double, double), double dfunc(double, double),
 	double h = (b-a)/n; // 刻み幅
 	double x = a;  // xの初期値
 	double y = y0; // yの初期値
-	cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
+	//cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
 	for(int i = 0; i <= n-1; ++i){
 		double yk = y; // y_(i+1)計算用の一時変数
 
@@ -119,8 +119,8 @@ double backward_eular(double func(double, double), double dfunc(double, double),
 		x = x+h;    // xの更新
 
 		// 出力用
-		//cout << "y(" << x << ") = " << y << endl;
-		cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
+		cout << "y(" << x << ") = " << y << endl;
+		//cout << x << ", " << y << ", " << TF(x) << ", " << fabs(y-TF(x)) << endl; // グラフ描画用に真値も出力
 	}
 	cout << "average number of iterations : " << k_avg/(double)n << endl;
 
@@ -151,7 +151,7 @@ int main(void)
 	//TF = std::bind(FuncOdeXY_true, placeholders::_1, y0);// 真値
 
 	cout.precision(10);
-	int n = 20;
+	int n = 10;
 	double y = 0.0;
 	double t = TF(b);  // 真値
 

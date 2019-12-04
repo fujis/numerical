@@ -97,7 +97,7 @@ int main(void)
 {
 	// 常微分方程式dy/dx=ay (解析解はy = C e^ax = y0 e^ax)
 	double(*func)(double,double) = FuncOdeY;
-	double a = 0.0, b = 10.0; // 範囲[a,b]
+	double a = 0.0, b = 1.0; // 範囲[a,b]
 	double y0 = 1.0; // 初期値
 	lambda = 25;
 	TF = std::bind(FuncOdeY_true, placeholders::_1, y0);// 真値
@@ -109,7 +109,7 @@ int main(void)
 	//TF = std::bind(FuncOdeXY_true, placeholders::_1, y0);// 真値
 
 	cout.precision(10);
-	int n = 100;
+	int n = 20;
 	double y = 0.0;
 	double t = TF(b);  // 真値
 
