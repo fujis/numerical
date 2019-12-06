@@ -164,7 +164,6 @@ int diffuse1d_cn(vector<double> &f1, vector<double> &f0, double a, double dt, in
 {
 	if(n < 0) return 1;
 	double dx = (xn-x0)/n; // 空間刻み幅
-
 	double eta = a*dt/(dx*dx);
 
 	// 線形システムの係数行列と右辺項ベクトルの計算
@@ -408,9 +407,10 @@ int main(void)
 
 	// 初期値設定
 	for(int i = 0; i < n+1; ++i) f[i] = 1.0;
+	bcfunc(f, n);
 
 	// データ保存パス(ファイル名の最後の_ignはGitで除外ファイルにするためのもの)
-	string path = "../../bin/data";
+	string path = "../../bin/data/";
 
 
 	// 前進オイラー+中心差分
@@ -425,6 +425,9 @@ int main(void)
 	// クランク・ニコルソン法
 	cn_lambda = 0.5;
 	diffuse1d(diffuse1d_cn, bcfunc, f, a, dt, n, x0, xn, path+"diffuse1d_cn_dt11_ign.txt");
+	// クランク・ニコルソン法(dt=0.05)
+	dt = 0.05;
+	diffuse1d(diffuse1d_cn, bcfunc, f, a, dt, n, x0, xn, path+"diffuse1d_cn_dt50_ign.txt");
 
 
 	// 2次元
@@ -433,6 +436,7 @@ int main(void)
 	BC2 bcfunc2 = setbc2_d;
 	for(int i = 0; i < n+1; ++i) f[i] = 1.0;
 	vector< vector<double> > f2(n+1, f);
+	bcfunc2(f2, n);
 
 	// 前進オイラー+中心差分
 	diffuse2d(diffuse2d_ftcs, bcfunc2, f2, a, dt, n, x0, xn, y0, yn, path+"diffuse2d_ftcs_ign.txt");

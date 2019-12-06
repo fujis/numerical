@@ -13,6 +13,7 @@
 //-----------------------------------------------------------------------------
 #include "rx_utils.h"
 #include "rx_filelist.h"
+#include "rx_bitmap.h"
 
 // OpenGL
 #include <GL/glut.h>
@@ -138,10 +139,11 @@ vector<string> g_dfiles;
 int g_dfile_idx = -1;
 
 // 描画領域サイズ(ピクセル数)
-int g_w = 800, g_h = 800;
+int g_w = 1200, g_h = 600;
 
 // 描画内容
 int g_draw = 0;
+double g_lc = 1.0;
 
 //-----------------------------------------------------------------------------
 // 関数プロトタイプ宣言
@@ -149,7 +151,7 @@ int g_draw = 0;
 void SwitchIdle(int on = -1);
 void SwitchFullScreen(void);
 void CleanGL(void);
-
+bool SaveFrameBuffer(const string &fn, int w, int h);
 
 //-----------------------------------------------------------------------------
 // シミュレーションデータの読み込み
@@ -447,6 +449,20 @@ static void DrawStrings(vector<string> &static_str, int w, int h)
 	glMatrixMode(GL_MODELVIEW);
 }
 
+
+/*!
+ * 2Dグラフの外枠描画
+ */
+void DrawFrame(double xmin, double xmax, double ymin, double ymax)
+{
+	glBegin(GL_LINE_LOOP);
+	glVertex2d(xmin, ymin);
+	glVertex2d(xmax, ymin);
+	glVertex2d(xmax, ymax);
+	glVertex2d(xmin, ymax);
+	glEnd();
+}
+
 //-----------------------------------------------------------------------------
 // OpenGLイベントハンドラ
 //-----------------------------------------------------------------------------
@@ -478,12 +494,26 @@ void Display(void)
 			ymax = g_data1d.max[1];
 		}
 
+		double lc = fabs(g_lc-0.5);
+		glColor3d(lc, lc, lc);
+		glLineWidth(2.0);
+		//DrawFrame(xmin, xmax, ymin, ymax);
+		glBegin(GL_LINES);
+		glVertex2d(xmin, ymin);
+		glVertex2d(xmax, ymin);
+		glVertex2d(xmin, ymin);
+		glVertex2d(xmin, ymax);
+		glVertex2d(xmax, ymin);
+		glVertex2d(xmax, ymax);
+		glEnd();
+
+
 		// 関数値データ
 		cur_step = g_data1d.current_index;
 		rxData1D &d = g_data1d.data[cur_step];
 
 		double xmargin = 0.05*(xmax-xmin);	// x方向余白
-		double ymargin = 0.1*(ymax-ymin);	// y方向余白
+		double ymargin = 0.2*(ymax-ymin);	// y方向余白
 		double yoffset = 0.5*(ymax-ymin);	// 下部分に別のものを描画するためのオフセット
 		// 透視変換行列の設定
 		glMatrixMode(GL_PROJECTION);
@@ -495,7 +525,7 @@ void Display(void)
 		glLoadIdentity();
 
 		// グラフ
-		glColor3d(1.0, 1.0, 1.0);
+		glColor3d(g_lc, g_lc, g_lc);
 		glLineWidth(3.0);
 		glBegin(GL_LINE_STRIP);
 		for(int i = 0; i < d.x.size(); ++i){
@@ -506,8 +536,8 @@ void Display(void)
 		glEnd();
 
 		// サーモバー
-		double y0 = ymin-yoffset+ymargin;
-		double y1 = ymin-2*ymargin;
+		double y0 = ymin-yoffset;
+		double y1 = ymin-ymargin;
 		glBegin(GL_QUADS);
 		for(int i = 0; i < d.x.size()-1; ++i){
 			double x0 = d.x[i];
@@ -733,6 +763,16 @@ void Keyboard(unsigned char key, int x, int y)
 		SwitchFullScreen();
 		break;
 
+	// 背景色変更
+	case 'w':
+		g_lc = 1-g_lc;
+		glClearColor(1-g_lc, 1-g_lc, 1-g_lc, 1.0f);
+		break;
+	case 'b':
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		g_lc = 1.0;
+		break;
+
 	// データのステップを進める/戻す
 	case 'J':
 		inc = 10;
@@ -771,6 +811,10 @@ void Keyboard(unsigned char key, int x, int y)
 		}
 		break;
 
+	case 'o': // 画像ファイル出力
+		SaveFrameBuffer("data_"+RX_TO_STRING(g_dfile_idx)+"_step"+RX_TO_STRING(g_current_type ==2 ? g_data2d.current_index : g_data1d.current_index)+".bmp", g_w, g_h);
+		break;
+
 	default:
 	break;
 	}
@@ -800,7 +844,7 @@ void InitGL(void)
 	}
 	if(g_dfiles.empty()){
 		cout << "there is no data file!" << endl;
-		g_dfile_idx = 1;
+		g_dfile_idx = -1;
 	}
 	else{
 		g_dfile_idx = 0;
@@ -896,4 +940,43 @@ void SwitchFullScreen(void)
 		glutFullScreen();
 	}
 	fullscreen ^= 1;
+}
+
+
+
+/*!
+ * 描画の画像保存
+ */
+bool SaveFrameBuffer(const string &fn, int w, int h)
+{
+	int c = 3;
+	vector<unsigned char> img_buf(w*h*c);
+
+	int format = GL_RGBA;
+	if(c == 3){
+		format = GL_RGB;
+	}
+	//glFlush();
+	glutSwapBuffers();
+
+	glRasterPos2i(0, h);
+	glReadPixels(0, 0, w, h, format, GL_UNSIGNED_BYTE, &img_buf[0]);
+
+	WriteBitmapFile(fn, &img_buf[0], w, h, c, RX_BMP_WINDOWS_V3, -1, false, true);
+
+	//for(int i = 0; i < w; ++i){
+	//	for(int j = 0; j < h; ++j){
+	//		int idx = 3*(w*(h-j-1)+i);
+	//		//int idx = 3*(j*w+i);
+
+	//		int r, g, b;
+	//		r = img_buf[idx+0];
+	//		g = img_buf[idx+1];
+	//		b = img_buf[idx+2];
+
+	//		SetPixel(cvimg, i, j, r, g, b);
+	//	}
+	//}
+
+	return true;
 }

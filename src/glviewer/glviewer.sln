@@ -6,6 +6,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glviewer", "glviewer.vcxpro
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{6EC60260-9A9D-4BA7-A4A5-EC0BE5485D9D}"
 	ProjectSection(SolutionItems) = preProject
+		..\..\shared\inc\rx_bitmap.h = ..\..\shared\inc\rx_bitmap.h
 		..\..\shared\inc\rx_filelist.h = ..\..\shared\inc\rx_filelist.h
 		..\..\shared\inc\rx_utils.h = ..\..\shared\inc\rx_utils.h
 	EndProjectSection
