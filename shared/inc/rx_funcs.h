@@ -365,5 +365,23 @@ inline vector<double> FuncOdePendulum(double x, const vector<double> &y)
 }
 
 
+//-----------------------------------------------------------------------------
+// 偏微分方程式(PDE:Partial Differential Equation)用
+//-----------------------------------------------------------------------------
+/*!
+ * g(x)=20x^3
+ *  - d^2 f/dx^2=g(x)の真値 : f(x)=x-x^5
+ * @param[in] x 変数
+ * @return g(x)の値
+ */
+inline double FuncPdeX3(double x)
+{
+	return -20*x*x*x;
+}
+inline double FuncPdeX3T(double x) // 微分方程式の真値
+{
+	return x-x*x*x*x*x;
+}
+
 
 #endif // #ifndef _RX_FUNC_H_

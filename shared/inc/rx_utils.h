@@ -110,6 +110,23 @@ inline T RX_MIN3(const T &a, const T &b, const T &c){ return ( (a < b) ? ( (a < 
 template<class T> 
 inline T RX_CLAMP(const T &x, const T &a, const T &b){ return ((x < a) ? a : (x > b) ? b : x); }
 
+//! 1次元線型補間
+template<class T>
+inline T RX_LERP(const T &a, const T &b, const T &t){ return a + t*(b-a); }
+
+//! degree -> radian の変換係数(pi/180.0)
+const double RX_DEGREES_TO_RADIANS = 0.0174532925199432957692369076848;
+
+//! radian -> degree の変換係数(180.0/pi)
+const double RX_RADIANS_TO_DEGREES = 57.295779513082320876798154814114;
+
+//! degree -> radian の変換
+template<class T>
+inline T RX_TO_RADIANS(const T &x){ return static_cast<T>((x)*RX_DEGREES_TO_RADIANS); }
+
+//! radian -> degree の変換
+template<class T>
+inline T RX_TO_DEGREES(const T &x){ return static_cast<T>((x)*RX_RADIANS_TO_DEGREES); }
 
 //-----------------------------------------------------------------------------
 // 関数定義
@@ -210,7 +227,7 @@ inline size_t GetFirstString(const string &src, string &sub, string sep)
  */
 inline bool IsNumeric(const string &str)
 {
-	if(str.find_first_not_of("-0123456789. Ee\t") != string::npos){
+	if(str.find_first_not_of("-+0123456789. Ee\t") != string::npos){
 		return false;
 	}
 	return true;
@@ -487,6 +504,26 @@ inline int OutputFunction(double x0, double x1, double dx, std::function<double(
 	return cnt;
 }
 
+/*!
+ * 関数値のファイル出力
+ * @param[in] x0,x1 サンプリング範囲
+ * @param[in] dx サンプリング間隔
+ * @param[in] func 関数値を与える関数ポインタ(std::bindをつかうためにstd::functionにしている)
+ * @param[in] filename 出力ファイル名
+ * @return 生成されたデータ個数
+ */
+inline int OutputFunction(double x0, double x1, double dx, vector<double> f, string filename)
+{
+	ofstream fo;
+	fo.open(filename.c_str(), ios::out);
+	double x = x0;
+	for(int i = 0; i < f.size(); ++i){
+		fo << x << "," << f[i] << endl;
+		x += dx;
+	}
+	fo.close();
+	return 0;
+}
 
 /*!
  * サンプリング点(データ点)の生成(1次元,ホワイトノイズ付き)
@@ -536,6 +573,108 @@ inline int MakeChebyshevNodes(double x0, double x1, double dx, double func(doubl
 }
 
 
+//-----------------------------------------------------------------------------
+// 偏微分方程式のための初期値設定とファイル出力
+//-----------------------------------------------------------------------------
+/*!
+ * 関数の初期値として矩形波を設定
+ * @param[out] f 未知関数fの各グリッドでの値
+ * @param[in] n 計算範囲内での分割数(h=(b-a)/n)
+ * @param[in] a,b 計算範囲
+ * @return 問題なければ0を返す
+ */
+inline int SetValueRectangle(vector<double> &f, int n, double a, double b)
+{
+	if(n <= 0) return 1;
+	double h = (b-a)/n; // 空間刻み幅
+	double l = b-a; // 計算範囲全体の長さ
+	double x = 0.0; // 計算半以内の相対位置(原点をaとする)
+	for(int i = 0; i <= n; ++i){
+		if(x >= 0.05*l && x <= 0.25*l){
+			f[i] = 1.0;
+		}
+		else{
+			f[i] = 0.0;
+		}
+		x += h;
+	}
+	return 0;
+}
 
+/*!
+ * 関数の初期値として正弦波を設定
+ * @param[out] f 未知関数fの各グリッドでの値
+ * @param[in] n 計算範囲内での分割数(h=(b-a)/n)
+ * @param[in] a,b 計算範囲
+ * @return 問題なければ0を返す
+ */
+inline int SetValueSin(vector<double> &f, int n, double a, double b)
+{
+	if(n <= 0) return 1;
+	double h = (b-a)/n; // 空間刻み幅
+	double l = b-a; // 計算範囲全体の長さ
+	double x = 0.0; // 計算半以内の相対位置(原点をaとする)
+	for(int i = 0; i <= n; ++i){
+		if(x >= 0.05*l && x <= 0.45*l){
+			f[i] = 0.5*sin(RX_PI*(x-0.05*l)/(0.4*l));
+		} else{
+			f[i] = 0.0;
+		}
+		x += h;
+	}
+	return 0;
+}
+
+/*!
+ * 関数値をファイル出力(1D)
+ * @param[out] f 未知関数fの各グリッドでの値
+ * @param[in] n 計算範囲内での分割数(h=(b-a)/n)
+ * @param[in] a,b 計算範囲
+ * @param[in] t 現在の時間(時間軸方向の現在地)
+ * @return 問題なければ0を返す
+ */
+inline int OutputValueToFile(const vector<double> &f, int n, double a, double b, double t, ofstream &fo)
+{
+	if(n <= 0) return 1;
+
+	// 結果の出力
+	double x = a;		// 位置
+	double h = (b-a)/n;	// 空間方向の刻み幅
+	fo << t << ",";
+	for(int i = 0; i <= n; ++i){
+		fo << x << "," << f[i] << (i == n ? "" : ",");
+		x += h;
+	}
+	fo << endl;
+	return 0;
+}
+
+/*!
+ * 関数値をファイル出力(2D)
+ * @param[out] f 未知関数fの各グリッドでの値
+ * @param[in] n 計算範囲内での分割数(h=(b-a)/n)
+ * @param[in] a,b 計算範囲
+ * @param[in] t 現在の時間(時間軸方向の現在地)
+ * @return 問題なければ0を返す
+ */
+inline int OutputValueToFile(const vector< vector<double> > &f, int n, double x0, double xn, double y0, double yn, double t, ofstream &fo)
+{
+	if(n <= 0) return 1;
+	fo << t << "," << n << "," << n << ",";
+
+	double dx = (xn-x0)/n;	// 空間方向の刻み幅
+	double dy = (yn-y0)/n;	// 空間方向の刻み幅
+
+	fo << x0 << "," << y0 << "," << dx << "," << dy << ",";
+
+	// 結果の出力
+	for(int j = 0; j <= n; ++j){
+		for(int i = 0; i <= n; ++i){
+			fo << f[i] << ((j == n && i == n) ? "" : ",");
+		}
+	}
+	fo << endl;
+	return 0;
+}
 
 #endif // #ifndef _RX_COMMON_H_

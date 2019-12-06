@@ -45,6 +45,7 @@ images/
 images_with_tag*/
 *_ign
 *_ign/
+*_ign.*
 
 *.lzh
 *.zip
