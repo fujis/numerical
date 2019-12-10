@@ -1,7 +1,7 @@
 /*! 
-  @file diffuse.cpp
+  @file poisson.cpp
 	
-  @brief 拡散方程式のソルバー
+  @brief ポアソン方程式のソルバー
  
   @author Makoto Fujisawa
   @date 2019-11
