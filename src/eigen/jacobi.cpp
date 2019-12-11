@@ -24,7 +24,7 @@
  * @param[inout] eps 許容誤差(反復終了後,実際の誤差を返す) 
  * @return 反復回数
  */
-int EigenJacobi(vector< vector<double> > &a, vector< vector<double> > &v, int n, int &max_iter, double &eps)
+int eigen_jacobi(vector< vector<double> > &a, vector< vector<double> > &v, int n, int &max_iter, double &eps)
 {
     vector<double> bim(n), bjm(n);
     double bii, bij, bjj, bji;
@@ -146,7 +146,7 @@ int main(void)
 
 	int max_iter = 100;
 	double eps = 1e-6;
-	EigenJacobi(A, V, n, max_iter, eps);
+	eigen_jacobi(A, V, n, max_iter, eps);
 
 	// 固有値の表示
 	cout << "e = (";
