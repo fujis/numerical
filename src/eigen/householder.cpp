@@ -108,7 +108,7 @@ int NCS(double lambda, const vector< vector<double> > &A, int n)
 /*!
  * 三重対角行列の特性方程式の漸化式(スツルム関数列)を計算
  *  - ニュートン法で使うため，勾配値も同時に計算
- * @param[in] lambda 固有値候補
+ * @param[in] lambda 固有値候補(変数)
  * @param[out] f スツルム関数列f_nの値
  * @param[out] f スツルム関数列f_nの勾配値
  * @param[inout] a 三重対角行列(n×n)
@@ -127,12 +127,10 @@ void CFunc(double lambda, double &f, double &df, const vector< vector<double> > 
 		return;
 	}
 
-	double f0, f1;
-	double df0, df1;
-	f0  = 1.0;	// f_0
-	f1  = lambda-A[0][0];	// f_1
-	df0 = 0.0;
-	df1 = 1.0;
+	double f0  = 1.0;	// f_0
+	double f1  = lambda-A[0][0];	// f_1
+	double df0 = 0.0;
+	double df1 = 1.0;
 
 	for(int k = 1; k < n; ++k){
 		double a = A[k][k];
@@ -167,7 +165,7 @@ double Newton(double x, double eps, const vector< vector<double> > &A, int n)
 
 		x = x0-f/df;
 		iter++;
-	}while(fabs(x-x0) > eps);
+	}while(fabs(x-x0) > eps && iter < 100);
 
 	return x;
 }

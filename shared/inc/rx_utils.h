@@ -372,6 +372,19 @@ inline int MulMatrix(const vector< vector<double> > &a, const vector< vector<dou
 
 	return 1;
 }
+inline vector< vector<double> > mul_mm(const vector< vector<double> > &a, const vector< vector<double> > &b, int n)
+{
+	vector< vector<double> > y(a);
+	for(int i = 0; i < n; ++i){
+		for(int j = 0; j < n; ++j){
+			y[i][j] = 0.0;
+			for(int k = 0; k < n; ++k){
+				y[i][j] += a[i][k]*b[k][j];
+			}
+		}
+	}
+	return y;
+}
 
 /*!
  * 2次元vectorコンテナに格納された行列の転置
@@ -379,7 +392,7 @@ inline int MulMatrix(const vector< vector<double> > &a, const vector< vector<dou
  * @param[in] n 行列の大きさ
  * @return 転置行列
  */
-inline vector< vector<double> > Transpose(const vector< vector<double> > &a, int n)
+inline vector< vector<double> > transpose(const vector< vector<double> > &a, int n)
 {
 	vector< vector<double> > t(n, vector<double>(n, 0.0));
 	for(int i = 0; i < n; ++i){
@@ -408,9 +421,22 @@ inline int MulMatrixVector(const vector< vector<double> > &a, const vector<doubl
 	}
 	return 1;
 }
+inline vector<double> mul_mv(const vector< vector<double> > &a, const vector<double> &b, int n)
+{
+	vector<double> y(n);
+	for(int i = 0; i < n; ++i){
+		y[i] = 0.0;
+		for(int k = 0; k < n; ++k){
+			y[i] += a[i][k]*b[k];
+		}
+	}
+	return y;
+}
+
+
 
 /*!
- * ベクトルの内積
+ * 1次元vectorコンテナに格納されたベクトル同士の内積
  * @param[in] a,b n次元ベクトル
  * @param[in] n ベクトルの大きさ
  * @return 内積
@@ -423,6 +449,49 @@ inline double dot(const vector<double> &a, const vector<double> &b, int n)
 	}
 	return d;
 }
+
+/*!
+ * 1次元vectorコンテナに格納されたベクトルとスカラー値の掛け算
+ * @param[in] a スカラー値
+ * @param[in] b n次元ベクトル
+ * @param[out] y 結果のベクトル(n)
+ * @param[in] n 行列の大きさ
+ * @return 1:成功
+ */
+inline vector<double> mul_sv(const double &a, const vector<double> &b, int n)
+{
+	vector<double> y(n);
+	for(int i = 0; i < n; ++i){
+		y[i] = a*b[i];
+	}
+	return y;
+}
+
+/*!
+ * 1次元vectorコンテナに格納されたベクトルの正規化
+ * @param[inout] a n次元ベクトル
+ * @param[in] n ベクトルの大きさ
+ * @return ノルムの値
+ */
+inline double normalize(vector<double> &a, int n)
+{
+	double l = sqrt(dot(a, a, n)); // |a|の計算
+	if(fabs(l) < 1e-10) return 0.0;
+	for(int i = 0; i < n; ++i){
+		a[i] /= l;
+	}
+	return l;
+}
+
+inline void unit(vector< vector<double> > &a, int n)
+{
+	for(int i = 0; i < n; ++i){
+		for(int j = 0; j < n; ++j){
+			a[i][j] = (i == j ? 1.0 : 0.0);
+		}
+	}
+}
+
 
 
 

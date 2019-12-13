@@ -176,7 +176,7 @@ int main(void)
 	if(d.empty()){
 		// 分解結果のチェック用
 		vector< vector<double> > LL(n, vector<double>(n, 0.0));
-		MulMatrix(L, Transpose(L, n), LL, n);
+		MulMatrix(L, transpose(L, n), LL, n);
 
 		// 分解した結果を掛け合わせた行列を画面表示(これが元の行列Aと同じならOK)
 		cout << "LL^T = " << endl;
@@ -194,7 +194,7 @@ int main(void)
 		vector< vector<double> > LD(n, vector<double>(n, 0.0));
 		vector< vector<double> > LDL(n, vector<double>(n, 0.0));
 		MulMatrix(L, D, LD, n);
-		MulMatrix(LD, Transpose(L, n), LDL, n);
+		MulMatrix(LD, transpose(L, n), LDL, n);
 
 		// 分解した結果を掛け合わせた行列を画面表示(これが元の行列Aと同じならOK)
 		cout << "LDL^T = " << endl;
