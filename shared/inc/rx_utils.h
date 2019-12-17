@@ -1,14 +1,14 @@
-/*! @file rx_common.h
+/*! @file rx_utils.h
 	
 	@brief 数値計算テストの共通ヘッダ
  
 	@author Makoto Fujisawa
-	@date   2012
+	@date   2019
 */
 
 
-#ifndef _RX_COMMON_H_
-#define _RX_COMMON_H_
+#ifndef _RX_UTILS_H_
+#define _RX_UTILS_H_
 
 //-----------------------------------------------------------------------------
 // インクルードファイル
@@ -240,7 +240,7 @@ inline bool IsNumeric(const string &str)
  * @param[out] mat 行列要素
  * @return ファイルが開けなかったらfalseを返す
  */
-bool ReadMatrix(string file_name, string sep, vector< vector<double> > &mat)
+static bool ReadMatrix(string file_name, string sep, vector< vector<double> > &mat)
 {
 	ifstream file;
  
@@ -290,7 +290,7 @@ bool ReadMatrix(string file_name, string sep, vector< vector<double> > &mat)
  * @param[out] c 係数列
  * @return ファイルが開けなかったらfalseを返す
  */
-bool ReadAlgebra(string file_name, string sep, vector<double> &c)
+static bool ReadAlgebra(string file_name, string sep, vector<double> &c)
 {
 	ifstream file;
  
@@ -743,6 +743,117 @@ inline int OutputValueToFile(const vector< vector<double> > &f, int n, double x0
 		}
 	}
 	fo << endl;
+	return 0;
+}
+
+
+//-----------------------------------------------------------------------------
+// 2次元座標データ
+//-----------------------------------------------------------------------------
+struct rxPoint2
+{
+	double x, y;
+};
+
+/*!
+ * 2次元ベクトルデータの読み込み
+ * @param[in] filename
+ * @param[out] data
+ * @return 正常に読み込めたら0を返す
+ */
+static int Read2d(const string &filename, vector<rxPoint2> &data, string sep = ",")
+{
+	ifstream file;
+	file.open(filename.c_str());
+	if(!file || !file.is_open() || file.bad() || file.fail()){
+		cout << "Read2d : Invalid file specified" << endl;
+		return 1;
+	}
+
+	string buf, grid;
+	string::size_type comment_start = 0;
+	while(!file.eof()){
+		getline(file, buf);
+
+		// '#'以降はコメントとして無視
+		if((comment_start = buf.find('#')) != string::size_type(-1))
+			buf = buf.substr(0, comment_start);
+
+		// 空行は無視
+		if(buf.empty())
+			continue;
+
+		rxPoint2 p;
+		size_t pos = 0;
+		string sub;
+
+		// 座標値を1つずつ読み込んでいく
+		pos = GetNextString(buf, sub, sep, pos);
+		if(IsNumeric(sub)){
+			p.x = atof(sub.c_str());
+		} else{
+			break;
+		}
+		pos = GetNextString(buf, sub, sep, pos);
+		if(IsNumeric(sub)){
+			p.y = atof(sub.c_str());
+		} else{
+			break;
+		}
+
+		data.push_back(p);
+	}
+	file.close();
+
+	if(data.empty()) return 1;
+
+	return 0;
+}
+/*!
+ * 2次元ベクトルデータの読み込み
+ * @param[in] filename
+ * @param[out] data
+ * @return 正常に読み込めたら0を返す
+ */
+static int Write2d(const string &filename, const vector<rxPoint2> &data, string header = "#p2d", string sep = ",")
+{
+	if(data.empty()) return 1;
+
+	ofstream file;
+	file.open(filename.c_str(), ios::out);
+	if(!file || !file.is_open() || file.bad() || file.fail()){
+		cout << "Write2d : Invalid file specified" << endl;
+		return 1;
+	}
+
+	// 1行目はデータの種類を表す
+	file << header << endl;
+
+	// 点データを1座標/行で書き出す
+	for(rxPoint2 p : data){
+		file << p.x << sep << p.y << endl;
+	}
+	file.close();
+
+	return 0;
+}
+
+/*!
+ * 座標値データの範囲を求める
+ * @param[in] data 2次元座標値データ
+ * @param[out] min,max 最小,最大座標
+ */
+inline int SearchRange(vector<rxPoint2> &data, double min[2], double max[2])
+{
+	if(data.empty()) return 1;
+	min[0] = max[0] = data[0].x;
+	min[1] = max[1] = data[0].y;
+	for(rxPoint2 p : data){
+		if(p.x < min[0]) min[0] = p.x;
+		if(p.x > max[0]) max[0] = p.x;
+		if(p.y < min[1]) min[1] = p.y;
+		if(p.y > max[1]) max[1] = p.y;
+	}
 	return 0;
 }
 

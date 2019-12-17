@@ -7,6 +7,10 @@
   @date 2014-11
 */
 
+
+#ifndef _RX_FILELIST_H_
+#define _RX_FILELIST_H_
+
 //-----------------------------------------------------------------------------
 // インクルードファイル
 //-----------------------------------------------------------------------------
@@ -201,3 +205,8 @@ inline static std::vector<std::string> GetFileList(std::string dir)
 
 
 #endif
+
+
+
+
+#endif // #ifndef _RX_FILELIST_H_
