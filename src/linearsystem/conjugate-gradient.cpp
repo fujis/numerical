@@ -117,7 +117,7 @@ int CGSolver(const vector< vector<double> > &A, const vector<double> &b, vector<
 	}
 
 	double rr0 = dot(r, r, n), rr1;
-	double alpha, beta;
+	double alpha, beta, pap;
 
 	double e = 0.0;
 	int k;
@@ -130,7 +130,9 @@ int CGSolver(const vector< vector<double> > &A, const vector<double> &b, vector<
 		}
 
 		// alpha = r*r/(P*AP)の計算
-		alpha = rr0/dot(p, y, n);
+		pap = dot(p, y, n);
+		if(fabs(pap) < 1e-6) break; // 右辺項bが全て0かつxも全て0だと0割になるのでその対策(b=0のときのx=0は自明な解)
+		alpha = rr0/pap;
 
 		// 解x、残差rの更新
 		for(int i = 0; i < n; ++i){
@@ -237,8 +239,7 @@ int ICCGSolver(const vector< vector<double> > &A, const vector<double> &b, vecto
 	ICRes(L, d, r, p, n);
 
 	float rr0 = dot(r, p, n), rr1;
-	float alpha, beta;
-
+	float alpha, beta, pap;
 
 	double e = 0.0;
 	int k;
@@ -251,7 +252,9 @@ int ICCGSolver(const vector< vector<double> > &A, const vector<double> &b, vecto
 		}
 
 		// alpha = r*r/(P*AP)の計算
-		alpha = rr0/dot(p, y, n);
+		pap = dot(p, y, n);
+		if(fabs(pap) < 1e-6) break; // 右辺項bが全て0かつxも全て0だと0割になるのでその対策(b=0のときのx=0は自明な解)
+		alpha = rr0/pap;
 
 		// 解x、残差rの更新
 		for(int i = 0; i < n; ++i){
@@ -327,8 +330,8 @@ int main(void)
 	int max_iter = 100;
 	double eps = 1e-6;
 	vector<double> x(n);
-	//CGSolver(A, b, x, n, max_iter, eps);
-	ICCGSolver(A, b, x, n, max_iter, eps);
+	CGSolver(A, b, x, n, max_iter, eps);
+	//ICCGSolver(A, b, x, n, max_iter, eps);
 	
 	// 結果の画面表示
 	for(int i = 0; i < n; ++i){

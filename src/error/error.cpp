@@ -14,7 +14,6 @@
 #include "rx_utils.h"
 #include <cfloat>
 
-
 //-----------------------------------------------------------------------------
 //! メイン関数
 //-----------------------------------------------------------------------------
@@ -29,9 +28,9 @@ int main(void)
 	cout << "double : " << DBL_MIN << " - " << DBL_MAX << "  (" << sizeof(double)*8 << "bit)" << endl;
 	cout << endl;
 
-	// float型の有効桁数
-	float x = 123456789;
-	float y = 123456700;
+	//// float型の有効桁数
+	float x = 123456789.0;
+	float y = 123456700.0;
 	float z = x-y;
 	cout.precision(10); // 表示桁数を10桁にする
 	cout << "x = " << x << endl;
@@ -61,6 +60,19 @@ int main(void)
 	cout << "(a1+a2)-a3=" << (a1+a2)-a3 << endl;
 	cout << "(a1-a3)+a2=" << (a1-a3)+a2 << endl;
 
+	//// 桁落ち誤差を生じないように計算する例
+	//float t[10000];
+	//for(int j = 0; j < 10000; ++j){
+	//	t[j] = 0.0;
+	//	for(int i = 0; i < 10000; ++i){
+	//		t[j] += 0.1;
+	//	}
+	//}
+	//float t1 = 0.0;
+	//for(int j = 0; j < 10000; ++j) t1 += t[j];
+	//cout << t1 << endl;
+
+
 	// 倍精度と単精度の違い
 	cout << "\n[single/double precision]" << endl;
 	float x1 = 1.1;
@@ -71,30 +83,34 @@ int main(void)
 	// 打ち切り誤差
 	// ライプニッツの公式でπを計算
 	cout << "\n[trancation error]" << endl;
-	int n = 1000000;
+	long n = 100;
 	double pi = 0;
 	int sgn = 1;
-	for(int i = 0; i <= n; ++i){
+	for(long i = 0; i <= n; ++i){
 		pi += sgn/(2.0*i+1.0);
 		sgn *= -1;
 		if(i%(n/10) == 0) cout << "n=" << i << " : " << 4*pi << endl;
 	}
 	double pi0 = 3.141592653589793; // 真値
+	cout.precision(20); // 表示する桁数を20桁に設定
 	cout << "error = " << 4*pi-pi0 << endl;
 
 	// 真値が分からない場合の収束判定
 	cout << "\n[convergence test]" << endl;
-	double eps = 1e-5;
+	double eps = 1.0e-3; // 精度を更に挙げる場合は桁落ち誤差に注意
 	pi = 0;
 	sgn = 1;
-	for(int i = 0; i <= 1000000; ++i){
+	int m = 0;
+	for(int i = 0; i <= 10000; ++i){
 		double pi0 = pi;	// 収束判定のために前の反復の値を確保しておく
-		pi += sgn/(2.0*i+1.0)*4;
+		pi += sgn/(2.0*i+1.0)*4.0;
 		sgn *= -1;
 		if(fabs(pi-pi0) <= eps) break; // 収束判定
+		m++;
 	}
 	cout << "pi = " << pi << endl;
-
+	cout.precision(20); // 表示する桁数を20桁に設定
+	cout << "iterations : " << m << endl;
 
 	return 0;
 }

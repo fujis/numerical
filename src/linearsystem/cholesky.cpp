@@ -163,17 +163,17 @@ int main(void)
 	// コレスキー分解
 	vector< vector<double> > L(n, vector<double>(n, 0.0));
 	vector<double> d;
-	//CholeskyDecomp(A, L, n);
+	CholeskyDecomp(A, L, n);
 
 	// 修正コレスキー分解，不完全コレスキー分解
-	d.resize(n, 0.0);
-	ModifiedCholeskyDecomp(A, L, d, n);
+	//d.resize(n, 0.0);
+	//ModifiedCholeskyDecomp(A, L, d, n);
 	//IncompleteCholeskyDecomp(A, L, d, n);
 
 	cout << "L = " << endl;
 	OutputMatrix(L, n, n);
 
-	if(d.empty()){
+	if(d.empty()){ // コレスキー分解のチェック
 		// 分解結果のチェック用
 		vector< vector<double> > LL(n, vector<double>(n, 0.0));
 		MulMatrix(L, transpose(L, n), LL, n);
@@ -183,7 +183,7 @@ int main(void)
 		OutputMatrix(LL, n, n);
 		cout << endl;
 	}
-	else{
+	else{ // 修正コレスキー分解，不完全コレスキー分解のチェック
 		vector< vector<double> > D(n, vector<double>(n, 0.0));
 		for(int i = 0; i < n; ++i) D[i][i] = d[i];
 		cout << "D = " << endl;
