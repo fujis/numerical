@@ -168,8 +168,8 @@ int main(void)
 	cout << endl;
 
 	//ScalingForGauss(A, n);			// スケーリング処理
-	GaussElimination(A, n);			// ピボッティングなし
-	//GaussEliminationWithPivoting(A, n);	// ピボッティングあり
+	//GaussElimination(A, n);			// ピボッティングなし
+	GaussEliminationWithPivoting(A, n);	// ピボッティングあり
 
 	for(int i = 0; i < n; ++i){
 		cout << "x" << i << " = " << A[i][n] << (i == n-1 ? "" : ", ");
