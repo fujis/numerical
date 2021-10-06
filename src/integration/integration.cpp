@@ -108,14 +108,14 @@ double trapezoidal_integration2(double func(const double, const double), double 
 int main(void)
 {
 	// 指数関数の[0,1]での積分 (解析解はe-1=1.718281828459045235360287471352...)
-	double(*func)(double) = FuncExp;
-	double a = 0.0, b = 1.0;
-	double t = (exp(1.0)-1); // 真値
+	//double(*func)(double) = FuncExp;
+	//double a = 0.0, b = 1.0;
+	//double t = (exp(1.0)-1); // 真値
 
 	// 講義で示した例題(2017年度筑波大学前期日程入試問題)
-	//double(*func)(double) = FuncT17;
-	//double a = 0.5, b = 2.0;
-	//double t = -99.0/8.0+18.0*log(2.0); // 真値
+	double(*func)(double) = FuncT17;
+	double a = 0.5, b = 2.0;
+	double t = -99.0/8.0+18.0*log(2.0); // 真値
 
 	cout.precision(10);
 	int n = 100;
@@ -129,14 +129,15 @@ int main(void)
 
 	cout << "ground truth = " << t << endl;
 
+	cout << endl;
 
-	// 円の面積の計算(上半分の積分-下半分の積分)
-	double r = 1.0;
-	a = -r; b = r;
-	t = RX_PI*r*r;
-	s = trapezoidal_integration(FuncCircleTop, a, b, n)-trapezoidal_integration(FuncCircleBottom, a, b, n);
-	cout << "area of circle = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
-	cout << "ground truth = " << t << endl;
+	//// 円の面積の計算(上半分の積分-下半分の積分)
+	//double r = 1.0;
+	//a = -r; b = r;
+	//t = RX_PI*r*r;
+	//s = trapezoidal_integration(FuncCircleTop, a, b, n)-trapezoidal_integration(FuncCircleBottom, a, b, n);
+	//cout << "area of circle = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
+	//cout << "ground truth = " << t << endl;
 
 
 	// 重積分

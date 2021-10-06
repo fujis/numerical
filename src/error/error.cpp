@@ -38,6 +38,8 @@ int main(void)
 	cout << "x-y = " << z << endl;
 	cout << endl;
 
+
+
 	// 丸め誤差
 	//cout << "\n[round-off error]" << endl;
 	float a = 1.1;
@@ -61,6 +63,11 @@ int main(void)
 	cout << "(a1-a3)+a2=" << (a1-a3)+a2 << endl;
 
 	//// 桁落ち誤差を生じないように計算する例
+	////float t1 = 0.0;
+	////for(int j = 0; j < 100000000; ++j){
+	////	t1 += 0.1;
+	////}
+
 	//float t[10000];
 	//for(int j = 0; j < 10000; ++j){
 	//	t[j] = 0.0;

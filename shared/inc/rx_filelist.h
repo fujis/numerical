@@ -128,7 +128,7 @@ static void SearchFiles(const std::string &dir, std::vector<std::string> &paths,
 	}
 }
 
-//! マッチング画像リストの取得
+//! 画像リストの取得
 inline static std::vector<std::string> GetImageFileList(std::string dir)
 {
 	std::vector<std::string> exts;
@@ -147,7 +147,7 @@ inline static std::vector<std::string> GetImageFileList(std::string dir)
 	return files;
 }
 
-//! マッチング画像リストの取得
+//! ファイルリストの取得
 inline static std::vector<std::string> GetFileList(std::string dir, std::string ext)
 {
 	std::vector<std::string> exts;

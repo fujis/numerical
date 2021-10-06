@@ -20,6 +20,7 @@
 
 using namespace std;
 
+//! 1次元データを格納するための構造体
 struct rxData1D
 {
 	vector<double> x;
@@ -48,6 +49,7 @@ struct rxData1D
 	}
 };
 
+//! 2次元データを格納するための構造体
 struct rxData2D
 {
 	//vector<double> x, y;
@@ -72,6 +74,8 @@ struct rxData2D
 
 };
 
+
+//! 時系列データを扱うためのクラス - rxData1D,rxData2Dをテンプレート引数として取る
 template<typename T> class rxTimeData
 {
 public:
@@ -82,6 +86,7 @@ public:
 	int state;
 	int dim;
 
+	//! コンストラクタ(各種初期化)
 	rxTimeData(int d)
 	{
 		current_index = 0;
@@ -95,9 +100,9 @@ public:
 		dim = d;
 	}
 
+	//! データの範囲を調べる
 	void SearchRange(void)
 	{
-		// データの範囲を調べる
 		for(int k = 0; k < 3; ++k){
 			min[k] = 1e10;
 			max[k] = -1e10;
@@ -113,6 +118,7 @@ public:
 		}
 	}
 
+	//! 参照するデータの時刻を進める/戻る
 	void Increment(int d = 1)
 	{
 		current_index += d;
@@ -837,7 +843,7 @@ void InitGL(void)
 	glEnable(GL_AUTO_NORMAL);
 	glEnable(GL_NORMALIZE);
 
-	// データファイルリストの取得
+	// データファイルリストの取得 - 実行フォルダのdataフォルダ内にあるテキストファイルを全て列挙してそのパスを配列に格納
 	g_dfiles = GetFileList("./data/", "txt");
 	for(vector<string>::iterator i = g_dfiles.begin(); i != g_dfiles.end(); ++i){
 		std::cout << *i << std::endl;
@@ -850,7 +856,7 @@ void InitGL(void)
 		g_dfile_idx = 0;
 	}
 
-	// データ読み込み
+	// データ読み込み - dataフォルダに1つでもテキストファイルがあれば最初のファイルをデフォルトで読み込む
 	if(g_dfile_idx >= 0){
 		Read(g_dfiles[g_dfile_idx]);
 	}
@@ -879,7 +885,7 @@ int main(int argc, char *argv[])
 	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(g_w, g_h);
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH | GLUT_ACCUM);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH | GLUT_ACCUM | GLUT_MULTISAMPLE);
 	glutCreateWindow(argv[0]);
 
 	glutDisplayFunc(Display);

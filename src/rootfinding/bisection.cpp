@@ -83,7 +83,7 @@ int main(void)
 
 	// 二分法でf(x)=0を解く
 	int max_iter = 100;
-	double eps = 1e-10;
+	double eps = 1e-6;
 	bisection(Func1, x1, x2, x, max_iter, eps);
 
 	cout.precision(15);
@@ -92,7 +92,7 @@ int main(void)
 	cout << "iter = " << max_iter << ", eps = " << eps << endl;
 	cout << endl;
 
-	cout << log2(2.0/1.0e-6) << endl;
+	//cout << log2(2.0/1.0e-6) << endl;
 
 	return 0;
 }

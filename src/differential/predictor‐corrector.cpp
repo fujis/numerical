@@ -172,7 +172,7 @@ int main(void)
 	//TF = std::bind(FuncOdeXY_true, placeholders::_1, y0);// 真値
 
 	cout.precision(10);
-	int n = 10;
+	int n = 20;
 	double y = 0.0;
 	double t = TF(b);  // 真値
 

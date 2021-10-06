@@ -830,6 +830,10 @@ static int Write2d(const string &filename, const vector<rxPoint2> &data, string 
 	file << header << endl;
 
 	// 点データを1座標/行で書き出す
+	// vector<rxPoint2>::const_iterator p;
+	// for(p = data.begin(); p != data.end(); ++p){
+	// 	file << p->x << sep << p->y << endl;
+	// }
 	for(rxPoint2 p : data){
 		file << p.x << sep << p.y << endl;
 	}
@@ -854,6 +858,13 @@ inline int SearchRange(vector<rxPoint2> &data, double min[2], double max[2])
 		if(p.y < min[1]) min[1] = p.y;
 		if(p.y > max[1]) max[1] = p.y;
 	}
+	// vector<rxPoint2>::const_iterator p;
+	// for(p = data.begin(); p != data.end(); ++p){
+	// 	if(p->x < min[0]) min[0] = p->x;
+	// 	if(p->x > max[0]) max[0] = p->x;
+	// 	if(p->y < min[1]) min[1] = p->y;
+	// 	if(p->y > max[1]) max[1] = p->y;
+	// }	
 	return 0;
 }
 

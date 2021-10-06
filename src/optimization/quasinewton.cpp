@@ -195,10 +195,9 @@ int main(void)
 {
 	vector<double> x0(2, -1.0);
 	vector<double> x(2, 0.0);
-	double alpha = 0.2;
 
 	int max_iter = 100;
-	double eps = 1e-8;
+	double eps = 1e-6;
 	quasinewton_bgfs(Func4, DFunc4, x0, x, max_iter, eps);
 
 	cout << "(x,y) = (" << x[0] << "," << x[1] << "), ";
