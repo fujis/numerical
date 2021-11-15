@@ -1,5 +1,5 @@
 /*!
-@file quasineton.cpp
+@file quasinewton.cpp
 
 @brief 準ニュートン法
 

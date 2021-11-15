@@ -156,10 +156,8 @@ int newton(vector<FUNCTION> funcs, vector<double> &x, int n, int &max_iter, doub
 		}
 		cout << endl;
 		
-		
-
 		// 線形システムを解いてδを計算
-		for(int i = 0; i < n; ++i) J[i][n] = f[i];
+		for(int i = 0; i < n; ++i) J[i][n] = f[i]; // 上の関数値の計算のところでマイナスをすでに付けてあることに注意
 		GaussEliminationWithPivoting(J, n);
 
 		// xを更新
@@ -200,7 +198,7 @@ int main(void)
 
 	// 多次元のニュートン法
 	vector<double> xv(2);
-	xv[0] = 0.0; xv[1] = -1.0;
+	xv[0] = 1.0; xv[1] = 0.0;
 	FUNCTION f;
 	vector<FUNCTION> funcs;
 	f.func = Func4;	f.dfunc = DFunc4;

@@ -32,6 +32,7 @@ inline double Func1(const double x)
 {
 	//return x*x-2;
 	return 2*x*x*x*x*x+5*x*x*x+3*x+1;
+	//return cos(0.5*x);
 }
 inline double DFunc1(const double x)
 {

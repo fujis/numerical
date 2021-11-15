@@ -1,5 +1,5 @@
 /*! 
-  @file goldensection.chpp
+  @file goldensection.cpp
 	
   @brief 黄金分割法
  
