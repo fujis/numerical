@@ -1,0 +1,10 @@
+*.cpp  text eol=crlf
+*.hpp  text eol=crlf
+*.c  text eol=crlf
+*.h  text eol=crlf
+*.sln  text eol=crlf
+*.vcxproj  text eol=crlf
+*.filters  text eol=crlf 
+*.user  text eol=crlf 
+*.txt  text eol=crlf 
+*.dat  text eol=crlf 
