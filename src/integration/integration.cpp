@@ -131,7 +131,8 @@ int main(void)
 
 	cout << endl;
 
-	//// 円の面積の計算(上半分の積分-下半分の積分)
+	// 円の面積の計算(上半分の積分-下半分の積分)
+	//n = 100;
 	//double r = 1.0;
 	//a = -r; b = r;
 	//t = RX_PI*r*r;
@@ -147,12 +148,12 @@ int main(void)
 	//cout << "trapezoidal int2 f(x) = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
 	//cout << "ground truth = " << t << endl;
 
-	// 球の体積(こちらは上半分の積分x2で計算)
-	a = -sr, b = sr;
-	t = (4*RX_PI*sr*sr*sr)/3.0; // 真値
-	s = 2*trapezoidal_integration2(FuncSphere, a, b, FuncSphereY1, FuncSphereY2, n, n);
-	cout << "trapezoidal int2 f(x) = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
-	cout << "ground truth = " << t << endl;
+	//// 球の体積(こちらは上半分の積分x2で計算)
+	//a = -sr, b = sr;
+	//t = (4*RX_PI*sr*sr*sr)/3.0; // 真値
+	//s = 2*trapezoidal_integration2(FuncSphere, a, b, FuncSphereY1, FuncSphereY2, n, n);
+	//cout << "trapezoidal int2 f(x) = " << fabs(s) << ",  error = " << fabs(fabs(s)-t) << endl;
+	//cout << "ground truth = " << t << endl;
 
 
 	return 0;

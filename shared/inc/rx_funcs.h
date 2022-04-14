@@ -339,8 +339,8 @@ inline double FuncOdeXY_true(double x, double C) // 微分方程式の真値
  * @param[in] t,y 変数 (y[0]:x,y[1]:y)
  * @return f(t,x,y)の値
  */
-static double lva = 0.01, lvb = 0.0005; // 被食者の増殖係数と被食者による減少係数
-static double lvc = 0.0005, lvd = 0.05; // 捕食者の被食者の数による増殖係数と捕食者の数が増えることによる減少係数
+static double lva = 0.01, lvb = 0.0001; // 被食者の増殖係数と被食者による減少係数
+static double lvc = 0.0001, lvd = 0.05; // 捕食者の被食者の数による増殖係数と捕食者の数が増えることによる減少係数
 inline vector<double> FuncOdeLV(double t, const vector<double> &y)
 {
 	vector<double> f(y.size(), 0.0);

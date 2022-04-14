@@ -150,7 +150,7 @@ vector<double> rk4(vector<double> func(double, const vector<double>&), vector<do
 //-----------------------------------------------------------------------------
 int main(void)
 {
-	// Lotka-Volterraモデル
+	//// Lotka-Volterraモデル
 	//vector<double>(*func)(double, const vector<double>&) = FuncOdeLV;
 	//double a = 0.0, b = 1000.0; // 範囲[a,b] → 時刻(日数)
 	//int n = 1000;
