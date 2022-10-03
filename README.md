@@ -40,3 +40,5 @@
  - Mac環境下でエラーが出る場合は，以下のコマンドを試してみてください(error.cppのところは適宜変えてください)．  
 　`g++ error.cpp -O3 -std=c++11`  
 　ヘッダの中で一部C++11の機能を使っています(foreachとか). 
+
+ - 自身のPC環境(Windows)で動かしたい人向けにdocフォルダに[「Visual Studio Community インストール方法」](https://github.com/fujis/numerical/blob/master/doc/how_to_install_vscommunity_win.pdf)というPDFを用意してあるので参考にしてください．
