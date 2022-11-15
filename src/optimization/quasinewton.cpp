@@ -193,15 +193,22 @@ int quasinewton_bgfs(double func(const vector<double>&), vector<double> dfunc(co
 //-----------------------------------------------------------------------------
 int main(void)
 {
+	// 初期値を格納する配列x0と解を格納する配列xの宣言
 	vector<double> x0(2, -1.0);
 	vector<double> x(2, 0.0);
 
+	// 値を返す関数と導関数を返す関数ポインタの指定
+	double (*func)(const vector<double>&) = Func4;
+	vector<double>(*dfunc)(const vector<double>&) = DFunc4;
+
+	// 準ニュートン法で数値解(関数funcが最小値を取るx)を求める
 	int max_iter = 100;
 	double eps = 1e-6;
-	quasinewton_bgfs(Func4, DFunc4, x0, x, max_iter, eps);
+	quasinewton_bgfs(func, dfunc, x0, x, max_iter, eps);
 
+	// 最終計算結果の表示
 	cout << "(x,y) = (" << x[0] << "," << x[1] << "), ";
-	cout << " f = " << Func4(x) << endl;
+	cout << " f = " << func(x) << endl;
 
 	cout << "iter = " << max_iter << ", eps = " << eps << endl;
 	cout << endl;
