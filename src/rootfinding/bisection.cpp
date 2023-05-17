@@ -78,8 +78,8 @@ int main(void)
 	double x = 0.0;
 
 	// 探索範囲
-	x1 = 0.0;
-	x2 = 5.0;
+	x1 = -1.0;
+	x2 = 1.0;
 
 	// 二分法でf(x)=0を解く
 	int max_iter = 100;

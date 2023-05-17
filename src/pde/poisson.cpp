@@ -112,8 +112,7 @@ void setbc_d(vector<double> &f, int n)
  * @param[inout] f 未知関数fの各グリッドでの値(初期値を入れておく)
  * @param[in] x0,x1 計算範囲
  * @param[in] n 計算範囲内での分割数(h=(b-a)/n)
- * @param[in] rhs 右辺項を与える関数ポインタ
- * @param[in] alpha,beta x=a,bでの境界値
+ * @param[in] g 右辺項を与える関数ポインタ
  * @return 
  */
 int poisson1d_central(vector<double> &f, double x0, double x1, int n, double g(double))

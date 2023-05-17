@@ -331,7 +331,7 @@ int main(void)
 	double eps = 1e-6;
 	vector<double> x(n);
 	//CGSolver(A, b, x, n, max_iter, eps);
-	max_iter = 100; eps = 1e-6;
+	//max_iter = 100; eps = 1e-6;
 	ICCGSolver(A, b, x, n, max_iter, eps);
 	
 	// 結果の画面表示

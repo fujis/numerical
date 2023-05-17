@@ -73,7 +73,7 @@ int JacobiIteration(vector< vector<double> > &A, int n, int &max_iter, double &e
 	}
 
 	max_iter = k;
-	eps = e;
+	eps = e/n;
 
 	// 解をA_(i,n)に格納
 	for(int i = 0; i < n; ++i){
