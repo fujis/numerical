@@ -28,6 +28,7 @@
 *.VC.db
 *.ini
 *.opendb
+*.pptx
 
 score/
 bmc/
