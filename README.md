@@ -1,3 +1,4 @@
+#numerical
 筑波大学情報学群情報メディア創成学類の授業「情報数学C」の
 受講生向け説明ページ(HTML)，サンプルコードのためのGitリポジトリです．
 This is a git repository for lecture : Mathematics for Informatics C. 
