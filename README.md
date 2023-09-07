@@ -1,6 +1,18 @@
 # numerical
 筑波大学情報メディア創成学類 情報数学C用サンプルプログラム
 
+# iml_physics
+筑波大学情報学群情報メディア創成学類の授業「情報数学C」の
+受講生向け説明ページ(HTML)，サンプルコードのためのGitリポジトリです．
+This is a git repository for lecture : Mathematics for Informatics C. 
+It is including htmls for explanation and sample code written by C++. 
+
+## 各フォルダについて
+- doc : 説明ページのHTMLが入っています．Webページとしてみる場合は [https://fujis.github.io/numerical/](https://fujis.github.io/numerical/) にアクセスしてください．
+- bin :
+- shared : サンプルプログラムを動かす際の共有ヘッダなどが入っています．VisualStudio以外でコンパイルする際はshared/incをインクルードフォルダとして追加するか，shared/inc内の*.hファイルをcppファイルのあるところにコピーするようにしてください．なお，shared/inc/GLとshared/libはglviewerを動かすときだけ必要です．
+- src : サンプルソースです．それぞれの授業に対応するフォルダについては以下参照．
+
 第1回【数値計算の基礎】 数の表現,数値誤差,桁落ち
   - src/error 
 
@@ -33,7 +45,7 @@
   - src/eigen
 
 
-トラブルシューティング
+##トラブルシューティング
  - Visual Studioで「error MSB8036: Windows SDK バージョン 10.0.xxxxxx.0 が見つかりませんでした。」というエラーが出てビルドできない．  
 　⇒ 「プロジェクト」メニューから「プロジェクトの再ターゲット」で「Windows SDK バージョン:」 のところにその環境で対応するバージョンが出るので，問題なければそのまま「OK」をクリック
 
