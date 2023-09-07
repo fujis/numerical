@@ -1,0 +1,3 @@
+# Apache .htaccess for lecture
+AddHandler cgi-script htaccess
+Options -Indexes

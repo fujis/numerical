@@ -1,9 +1,9 @@
-# # ƒRƒƒ“ƒgB‚±‚ê‚Í–³Ž‹‚³‚ê‚Ü‚·
-# *.a       # .a ƒtƒ@ƒCƒ‹‚Í–³Ž‹
-# !lib.a    # ‚µ‚©‚µAlib.a ƒtƒ@ƒCƒ‹‚¾‚¯‚Í .a ‚Å‚ ‚Á‚Ä‚à’ÇÕ‘ÎÛ‚Æ‚µ‚Ü‚·
-# /TODO     # ƒ‹[ƒgƒfƒBƒŒƒNƒgƒŠ‚Ì TODO ƒtƒ@ƒCƒ‹‚¾‚¯‚ð–³Ž‹‚µAƒTƒuƒfƒBƒŒƒNƒgƒŠ‚Ì TODO ‚Í–³Ž‹‚µ‚Ü‚¹‚ñ
-# build/    # build/ ƒfƒBƒŒƒNƒgƒŠ‚Ì‚·‚×‚Ä‚Ìƒtƒ@ƒCƒ‹‚ð–³Ž‹‚µ‚Ü‚·
-# doc/*.txt # doc/notes.txt ‚Í–³Ž‹‚µ‚Ü‚·‚ªAdoc/server/arch.txt ‚Í–³Ž‹‚µ‚Ü‚¹‚ñ
+# # ã‚³ãƒ¡ãƒ³ãƒˆã€‚ã“ã‚Œã¯ç„¡è¦–ã•ã‚Œã¾ã™
+# *.a       # .a ãƒ•ã‚¡ã‚¤ãƒ«ã¯ç„¡è¦–
+# !lib.a    # ã—ã‹ã—ã€lib.a ãƒ•ã‚¡ã‚¤ãƒ«ã ã‘ã¯ .a ã§ã‚ã£ã¦ã‚‚è¿½è·¡å¯¾è±¡ã¨ã—ã¾ã™
+# /TODO     # ãƒ«ãƒ¼ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã® TODO ãƒ•ã‚¡ã‚¤ãƒ«ã ã‘ã‚’ç„¡è¦–ã—ã€ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã® TODO ã¯ç„¡è¦–ã—ã¾ã›ã‚“
+# build/    # build/ ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ã™ã¹ã¦ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ç„¡è¦–ã—ã¾ã™
+# doc/*.txt # doc/notes.txt ã¯ç„¡è¦–ã—ã¾ã™ãŒã€doc/server/arch.txt ã¯ç„¡è¦–ã—ã¾ã›ã‚“
 
 *.o
 *.lo

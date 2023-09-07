@@ -1,0 +1,237 @@
+
+/* 本文 */
+body{
+	background-color:#222;
+	font-family:Lucida Sans Unicode, Arial;
+	font-size:12px;
+	margin:0px 0px 0px 0px;
+	color:#555;
+	line-height:160%;
+}
+
+.main{
+	width:80%;
+	position:relative;
+	background-color:#fff;
+	text-align:left;
+    margin:0px auto;
+	line-height:160%;
+}
+
+.content{
+	margin-left:20px;
+	background-color:#fff;
+	padding:20px;
+	font-size:1.2em;margin-right:5px;
+	line-height:160%;
+}
+
+.content2{
+	margin-left:30px;
+	background-color:#eee;
+	padding:20px;
+	font-size:1.0em;
+	margin-right:5px;
+	width:80%;
+	line-height:160%;
+}
+
+.code{
+	margin-left:30px;
+	background-color:#f3f3ff;
+	padding:10px;
+	font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+	font-size:1em;
+	margin-right:5px;
+	width:90%;
+}
+
+.prompt{
+	color:rgb(255, 255, 255);
+	margin-left:35px;
+	background-color:#232324;
+	padding:10px;
+	font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+	font-size:0.9em;
+	margin-right:5px;
+	width:70%;
+}
+
+.task{
+	margin-left:15px;
+	margin-bottom:30px;
+	background-color:#fefee0;
+	padding:2px;
+	font-size:1.0em;margin-right:5px;
+	width:95%;
+	border-radius: 10px; /* コーナーを丸くする(HTML5/CSS3) */
+}
+
+.notation{
+	margin-left:15px;
+	margin-bottom:30px;
+	background-color:#fcdcdc;
+	padding:2px;
+	font-size:1.0em;margin-right:5px;
+	width:95%;
+	border-radius: 10px; /* コーナーを丸くする(HTML5/CSS3) */
+}
+
+
+.supplement{
+	color:rgb(83, 83, 83);
+	margin-left:30px;
+	margin-bottom:15px;
+	background-color:#e1fee0;
+	padding:2px;
+	font-size:0.9em;margin-right:5px;
+	width:95%;
+	border-radius: 10px; /* コーナーを丸くする(HTML5/CSS3) */
+}
+
+
+/* タイトル */
+.title{
+	color:#111;
+	position:relative;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 10px;
+	height:120px;
+	font-size:3.0em;
+	text-align:left;
+	text-shadow:#222 2px 3px 4px;
+	background:url(title_back.jpg) no-repeat #FFF;
+	background-position:right bottom;
+	line-height:150%;
+}
+.title:before{
+/*	content:"画像・映像メディア処理";*/
+	white-space: pre;
+}
+.title a{
+	color:#777;
+}
+.title_je{
+	color:#111;
+	position:absolute;
+	top:120px;
+	font-size:0.5em;
+	text-align:left,bottom;
+}
+
+
+
+
+/* ヘッダ(各ページへのリンク) */
+.header{
+	position:relative;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	text-align:right;
+	list-style-type:none;
+	font-size:1.4em;
+	background-color:#555;
+}
+.header li{
+	display:inline;
+	padding:0px 10px 0px 10px;
+}
+.header li a{
+	color:#ccc;
+	text-decoration:none;
+}
+.header li a:hover{
+	color:#ccc;
+	text-decoration:none;
+}
+
+
+/* フッタ */
+.footer{
+	position:relative;
+	text-align:right;
+	font-size:1.0em;
+	color:#ccc;
+	width:100%;
+	height:22px;
+	background-color:#555;
+	/*background:url(footer_back.gif) no-repeat #444;*/
+	/*background-position:right,top;*/
+}
+.footer:after{
+	padding-right:8px;
+	content:"Copyright(C) 2019 Makoto Fujisawa\ ";
+}
+.footer a{
+	color:#eee;
+}
+
+/* テーブル */
+table.tab{
+	margin-left:20px;
+	padding:20px;
+	border-top:1px solid;
+	border-left:1px solid;
+	border-collapse:collapse;
+	border-spacing:0;
+	background-color:#ffffff;
+	empty-cells:show;
+}
+.tab th{
+    border-right:1px solid;
+    border-bottom:1px solid;
+    color:#cccccc;
+    background-color:#555555;
+    background-position:left top;
+    padding:0.3em 1em;
+    text-align:center;
+}
+.tab td{
+    border-right:1px solid;
+    border-bottom:1px solid;
+    padding:0.3em 1em;
+}
+
+
+/* その他 */
+p{
+	padding:2px 2px 2px 20px;
+	margin-top:1px;
+}
+a{
+	color:#999;
+	text-decoration:none;
+}
+
+a:hover{
+	text-decoration:underline;
+}
+
+h2{
+	font-size:1.4em;
+	margin-bottom:3px;
+	color:#888;
+}
+
+h3{
+	font-size:1.1em;
+	margin-left:10px;
+	margin-bottom:2px;
+	margin-top:5px;
+}
+
+h4{
+	font-size:1.1em;
+	margin-left:10px;
+	margin-bottom:2px;
+	margin-top:5px;
+}
+
+.research a{
+	background-color:#fff;
+}
+
+.research img{
+	margin:2px 2px 2px 2px;
+	background-color:#fff;
+}
