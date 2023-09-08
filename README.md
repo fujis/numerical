@@ -1,13 +1,14 @@
 # numerical
 筑波大学情報学群情報メディア創成学類の授業「情報数学C」の
 受講生向け説明ページ(HTML)，サンプルコードのためのGitリポジトリです．
+
 This is a git repository for lecture : Mathematics for Informatics C. 
 It is including htmls for explanation and sample code written by C++. 
 
 ## 各フォルダについて
 * docs : 説明ページのHTMLが入っています．Webページとしてみる場合は [https://fujis.github.io/numerical/](https://fujis.github.io/numerical/) にアクセスしてください．
 * bin : glviewerの実行用フォルダ
-* shared : サンプルプログラムを動かす際の共有ヘッダなどが入っています．VisualStudio以外でコンパイルする際はshared/incをインクルードフォルダとして追加するか，shared/inc内の*.hファイルをcppファイルのあるところにコピーするようにしてください．なお，shared/inc/GLとshared/libはglviewerを動かすときだけ必要です．
+* shared : サンプルプログラムを動かす際の共有ヘッダなどが入っています．VisualStudio以外でコンパイルする際はshared/incをインクルードフォルダとして追加するか，shared/inc内の*.hファイルをcppファイルのあるところにコピーするようにしてください．なお，shared/inc/GL,GLFW,glmとshared/libはglviewerを動かすときだけ必要です．
 * src : サンプルソースです．それぞれの授業に対応するフォルダについては以下参照．
   * src/error : 第1回【数値計算の基礎】数の表現,数値誤差,桁落ち
   * src/linearsystem : 第2回【線形連立方程式の直接解法】ガウスの消去法,ピボット選択付きガウス消去法,LU分解,コレスキー分解 ＆ 第3回【線形連立方程式の反復解法】ヤコビ法,ガウス・ザイデル法,SOR法,共役勾配法
@@ -19,7 +20,7 @@ It is including htmls for explanation and sample code written by C++.
   * src/pde : 第9回【偏微分方程式の数値解法】 放物型方程式,楕円型方程式,双曲型方程式
   * src/eigen : 第10回【行列の固有値計算】 べき乗法,ハウスホルダー変換,QR法
 
-  * src/glviewer : 偏微分方程式を数値計算出といた結果を見るためのOpenGLで書かれたビューワ．同梱のlib,dllはWindowsのVisual Studio 2017(x64)用なので，コレを使いたい場合は自分の環境に合わせたlib,dllをとってくるか，自身でライブラリビルドしてください(サンプルではfreeglutをライブラリとして使っています)．
+  * src/glviewer_fw : 偏微分方程式を数値計算出といた結果を見るためのOpenGL&glfw&imguiで書かれたビューワ．同梱のlib,dllはWindowsのVisual Studio 2022(x64)用なので，これを使いたい場合は自分の環境に合わせたlib,dllをとってくるか，自身でライブラリビルドしてください．結果の可視化のためだけのプログラムなので，Excelなど他のプログラムで結果を可視化するならば特に必要なしです．
 
 
 ## トラブルシューティング
