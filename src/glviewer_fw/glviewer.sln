@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glviewer", "glviewer.vcxproj", "{DF2A649D-7640-453F-8369-D07470E92EFB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glpoints", "glpoints.vcxproj", "{57F98347-5B72-4A9D-9821-250A617E7E96}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DF2A649D-7640-453F-8369-D07470E92EFB}.Debug|x64.ActiveCfg = Debug|x64
+		{DF2A649D-7640-453F-8369-D07470E92EFB}.Debug|x64.Build.0 = Debug|x64
+		{DF2A649D-7640-453F-8369-D07470E92EFB}.Release|x64.ActiveCfg = Release|x64
+		{DF2A649D-7640-453F-8369-D07470E92EFB}.Release|x64.Build.0 = Release|x64
+		{57F98347-5B72-4A9D-9821-250A617E7E96}.Debug|x64.ActiveCfg = Debug|x64
+		{57F98347-5B72-4A9D-9821-250A617E7E96}.Debug|x64.Build.0 = Debug|x64
+		{57F98347-5B72-4A9D-9821-250A617E7E96}.Release|x64.ActiveCfg = Release|x64
+		{57F98347-5B72-4A9D-9821-250A617E7E96}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DEED13E7-2FF2-4265-9B01-E0E16E262136}
+	EndGlobalSection
+EndGlobal
