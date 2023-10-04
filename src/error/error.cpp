@@ -26,6 +26,7 @@ int main(void)
 	cout << "longlong : " << LLONG_MIN << " - " << LLONG_MAX << "  (" << sizeof(long long)*8 << "bit)" << endl;
 	cout << "float : " << FLT_MIN << " - " << FLT_MAX << "  (" << sizeof(float)*8 << "bit)" << endl;
 	cout << "double : " << DBL_MIN << " - " << DBL_MAX << "  (" << sizeof(double)*8 << "bit)" << endl;
+	cout << "long double : " << LDBL_MIN << " - " << LDBL_MAX << "  (" << sizeof(long double)*8 << "bit)" << endl;
 	cout << endl;
 
 	//// float型の有効桁数
