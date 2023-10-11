@@ -38,6 +38,7 @@ Release/
 Release(*)/
 ipch/
 .vc/
+.vs/
 
 vol/
 img/

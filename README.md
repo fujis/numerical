@@ -31,4 +31,4 @@ It is including htmls for explanation and sample code written by C++.
 　`g++ error.cpp -O3 -std=c++11 -I../../shared/inc -o error`  
 　ヘッダの中で一部C++11の機能を使っています(foreachとか). 上記はインクルードフォルダ(../../shared/inc)も設定しています．
  
- - 自身のPC環境(Windows)で動かしたい人向けにdocフォルダに[「Visual Studio Community インストール方法」](https://github.com/fujis/numerical/blob/master/doc/how_to_install_vscommunity_win.pdf)というPDFを用意してあるので参考にしてください．
+ - 自身のPC環境(Windows)で動かしたい人向けにdocs/textフォルダに「Visual Studio Community インストール方法」というPDFを用意してあるので参考にしてください．
