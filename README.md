@@ -26,6 +26,7 @@ It is including htmls for explanation and sample code written by C++.
 ## トラブルシューティング
  - Visual Studioで「error MSB8036: Windows SDK バージョン 10.0.xxxxxx.0 が見つかりませんでした。」というエラーが出てビルドできない．  
 　⇒ 「プロジェクト」メニューから「プロジェクトの再ターゲット」で「Windows SDK バージョン:」 のところにその環境で対応するバージョンが出るので，問題なければそのまま「OK」をクリック
+ - Visual Studioで実行しても特定のプロジェクトしか実行されない場合は，「プロジェクト」メニューから「スタートアップ プロジェクトの構成」で「現在の選択」にチェックしてください．
 
  - Mac環境下でエラーが出る場合は，以下のコマンドを試してみてください(error.cppや-o errorのところは適宜変えてください)．  
 　`g++ error.cpp -O3 -std=c++11 -I../../shared/inc -o error`  
