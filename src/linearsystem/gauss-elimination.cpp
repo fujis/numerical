@@ -157,13 +157,13 @@ int ScalingForGauss(vector< vector<double> > &A, int n)
 int main(void)
 {
 	// ファイルから行列要素を読み込む場合
-	//vector< vector<double> > A;
-	//ReadMatrix("matrix.txt", ",", A);
+	vector< vector<double> > A;
+	ReadMatrix("matrix.txt", ",", A);
 
 	// 2次元配列に初期値として直接値を設定する場合
-	vector< vector<double> > A{ {2, 1, 3, 9},
-                                {1, 3, 2, 1},
-                                {3, 4, 3, 4} };
+	//vector< vector<double> > A{ {2, 1, 3, 9},
+ //                               {1, 3, 2, 1},
+ //                               {3, 4, 3, 4} };
 
 	// 行列のサイズの取得と確認のための画面表示
 	int n = (int)A.size();	// n元連立一次方程式
