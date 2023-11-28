@@ -98,6 +98,7 @@ int main(void)
 	goldensection(Func2, x1, x2, x, max_iter, eps);
 
 	cout << "x = " << x << endl;
+	cout << "f(x,y) = " << Func2(x) << endl;
 
 	cout << "iter = " << max_iter << ", eps = " << eps << endl;
 	cout << endl;

@@ -111,6 +111,7 @@ int main(void)
 	gradientdecent(DFunc4, x0, alpha, x, max_iter, eps);
 
 	cout << "x,y = " << x[0] << ", " << x[1] << endl;
+	cout << "f(x,y) = " << Func4(x) << endl;
 
 #endif
 
