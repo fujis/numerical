@@ -136,19 +136,19 @@ double backward_eular(double func(double, double), double dfunc(double, double),
 int main(void)
 {
 	// 常微分方程式dy/dx=ay (解析解はy = C e^ax = y0 e^ax)
-	//double(*func)(double, double) = FuncOdeY;
-	//double(*dfunc)(double, double) = DyFuncOdeY;
-	//double a = 0.0, b = 1.0; // 範囲[a,b]
-	//double y0 = 1.0; // 初期値
-	//lambda = 25;
-	//TF = std::bind(FuncOdeY_true, placeholders::_1, y0);// 真値
-
-	// 常微分方程式dy/dx=2xy (解析解はy = C e^(x^2) = y0 e^(x^2))
-	double(*func)(double, double) = FuncOdeXY;
-	double(*dfunc)(double, double) = DyFuncOdeXY;
+	double(*func)(double, double) = FuncOdeY;
+	double(*dfunc)(double, double) = DyFuncOdeY;
 	double a = 0.0, b = 1.0; // 範囲[a,b]
 	double y0 = 1.0; // 初期値
-	TF = std::bind(FuncOdeXY_true, placeholders::_1, y0);// 真値
+	lambda = 25;
+	TF = std::bind(FuncOdeY_true, placeholders::_1, y0);// 真値
+
+	//// 常微分方程式dy/dx=2xy (解析解はy = C e^(x^2) = y0 e^(x^2))
+	//double(*func)(double, double) = FuncOdeXY;
+	//double(*dfunc)(double, double) = DyFuncOdeXY;
+	//double a = 0.0, b = 1.0; // 範囲[a,b]
+	//double y0 = 1.0; // 初期値
+	//TF = std::bind(FuncOdeXY_true, placeholders::_1, y0);// 真値
 
 	cout.precision(10);
 	int n = 10;
