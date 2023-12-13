@@ -208,7 +208,7 @@ int main(void)
 
 	// 最終計算結果の表示
 	cout << "(x,y) = (" << x[0] << "," << x[1] << "), ";
-	cout << " f = " << func(x) << endl;
+	cout << " f(x,y) = " << func(x) << endl;
 
 	cout << "iter = " << max_iter << ", eps = " << eps << endl;
 	cout << endl;
