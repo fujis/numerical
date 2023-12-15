@@ -106,7 +106,7 @@ int main(void)
 	gradientdecent(DFunc3, x0, alpha, x, max_iter, eps);
 	cout << "x = " << x << endl;
 #else
-	vector<double> x0(2, -1);
+	vector<double> x0(2,1);
 	vector<double> x(2);
 	gradientdecent(DFunc4, x0, alpha, x, max_iter, eps);
 

@@ -62,7 +62,6 @@ int main(void)
 	float a3 = 1234567;
 	cout << "(a1+a2)-a3=" << (a1+a2)-a3 << endl;
 	cout << "(a1-a3)+a2=" << (a1-a3)+a2 << endl;
-	return 0;
 
 	//// 桁落ち誤差を生じないように計算する例
 	//float t1 = 0.0;
@@ -106,11 +105,11 @@ int main(void)
 
 	// 真値が分からない場合の収束判定
 	cout << "\n[convergence test]" << endl;
-	double eps = 1.0e-3; // 精度を更に挙げる場合は桁落ち誤差に注意
+	double eps = 1.0e-5; // 精度を更に挙げる場合は桁落ち誤差に注意
 	pi = 0;
 	sgn = 1;
 	int m = 0;
-	for(int i = 0; i <= 10000; ++i){
+	for(int i = 0; i <= 1000; ++i){
 		double pi0 = pi;	// 収束判定のために前の反復の値を確保しておく
 		pi += sgn/(2.0*i+1.0)*4.0;
 		sgn *= -1;

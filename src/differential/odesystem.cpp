@@ -150,19 +150,19 @@ vector<double> rk4(vector<double> func(double, const vector<double>&), vector<do
 //-----------------------------------------------------------------------------
 int main(void)
 {
-	//// Lotka-Volterraモデル
-	//vector<double>(*func)(double, const vector<double>&) = FuncOdeLV;
-	//double a = 0.0, b = 1000.0; // 範囲[a,b] → 時刻(日数)
-	//int n = 1000;
-	//vector<double> y0(2, 0.0); // 初期値
-	//y0[0] = 300; y0[1] = 300;
-
-	// 単振り子モデル
-	vector<double>(*func)(double, const vector<double>&) = FuncOdePendulum;
-	double a = 0.0, b = 10.0; // 範囲[a,b] → 時刻(秒数)
-	int n = 100;
+	// Lotka-Volterraモデル
+	vector<double>(*func)(double, const vector<double>&) = FuncOdeLV;
+	double a = 0.0, b = 1000.0; // 範囲[a,b] → 時刻(日数)
+	int n = 1000;
 	vector<double> y0(2, 0.0); // 初期値
-	y0[0] = RX_PI/4.0; y0[1] = 0;
+	y0[0] = 300; y0[1] = 300;
+
+	//// 単振り子モデル
+	//vector<double>(*func)(double, const vector<double>&) = FuncOdePendulum;
+	//double a = 0.0, b = 10.0; // 範囲[a,b] → 時刻(秒数)
+	//int n = 100;
+	//vector<double> y0(2, 0.0); // 初期値
+	//y0[0] = RX_PI/4.0; y0[1] = 0;
 
 	cout.precision(10);
 	vector<double> y(y0);

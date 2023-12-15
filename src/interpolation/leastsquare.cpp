@@ -1,7 +1,7 @@
 /*! 
-  @file spline.cpp
+  @file leastsquare.cpp
 	
-  @brief スプライン補間
+  @brief 最小二乗近似
  
   @author Makoto Fujisawa
   @date 2019-09

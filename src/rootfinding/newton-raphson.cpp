@@ -182,13 +182,13 @@ int newton(vector<FUNCTION> funcs, vector<double> &x, int n, int &max_iter, doub
 //-----------------------------------------------------------------------------
 int main(void)
 {
-	//// 探索開始位置
-	//double x = 1;
+	// 探索開始位置
+	double x = 1;
 
 	//// ニュートン法でf(x)=0を解く
 	//int max_iter = 100;
 	//double eps = 1e-6;
-	//newton(FuncPi, DFuncPi, x, max_iter, eps);
+	//newton(Func1, DFunc1, x, max_iter, eps);
 
 	//// 結果の画面表示
 	//cout.precision(12);
