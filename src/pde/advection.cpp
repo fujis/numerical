@@ -295,28 +295,28 @@ int main(void)
 
 	// 前進オイラー+中心差分
 	advect1d(advect1d_step_forwardeular, advect1d_central, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_fe+cen_ign.txt");
-	// 前進オイラー+風上差分
-	advect1d(advect1d_step_forwardeular, advect1d_upwind, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_fe+upwind_ign.txt");
-	// 前進オイラー+Lax-Wendroff
-	advect1d(advect1d_step_forwardeular, advect1d_lw, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_fe+lw_ign.txt");
-	// 前進オイラー+セミラグランジュ法
-	advect1d(advect1d_step_forwardeular, advect1d_sl, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_fe+sl_ign.txt");
-	// ホイン+中心差分
-	advect1d(advect1d_step_heun, advect1d_central, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_heun+cen_ign.txt");
-	// ホイン+風上差分
-	advect1d(advect1d_step_heun, advect1d_upwind, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_heun+upwind_ign.txt");
-	// ホイン+Lax-Wendroff
-	advect1d(advect1d_step_heun, advect1d_lw, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_heun+lw_ign.txt");
-	// ホイン+セミラグランジュ法
-	advect1d(advect1d_step_heun, advect1d_sl, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_heun+sl_ign.txt");
-	// RK4+中心差分
-	advect1d(advect1d_step_rk4, advect1d_central, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_rk4+cen_ign.txt");
-	// RK4+風上差分
-	advect1d(advect1d_step_rk4, advect1d_upwind, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_rk4+upwind_ign.txt");
-	// RK4+Lax-Wendroff
-	advect1d(advect1d_step_rk4, advect1d_lw, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_rk4+lw_ign.txt");
-	// RK4+セミラグランジュ法
-	advect1d(advect1d_step_rk4, advect1d_sl, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_rk4+sl_ign.txt");
+	//// 前進オイラー+風上差分
+	//advect1d(advect1d_step_forwardeular, advect1d_upwind, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_fe+upwind_ign.txt");
+	//// 前進オイラー+Lax-Wendroff
+	//advect1d(advect1d_step_forwardeular, advect1d_lw, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_fe+lw_ign.txt");
+	//// 前進オイラー+セミラグランジュ法
+	//advect1d(advect1d_step_forwardeular, advect1d_sl, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_fe+sl_ign.txt");
+	//// ホイン+中心差分
+	//advect1d(advect1d_step_heun, advect1d_central, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_heun+cen_ign.txt");
+	//// ホイン+風上差分
+	//advect1d(advect1d_step_heun, advect1d_upwind, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_heun+upwind_ign.txt");
+	//// ホイン+Lax-Wendroff
+	//advect1d(advect1d_step_heun, advect1d_lw, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_heun+lw_ign.txt");
+	//// ホイン+セミラグランジュ法
+	//advect1d(advect1d_step_heun, advect1d_sl, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_heun+sl_ign.txt");
+	//// RK4+中心差分
+	//advect1d(advect1d_step_rk4, advect1d_central, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_rk4+cen_ign.txt");
+	//// RK4+風上差分
+	//advect1d(advect1d_step_rk4, advect1d_upwind, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_rk4+upwind_ign.txt");
+	//// RK4+Lax-Wendroff
+	//advect1d(advect1d_step_rk4, advect1d_lw, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_rk4+lw_ign.txt");
+	//// RK4+セミラグランジュ法
+	//advect1d(advect1d_step_rk4, advect1d_sl, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_rk4+sl_ign.txt");
 
 	//ofstream fo;
 	//fo.open("../../bin/advect1d_heun+cen.txt", ios::out);
