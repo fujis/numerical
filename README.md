@@ -2,8 +2,7 @@
 筑波大学情報学群情報メディア創成学類の授業「情報数学C」の
 受講生向け説明ページ(HTML)，サンプルコードのためのGitリポジトリです．
 
-This is a git repository for lecture : Mathematics for Informatics C. 
-It is including htmls for explanation and sample code written by C++. 
+This is a git repository for the lecture "Mathematics for Informatics C" at the University of Tsukuba, School of Informatics, College of Media Arts, Science and Technology. It includes the explanation pages (HTML) and sample code written in C++.
 
 ## 各フォルダについて
 * docs : 説明ページのHTMLが入っています．Webページとしてみる場合は [https://fujis.github.io/numerical/](https://fujis.github.io/numerical/) にアクセスしてください．
