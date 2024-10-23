@@ -30,9 +30,9 @@ int main(void)
 	cout << endl;
 
 	//// float型の有効桁数
-	float x = 123456789.0;
-	float y = 123456700.0;
-	float z = x-y;
+	double x = 123456789;
+	double y = 123456700;
+	double z = x-y;
 	cout.precision(10); // 表示桁数を10桁にする
 	cout << "x = " << x << endl;
 	cout << "y = " << y << endl;
