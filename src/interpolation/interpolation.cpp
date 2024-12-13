@@ -101,11 +101,11 @@ int main(void)
 
 
 
-	//// グラフ描画用にデータ出力
-	//int m = 6; // データ点数(次数はデータ点数-1)
-	//MakeSamplingPoints(x0, x1, (x1-x0)/(m-1.0), func, xi, yi);
-	//OutputSamplingPoints(xi, yi, "dat/lagrangian"+TOSTR(m)+"_data.txt");
-	//OutputFunction(x0, x1, (x1-x0)/200, std::bind(lagrangian_interpolation, yi, xi, xi.size(), std::placeholders::_1), "dat/lagrangian"+TOSTR(m)+".txt");
+	// グラフ描画用にデータ出力
+	int m = 20; // データ点数(次数はデータ点数-1)
+	MakeSamplingPoints(x0, x1, (x1-x0)/(m-1.0), func, xi, yi);
+	OutputSamplingPoints(xi, yi, "dat/lagrangian"+TOSTR(m)+"_data.txt");
+	OutputFunction(x0, x1, (x1-x0)/200, std::bind(lagrangian_interpolation, yi, xi, xi.size(), std::placeholders::_1), "dat/lagrangian"+TOSTR(m)+".txt");
 	//// チェビシェフ節点を用いる場合
 	//MakeChebyshevNodes(x0, x1, (x1-x0)/(m-1.0), func, xi, yi);
 	//OutputSamplingPoints(xi, yi, "dat/lagrangian"+TOSTR(m)+"c_data.txt");

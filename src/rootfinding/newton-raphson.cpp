@@ -182,8 +182,8 @@ int newton(vector<FUNCTION> funcs, vector<double> &x, int n, int &max_iter, doub
 //-----------------------------------------------------------------------------
 int main(void)
 {
-	// 探索開始位置
-	double x = 1;
+	//// 探索開始位置
+	//double x = -1;
 
 	//// ニュートン法でf(x)=0を解く
 	//int max_iter = 100;
