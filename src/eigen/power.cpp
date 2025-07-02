@@ -35,7 +35,6 @@ int eigen_power(vector< vector<double> > &A, double &lambda, vector<double> &x, 
     for(k = 0; k < max_iter; ++k){
 		// |x^(k)|=1となるように正規化
 		double l = sqrt(l2); // |x^(k)|の計算
-		if(l < 1e-6) break;
 		x = mul_sv(1.0/l, x, n); // |x^(k)|で割る(1/|x|を掛ける)
 
 		// x^(k+1) = A x^(k)の計算

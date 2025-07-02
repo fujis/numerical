@@ -243,42 +243,6 @@ void DrawArrow2D(const double *s, const double *d, double scale = 0.2)
 }
 
 /*!
-* 楕円描画
-* @param[in] cen 楕円中心
-* @param[in] dir1,dir2 楕円の長軸,短軸方向ベクトル(ベクトルの大きさがそちら方向の半径)
-* @param[in] n エッジ分割数
-*/
-void DrawEllipse2D(const double cen[2], const double dir1[2], const double dir2[2], int n = 32)
-{
-	double r1 = sqrt(dir1[0]*dir1[0]+dir1[1]*dir1[1]);
-	double r2 = sqrt(dir2[0]*dir2[0]+dir2[1]*dir2[1]);
-
-	double theta = 0.0;
-	if(fabs(dir1[0]) > 1e-6){
-		theta = RX_TO_DEGREES(atan(dir1[1]/dir1[0]));
-	}
-	else{
-		theta = 90.0;
-	}
-
-	double t = 0.0;
-	double dt = 2.0*RX_PI/(double)n;
-
-	glPushMatrix();
-
-	glTranslatef(cen[0], cen[1], cen[2]);
-	glRotatef(theta, 0, 0, 1);
-	glBegin(GL_LINE_LOOP);
-	do{
-		glVertex3f(r1*cos(t), r2*sin(t), 0.0);
-		t += dt;
-	}while(t < 2.0*RX_PI);
-	glEnd();
-
-	glPopMatrix();
-}
-
-/*!
 * 2Dグラフの外枠描画
 */
 void DrawFrame(double xmin, double xmax, double ymin, double ymax)
@@ -452,21 +416,17 @@ void Display(void)
 		glEnd();
 
 		// 固有ベクトル
-		double ld, dir1[2], dir2[2];
+		double ld, dir[2];
 		ld = 2*sqrt(fabs(g_lambda[0])); // 分散は2乗されているので平方根をとって長さの目安にする(2倍は見た目を合わせるためのマジックナンバー)
-		dir1[0] = ld*g_v[0][0]; dir1[1] = ld*g_v[0][1];
+		dir[0] = ld*g_v[0][0]; dir[1] = ld*g_v[0][1];
 		glColor3d(0.0, 0.0, 1.0);
 		glLineWidth(3.0);
-		DrawArrow2D(cen, dir1, 0.1);
+		DrawArrow2D(cen, dir, 0.1);
 		ld = 2*sqrt(fabs(g_lambda[1]));
-		dir2[0] = ld*g_v[1][0]; dir2[1] = ld*g_v[1][1];
+		dir[0] = ld*g_v[1][0]; dir[1] = ld*g_v[1][1];
 		glColor3d(1.0, 0.0, 0.0);
 		glLineWidth(3.0);
-		DrawArrow2D(cen, dir2, 0.1);
-
-		glColor3d(0.5, 0.5, 0.5);
-		glLineWidth(2.0);
-		DrawEllipse2D(cen, dir1, dir2, 64);
+		DrawArrow2D(cen, dir, 0.1);
 	}
 
 
