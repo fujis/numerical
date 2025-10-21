@@ -56,6 +56,51 @@ int newton(double func(const double), double dfunc(const double),
 	return 0;
 }
 
+
+/*!
+ * セカント法(secant method, 割線法)
+ * @param[in] func 関数値を与える関数ポインタ
+ * @param[inout] x0,x1 解(探索開始位置を渡す)
+ * @param[inout] max_iter 最大反復数(反復終了後,実際の反復数を返す)
+ * @param[inout] eps 許容誤差(反復終了後,実際の誤差を返す)
+ */
+int secant(double func(const double), double& x0, double &x1, int& max_iter, double& eps)
+{
+	double f0, f1, dx;
+	f0 = func(x0);
+	f1 = func(x1);
+
+	int k;
+	for (k = 0; k < max_iter; ++k) {
+		// 確認用の画面出力
+		cout << k << " : f(" << x1 << ") = " << f1 << endl;
+
+		// 次の位置を計算
+		if(fabs(f1 - f0) < 1e-10){ // ゼロ除算防止
+			break;
+		}
+		double x2 = x1 - f1 * (x1 - x0) / (f1 - f0);
+
+		// 関数値の計算(次のループのため＆収束判定用)
+		f0 = f1;
+		f1 = func(x2);
+
+		// 収束判定
+		dx = fabs(x2 - x1);
+		if (dx < eps || fabs(f1) < eps) {
+			break;
+		}
+
+		x0 = x1;
+		x1 = x2;
+	}
+
+	max_iter = k; eps = dx;
+
+	return 0;
+}
+
+
 /*!
  * ピボット選択(Pivoting)
  *  - 行入れ替えだけの部分的ピボッティング
@@ -182,38 +227,40 @@ int newton(vector<FUNCTION> funcs, vector<double> &x, int n, int &max_iter, doub
 //-----------------------------------------------------------------------------
 int main(void)
 {
-	//// 探索開始位置
-	//double x = -1;
+	// 探索開始位置
+	double x = -1;
 
-	//// ニュートン法でf(x)=0を解く
-	//int max_iter = 100;
-	//double eps = 1e-6;
-	//newton(Func1, DFunc1, x, max_iter, eps);
-
-	//// 結果の画面表示
-	//cout.precision(12);
-	//cout << "x = " << x << endl;
-	//cout << "iter = " << max_iter << ", eps = " << eps << endl;
-	//cout << endl;
-
-	// 多次元のニュートン法
-	vector<double> xv(2);
-	xv[0] = 1.0; xv[1] = 0.0;
-	FUNCTION f;
-	vector<FUNCTION> funcs;
-	f.func = Func4;	f.dfunc = DFunc4;
-	funcs.push_back(f);
-	f.func = Func4a;	f.dfunc = DFunc4a;
-	funcs.push_back(f);
-
+	// ニュートン法でf(x)=0を解く
 	int max_iter = 100;
 	double eps = 1e-6;
-	newton(funcs, xv, 2, max_iter, eps);
+	newton(Func1, DFunc1, x, max_iter, eps);
+	//double x0 = x - 0.5;
+	//secant(Func1, x0, x, max_iter, eps);
 
 	// 結果の画面表示
-	cout << "(x1,x2) = (" << xv[0] << ", " << xv[1] << ")" << endl;
+	cout.precision(12);
+	cout << "x = " << x << endl;
 	cout << "iter = " << max_iter << ", eps = " << eps << endl;
 	cout << endl;
+
+	//// 多次元のニュートン法
+	//vector<double> xv(2);
+	//xv[0] = 1.0; xv[1] = 0.0;
+	//FUNCTION f;
+	//vector<FUNCTION> funcs;
+	//f.func = Func4;	f.dfunc = DFunc4;
+	//funcs.push_back(f);
+	//f.func = Func4a;	f.dfunc = DFunc4a;
+	//funcs.push_back(f);
+
+	//int max_iter = 100;
+	//double eps = 1e-6;
+	//newton(funcs, xv, 2, max_iter, eps);
+
+	//// 結果の画面表示
+	//cout << "(x1,x2) = (" << xv[0] << ", " << xv[1] << ")" << endl;
+	//cout << "iter = " << max_iter << ", eps = " << eps << endl;
+	//cout << endl;
 
 	return 0;
 }
