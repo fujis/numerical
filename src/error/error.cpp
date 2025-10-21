@@ -23,16 +23,16 @@ int main(void)
 	cout << "char : " << CHAR_MIN << " - " << CHAR_MAX << "  (" << sizeof(char)*8 << "bit)" << endl;
 	cout << "short : " << SHRT_MIN << " - " << SHRT_MAX << "  (" << sizeof(short)*8 << "bit)" << endl; // 正確にはshort int
 	cout << "int : " << INT_MIN << " - " << INT_MAX << "  (" << sizeof(int)*8 << "bit)" << endl;
-	cout << "longlong : " << LLONG_MIN << " - " << LLONG_MAX << "  (" << sizeof(long long)*8 << "bit)" << endl;
+	cout << "long long : " << LLONG_MIN << " - " << LLONG_MAX << "  (" << sizeof(long long)*8 << "bit)" << endl;
 	cout << "float : " << FLT_MIN << " - " << FLT_MAX << "  (" << sizeof(float)*8 << "bit)" << endl;
 	cout << "double : " << DBL_MIN << " - " << DBL_MAX << "  (" << sizeof(double)*8 << "bit)" << endl;
 	cout << "long double : " << LDBL_MIN << " - " << LDBL_MAX << "  (" << sizeof(long double)*8 << "bit)" << endl;
 	cout << endl;
 
-	//// float型の有効桁数
-	double x = 123456789;
-	double y = 123456700;
-	double z = x-y;
+	// float型の有効桁数
+	float x = 123456789;
+	float y = 123456700;
+	float z = x-y;
 	cout.precision(10); // 表示桁数を10桁にする
 	cout << "x = " << x << endl;
 	cout << "y = " << y << endl;

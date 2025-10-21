@@ -172,6 +172,9 @@ int main(void)
 	OutputMatrix(A, n, n+1);
 	cout << endl;
 
+	// 最後に結果をチェックするために行列を退避しておく
+	vector< vector<double> > A0 = A;
+
 	// ガウスの消去法で線形システムを解く
 	//ScalingForGauss(A, n);			// スケーリング処理
 	//GaussElimination(A, n);			// ピボッティングなし
@@ -182,6 +185,21 @@ int main(void)
 		cout << "x" << i << " = " << A[i][n] << (i == n-1 ? "" : ", ");
 	}
 	cout << endl;
+
+	// 結果のチェック
+	vector<double> x(n), y(n, 0.0);
+	for(int i = 0; i < n; ++i) x[i] = A[i][n];
+	MulMatrixVector(A0, x, y, n);
+	bool ok = true;
+	for(int i = 0; i < n; ++i){
+		// 桁落ち/丸め誤差があるのでfloatやdouble型で
+		// if(A0[i][n] != y[i]) のような比較をしないように！
+		if(fabs(A0[i][n]-y[i]) > 1e-6){
+			ok = false;
+			cout << "x_" << i << " is wrong result. " << endl;
+		}
+	}
+	if(ok) cout << "solution check : all clear" << endl;
 
 	return 0;
 }
