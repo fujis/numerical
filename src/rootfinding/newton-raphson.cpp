@@ -227,40 +227,40 @@ int newton(vector<FUNCTION> funcs, vector<double> &x, int n, int &max_iter, doub
 //-----------------------------------------------------------------------------
 int main(void)
 {
-	// 探索開始位置
-	double x = -1;
+	//// 探索開始位置
+	//double x = -1;
 
-	// ニュートン法でf(x)=0を解く
-	int max_iter = 100;
-	double eps = 1e-6;
-	newton(Func1, DFunc1, x, max_iter, eps);
-	//double x0 = x - 0.5;
-	//secant(Func1, x0, x, max_iter, eps);
-
-	// 結果の画面表示
-	cout.precision(12);
-	cout << "x = " << x << endl;
-	cout << "iter = " << max_iter << ", eps = " << eps << endl;
-	cout << endl;
-
-	//// 多次元のニュートン法
-	//vector<double> xv(2);
-	//xv[0] = 1.0; xv[1] = 0.0;
-	//FUNCTION f;
-	//vector<FUNCTION> funcs;
-	//f.func = Func4;	f.dfunc = DFunc4;
-	//funcs.push_back(f);
-	//f.func = Func4a;	f.dfunc = DFunc4a;
-	//funcs.push_back(f);
-
+	//// ニュートン法でf(x)=0を解く
 	//int max_iter = 100;
 	//double eps = 1e-6;
-	//newton(funcs, xv, 2, max_iter, eps);
+	//newton(Func1, DFunc1, x, max_iter, eps);
+	////double x0 = x - 0.1;
+	////secant(Func1, x0, x, max_iter, eps);
 
 	//// 結果の画面表示
-	//cout << "(x1,x2) = (" << xv[0] << ", " << xv[1] << ")" << endl;
+	//cout.precision(12);
+	//cout << "x = " << x << endl;
 	//cout << "iter = " << max_iter << ", eps = " << eps << endl;
 	//cout << endl;
+
+	// 多次元のニュートン法
+	vector<double> xv(2);
+	xv[0] = 1.0; xv[1] = 0.0;
+	FUNCTION f;
+	vector<FUNCTION> funcs;
+	f.func = Func4;	f.dfunc = DFunc4;
+	funcs.push_back(f);
+	f.func = Func4a;	f.dfunc = DFunc4a;
+	funcs.push_back(f);
+
+	int max_iter = 100;
+	double eps = 1e-6;
+	newton(funcs, xv, 2, max_iter, eps);
+
+	// 結果の画面表示
+	cout << "(x1,x2) = (" << xv[0] << ", " << xv[1] << ")" << endl;
+	cout << "iter = " << max_iter << ", eps = " << eps << endl;
+	cout << endl;
 
 	return 0;
 }
