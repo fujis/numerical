@@ -294,9 +294,9 @@ int main(void)
 	string path = "../../bin/data/";
 
 	// 前進オイラー+中心差分
-	//advect1d(advect1d_step_forwardeular, advect1d_central, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_fe+cen_ign.txt");
+	advect1d(advect1d_step_forwardeular, advect1d_central, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_fe+cen_ign.txt");
 	//// 前進オイラー+風上差分
-	advect1d(advect1d_step_forwardeular, advect1d_upwind, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_fe+upwind_ign.txt");
+	//advect1d(advect1d_step_forwardeular, advect1d_upwind, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_fe+upwind_ign.txt");
 	//// 前進オイラー+Lax-Wendroff
 	//advect1d(advect1d_step_forwardeular, advect1d_lw, setbc_d, f, u, dt, n, x0, xn, path+"advect1d_fe+lw_ign.txt");
 	//// 前進オイラー+セミラグランジュ法

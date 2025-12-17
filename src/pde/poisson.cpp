@@ -154,7 +154,7 @@ int main(void)
 {
 	double(*func)(double) = FuncPdeX3;
 	double a = 0.0, b = 1.0;
-	double alpha = 0.0, beta = 0.0;
+	alpha = 0.0, beta = 0.0;
 	int n = 10;
 	double(*func_t)(double) = FuncPdeX3T;
 

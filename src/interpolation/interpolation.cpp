@@ -1,5 +1,5 @@
 /*! 
-  @file interpolation.chpp
+  @file interpolation.cpp
 	
   @brief 補間法
  

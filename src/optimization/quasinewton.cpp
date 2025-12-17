@@ -98,7 +98,7 @@ int goldensection(double func(const vector<double>&), const vector<double> x0, c
 
 
 /*!
-* BGFS法(準ニュートン法の一種, Broyden–Fletcher–Goldfarb–Shanno method)
+* BFGS法(準ニュートン法の一種, Broyden–Fletcher–Goldfarb–Shanno method)
 * @param[in] func 関数値を与える関数ポインタ
 * @param[in] dfunc 関数勾配値を与える関数ポインタ
 * @param[in] x0 初期探索地点
@@ -107,7 +107,7 @@ int goldensection(double func(const vector<double>&), const vector<double> x0, c
 * @param[inout] eps 許容誤差(反復終了後,実際の誤差を返す)
 * @return 1:成功,0:失敗
 */
-int quasinewton_bgfs(double func(const vector<double>&), vector<double> dfunc(const vector<double>&), vector<double> x0, vector<double> &xout, int &max_iter, double &eps)
+int quasinewton_bfgs(double func(const vector<double>&), vector<double> dfunc(const vector<double>&), vector<double> x0, vector<double> &xout, int &max_iter, double &eps)
 {
 	int n = x0.size();
 	vector< vector<double> > H; // ヘッセ行列の逆行列H^-1
@@ -204,7 +204,7 @@ int main(void)
 	// 準ニュートン法で数値解(関数funcが最小値を取るx)を求める
 	int max_iter = 100;
 	double eps = 1e-6;
-	quasinewton_bgfs(func, dfunc, x0, x, max_iter, eps);
+	quasinewton_bfgs(func, dfunc, x0, x, max_iter, eps);
 
 	// 最終計算結果の表示
 	cout << "(x,y) = (" << x[0] << "," << x[1] << "), ";

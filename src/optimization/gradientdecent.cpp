@@ -100,20 +100,19 @@ int main(void)
 	cout << "alpha = ";
 	cin >> alpha;
 
-#if 0
-	double x0 = 1.0;
+	// 1次元の場合
+	double x0 = 0.0;
 	double x = 0.0;
-	gradientdecent(DFunc3, x0, alpha, x, max_iter, eps);
+	gradientdecent(DFunc2, x0, alpha, x, max_iter, eps);
 	cout << "x = " << x << endl;
-#else
-	vector<double> x0(2,1);
-	vector<double> x(2);
-	gradientdecent(DFunc4, x0, alpha, x, max_iter, eps);
 
-	cout << "x,y = " << x[0] << ", " << x[1] << endl;
-	cout << "f(x,y) = " << Func4(x) << endl;
+	//// 多次元の場合
+	//vector<double> x0(2,1);
+	//vector<double> x(2);
+	//gradientdecent(DFunc4, x0, alpha, x, max_iter, eps);
+	//cout << "x,y = " << x[0] << ", " << x[1] << endl;
+	//cout << "f(x,y) = " << Func4(x) << endl;
 
-#endif
 
 
 	cout << "iter = " << max_iter << ", eps = " << eps << endl;

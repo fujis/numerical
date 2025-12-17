@@ -98,7 +98,7 @@ int cg_solver(const vector< vector<double> > &A, const vector<double> &b, vector
  * 3次スプライン補間
  * @param[in] f 関数値を格納した配列
  * @param[in] xi 関数値に対応する位置を格納した配列(位置は昇順でソートされている必要がある)
- * @param[in] m データ数(=n+1)
+ * @param[in] m データ数
  * @param[in] x 補間した値が必要な位置x
  * @param[out] ans 解
  * @param[out] a,b,c,d 各区間における補間係数
