@@ -39,6 +39,7 @@ Release(*)/
 ipch/
 .vc/
 .vs/
+__pycache__/
 
 vol/
 img/
