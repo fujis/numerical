@@ -739,7 +739,7 @@ inline int OutputValueToFile(const vector< vector<double> > &f, int n, double x0
 	// 結果の出力
 	for(int j = 0; j <= n; ++j){
 		for(int i = 0; i <= n; ++i){
-			fo << f[i] << ((j == n && i == n) ? "" : ",");
+			fo << f[i][j] << ((j == n && i == n) ? "" : ",");
 		}
 	}
 	fo << endl;

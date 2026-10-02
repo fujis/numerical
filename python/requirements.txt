@@ -1,0 +1,12 @@
+# 数値計算サンプルコード(Python版)で使う追加パッケージ
+#  - 数値計算のコード本体は標準ライブラリだけで動く
+#  - 以下は glviewer_fw の可視化ビューワ用
+
+# matplotlib版ビューワ (glviewer_mpl.py, glpoints_mpl.py)
+numpy
+matplotlib
+
+# PyOpenGL版ビューワ (glviewer_gl.py, glpoints_gl.py)
+PyOpenGL
+glfw
+pillow

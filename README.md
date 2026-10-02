@@ -21,6 +21,7 @@ This is a git repository for the lecture "Mathematics for Informatics C" at the 
 
   * src/glviewer_fw : 偏微分方程式を数値計算出といた結果を見るためのOpenGL&glfw&imguiで書かれたビューワ．同梱のlib,dllはWindowsのVisual Studio 2022(x64)用なので，これを使いたい場合は自分の環境に合わせたlib,dllをとってくるか，自身でライブラリビルドしてください．結果の可視化のためだけのプログラムなので，Excelなど他のプログラムで結果を可視化するならば特に必要なしです．
 
+* python : srcのC++コードのpython版．詳しくはpythonフォルダ内のREADMEを見てください．
 
 ## トラブルシューティング
  - Visual Studioはgithub連携機能がありますが，このリポジトリには複数のVisual Studioソリューションとソースコード以外のファイルが多く含まれているのでうまくいかない可能性があります．別途リポジトリをクローンするかDownload ZIPで全体をダウンロード・解凍後，srcフォルダの各フォルダ内に含まれる*.slnファイルをVisual Studioで開くようにしてください．
