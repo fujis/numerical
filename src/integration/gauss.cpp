@@ -29,7 +29,7 @@ int gauss2(double func(const double), double a, double b, double &S)
 	double x[2], w[2];
 
 	// 分点と重みの計算(n=2)
-	x[0] = -sqrt(3.0);
+	x[0] = -sqrt(1.0/3.0);
 	x[1] = -x[0];
 	w[0] = w[1] = 1;
 
@@ -92,14 +92,14 @@ int gauss4(double func(const double), double a, double b, double &S)
 int main(void)
 {
 	// 指数関数の[0,1]での積分 (解析解はe-1=1.718281828459045235360287471352...)
-	//double(*func)(double) = FuncExp;
-	//double a = 0.0, b = 1.0;
-	//double t = (exp(1.0)-1); // 真値
+	double(*func)(double) = FuncExp;
+	double a = 0.0, b = 1.0;
+	double t = (exp(1.0)-1); // 真値
 
 	// 講義で示した例題(2017年度筑波大学前期日程入試問題)
-	double(*func)(double) = FuncT17;
-	double a = 0.5, b = 2.0;
-	double t = -99.0/8.0+18.0*log(2.0); // 真値
+	//double(*func)(double) = FuncT17;
+	//double a = 0.5, b = 2.0;
+	//double t = -99.0/8.0+18.0*log(2.0); // 真値
 
 	cout.precision(10);
 	double s = 0.0;
