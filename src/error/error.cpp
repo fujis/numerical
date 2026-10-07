@@ -63,23 +63,24 @@ int main(void)
 	cout << "(a1+a2)-a3=" << (a1+a2)-a3 << endl;
 	cout << "(a1-a3)+a2=" << (a1-a3)+a2 << endl;
 
-	// 桁落ち誤差を生じないように計算する例
+	// シンプルな積算での桁落ち誤差の例 : 1e8(一兆)回の積算
 	float t1 = 0.0;
 	for(int j = 0; j < 100000000; ++j){
-		t1 += 0.1;
+		t1 += 1.0;
 	}
-	cout << t1 << endl;
+	cout << "t1 = " << t1 << "  (simple accumulation)" << endl;
 
+	// 1e8(一兆)回の積算を10000回の積算に分割することで桁落ち誤差を抑える
 	float t[10000];
 	for(int j = 0; j < 10000; ++j){
 		t[j] = 0.0;
 		for(int i = 0; i < 10000; ++i){
-			t[j] += 0.1;
+			t[j] += 1.0;
 		}
 	}
-	float t1 = 0.0;
+	t1 = 0.0;
 	for(int j = 0; j < 10000; ++j) t1 += t[j];
-	cout << t1 << endl;
+	cout << "t1 = " << t1 << "  (two-step accumulation)" << endl;
 
 
 	// 倍精度と単精度の違い
