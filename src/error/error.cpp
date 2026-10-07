@@ -63,22 +63,23 @@ int main(void)
 	cout << "(a1+a2)-a3=" << (a1+a2)-a3 << endl;
 	cout << "(a1-a3)+a2=" << (a1-a3)+a2 << endl;
 
-	//// 桁落ち誤差を生じないように計算する例
-	//float t1 = 0.0;
-	//for(int j = 0; j < 100000000; ++j){
-	//	t1 += 0.1;
-	//}
+	// 桁落ち誤差を生じないように計算する例
+	float t1 = 0.0;
+	for(int j = 0; j < 100000000; ++j){
+		t1 += 0.1;
+	}
+	cout << t1 << endl;
 
-	//float t[10000];
-	//for(int j = 0; j < 10000; ++j){
-	//	t[j] = 0.0;
-	//	for(int i = 0; i < 10000; ++i){
-	//		t[j] += 0.1;
-	//	}
-	//}
-	//float t1 = 0.0;
-	//for(int j = 0; j < 10000; ++j) t1 += t[j];
-	//cout << t1 << endl;
+	float t[10000];
+	for(int j = 0; j < 10000; ++j){
+		t[j] = 0.0;
+		for(int i = 0; i < 10000; ++i){
+			t[j] += 0.1;
+		}
+	}
+	float t1 = 0.0;
+	for(int j = 0; j < 10000; ++j) t1 += t[j];
+	cout << t1 << endl;
 
 
 	// 倍精度と単精度の違い
