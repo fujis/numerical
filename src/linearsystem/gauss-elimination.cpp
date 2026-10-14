@@ -177,8 +177,8 @@ int main(void)
 
 	// ガウスの消去法で線形システムを解く
 	//ScalingForGauss(A, n);			// スケーリング処理
-	//GaussElimination(A, n);			// ピボッティングなし
-	GaussEliminationWithPivoting(A, n);	// ピボッティングあり
+	GaussElimination(A, n);			// ピボッティングなし
+	//GaussEliminationWithPivoting(A, n);	// ピボッティングあり
 
 	// 結果の表示
 	for(int i = 0; i < n; ++i){
