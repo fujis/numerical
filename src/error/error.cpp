@@ -93,7 +93,7 @@ int main(void)
 	// 打ち切り誤差
 	// ライプニッツの公式でπを計算
 	cout << "\n[trancation error]" << endl;
-	long n = 100;
+	long n = 1000;
 	double pi = 0;
 	int sgn = 1;
 	for(long i = 0; i <= n; ++i){
