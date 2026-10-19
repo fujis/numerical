@@ -166,8 +166,8 @@ int main(void)
  //                               {3, 4, 3, 4} };
 
 	// 行列のサイズの取得と確認のための画面表示
-	int n = (int)A.size();	// n元連立一次方程式
-	int m = (int)A[0].size();
+	int n = (int)(A.size());	// n元連立一次方程式
+	int m = (int)(A[0].size());
 	cout << "A(" << n << " x " << m << ") = " << endl;
 	OutputMatrix(A, n, n+1);
 	cout << endl;
@@ -177,8 +177,8 @@ int main(void)
 
 	// ガウスの消去法で線形システムを解く
 	//ScalingForGauss(A, n);			// スケーリング処理
-	GaussElimination(A, n);			// ピボッティングなし
-	//GaussEliminationWithPivoting(A, n);	// ピボッティングあり
+	//GaussElimination(A, n);			// ピボッティングなし
+	GaussEliminationWithPivoting(A, n);	// ピボッティングあり
 
 	// 結果の表示
 	for(int i = 0; i < n; ++i){
