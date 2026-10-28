@@ -109,6 +109,8 @@ int main(void)
 	double eps = 1e-6;
 	JacobiIteration(A, n, max_iter, eps);
 
+
+
 	// 結果の画面表示
 	for(int i = 0; i < n; ++i){
 		cout << "x" << i << " = " << A[i][n] << (i == n-1 ? "" : ", ");
