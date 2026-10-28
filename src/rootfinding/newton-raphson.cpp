@@ -233,9 +233,9 @@ int main(void)
 	//// ニュートン法でf(x)=0を解く
 	//int max_iter = 100;
 	//double eps = 1e-6;
-	//newton(Func1, DFunc1, x, max_iter, eps);
-	////double x0 = x - 0.1;
-	////secant(Func1, x0, x, max_iter, eps);
+	////newton(Func1, DFunc1, x, max_iter, eps);
+	//double x0 = x - 0.1;
+	//secant(Func1, x0, x, max_iter, eps);
 
 	//// 結果の画面表示
 	//cout.precision(12);
