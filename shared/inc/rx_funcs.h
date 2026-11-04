@@ -126,6 +126,25 @@ inline vector<double> DFunc5(const vector<double> &x)
 	return g;
 }
 
+/*!
+ * 2次元の凸関数3
+ *  - ラグランジュの未定乗数法のところで出した例
+ * @param[in] x 変数
+ * @return 方程式の値
+ */
+inline double Func6(const vector<double>& x)
+{
+	return x[0] * x[0] + 2 * x[1] * x[1];
+}
+inline vector<double> DFunc6(const vector<double>& x)
+{
+	vector<double> df(x.size(), 0.0);
+	df[0] = 2 * x[0];
+	df[1] = 4 * x[1];
+	return df;
+}
+
+
 
 /*!
  * 1次元の指数関数
