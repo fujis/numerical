@@ -51,6 +51,7 @@ MENU = [
     ("interpolation", "補間・近似", [
         ("interpolation.py", "線形補間, ラグランジュ補間"),
         ("leastsquare.py", "最小二乗近似"),
+        ("robust_regression.py", "ロバスト推定 (最小メディアン法, RANSAC, M推定)"),
         ("spline.py", "3次スプライン補間"),
     ]),
     ("integration", "数値積分", [
