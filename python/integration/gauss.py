@@ -35,7 +35,7 @@ def gauss2(func, a, b):
     w = zeros(2)
 
     # 分点と重みの計算(n=2)
-    x[0] = -math.sqrt(3.0)
+    x[0] = -math.sqrt(1.0/3.0)
     x[1] = -x[0]
     w[0] = w[1] = 1
 

@@ -113,6 +113,23 @@ def DFunc5(x):
     return g
 
 
+def Func6(x):
+    """!
+    2次元の凸関数3
+     - ラグランジュの未定乗数法のところで出した例
+    @param[in] x 変数(2要素のリスト)
+    @return 方程式の値
+    """
+    return x[0]*x[0]+2*x[1]*x[1]
+
+
+def DFunc6(x):
+    df = [0.0]*len(x)
+    df[0] = 2*x[0]
+    df[1] = 4*x[1]
+    return df
+
+
 def FuncExp(x):
     """!
     1次元の指数関数

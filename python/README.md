@@ -14,7 +14,7 @@ C++版の `src` フォルダと同じ構成になっています．
 | `error/` | 数値の精度と誤差 | `error.py` |
 | `linearsystem/` | 連立一次方程式 | `gauss-elimination.py`, `gauss-jordan.py`, `lu.py`, `cholesky.py`, `jacobi.py`, `gauss-seidel.py`, `sor.py`, `conjugate-gradient.py` |
 | `rootfinding/` | 求根問題 | `bisection.py`, `newton-raphson.py`, `dka.py` |
-| `optimization/` | 最適化 | `goldensection.py`, `gradientdecent.py`, `quasinewton.py`, `simplex.py` |
+| `optimization/` | 最適化 | `goldensection.py`, `gradientdecent.py`, `quasinewton.py`, `simplex.py`, `penalty.py` |
 | `interpolation/` | 補間・近似 | `interpolation.py`, `leastsquare.py`, `spline.py` |
 | `integration/` | 数値積分 | `integration.py`, `simpson.py`, `romberg.py`, `gauss.py`, `monte-carlo.py` |
 | `differential/` | 常微分方程式 | `eular.py`, `rk.py`, `adams.py`, `predictor-corrector.py`, `odesystem.py` |

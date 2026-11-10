@@ -146,7 +146,7 @@ int spline_interpolation(const vector<double> &f, const vector<double> &xi, int 
 	}
 
 	// xが含まれる区間の探索(区間幅がすべて同じならint(x/h)で求められる)
-	int k = 0;
+	int k = (x < xi[0] ? 0 : n-1); // 範囲外の場合は左端/右端区間の多項式を用いる
 	for(int i = 0; i < n; ++i){
 		if(x >= xi[i] && x < xi[i+1]){
 			k = i; break;
@@ -171,7 +171,7 @@ int spline_interpolation(const vector<double> &f, const vector<double> &xi, int 
 double cubic_spline(double x, const vector<double> &xi, int n, const vector<double> &a, const vector<double> &b, const vector<double> &c, const vector<double> &d)
 {
 	// xが含まれる区間の探索(区間幅がすべて同じならint(x/h)で求められる)
-	int k = 0;
+	int k = (x < xi[0] ? 0 : n-1); // 範囲外の場合は左端/右端区間の多項式を用いる
 	for(int i = 0; i < n; ++i){
 		if(x >= xi[i] && x < xi[i+1]){
 			k = i; break;

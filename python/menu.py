@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 """!
-@file numerical_menu.py
+@file menu.py
 
 @brief 授業デモ用のメニュープログラム
        各サンプルコードを番号を選ぶだけで実行できるようにしたもの
 
        使い方:
-         python numerical_menu.py           … 全体のメニューを表示
-         python numerical_menu.py pde       … pdeフォルダのメニューだけを表示
+         python menu.py           … 全体のメニューを表示
+         python menu.py pde       … pdeフォルダのメニューだけを表示
 
-       Windowsでは run_numerical.bat (もしくは各フォルダの run.bat) から呼ばれる．
+       Windowsでは run_menu.bat (もしくは各フォルダの run.bat) から呼ばれる．
 
 @author Makoto Fujisawa
 @date 2026 (Python版)
@@ -72,6 +72,7 @@ MENU = [
         ("gradientdecent.py", "最急降下法 (alphaを入力する)"),
         ("quasinewton.py", "準ニュートン法 (BFGS)"),
         ("simplex.py", "シンプレックス法"),
+        ("penalty.py", "ペナルティ関数法 (内点法(バリア関数法)と外点法)"),
     ]),
     ("pde", "偏微分方程式", [
         ("poisson.py", "ポアソン方程式 (中心差分+CG法)"),

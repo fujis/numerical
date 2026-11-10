@@ -143,7 +143,8 @@ def spline_interpolation(f, xi, m, x):
         d[i] = f[i]
 
     # xが含まれる区間の探索(区間幅がすべて同じならint(x/h)で求められる)
-    k = 0
+    #  - 範囲外のときは端の区間の多項式を使う(右端 x = x_n もここに含まれる)
+    k = 0 if x < xi[0] else n-1
     for i in range(n):
         if x >= xi[i] and x < xi[i+1]:
             k = i
@@ -166,7 +167,8 @@ def cubic_spline(x, xi, n, a, b, c, d):
     @return スプライン多項式を計算した結果
     """
     # xが含まれる区間の探索(区間幅がすべて同じならint(x/h)で求められる)
-    k = 0
+    #  - 範囲外のときは端の区間の多項式を使う(右端 x = x_n もここに含まれる)
+    k = 0 if x < xi[0] else n-1
     for i in range(n):
         if x >= xi[i] and x < xi[i+1]:
             k = i
